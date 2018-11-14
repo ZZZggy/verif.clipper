@@ -1,0 +1,3 @@
+mgmt_100M	--> make && make sim TEST_NAME=if2all_test LOGALL=1 SEED=1 UVM_VERBOSITY=UVM_LOW SIM_ARGS="+PORT_SPEED=1,0,2,1,3,0,4,1,5,0,6,1,7,2"
+
+mgmt_10M	--> make && make sim TEST_NAME=if2all_test LOGALL=1 SEED=1 UVM_VERBOSITY=UVM_LOW SIM_ARGS="+PORT_SPEED=1,0,2,1,3,0,4,1,5,0,6,1,7,3"

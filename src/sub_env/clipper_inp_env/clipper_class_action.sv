@@ -1,0 +1,21 @@
+import class_action_pkg::*;
+import rule_type_pkg::*;
+import action_type_pkg::*;
+import class_action_type_pkg::*;
+import lag_type_pkg::*;
+import domain_priority_pkg::*;
+import ethernet_pkg::*;
+import protocols_verif_pkg::*;
+`include "clipper_macros.sv"
+
+`include "clipper_bwp_model.svh"
+`include "clipper_class_rule_fwd_db.svh"
+`include "clipper_class_rule_vid.svh"
+`include "clipper_class_action_router.svh"
+`include "clipper_class_rule_action.svh"
+`include "clipper_class_rule_complex.svh"
+`include "clipper_class_rule_hidden.svh"
+`include "clipper_class_rule_filter_hidden.svh"
+`include "clipper_class_action_filter.svh"
+`include "clipper_classifier.svh"
+`include "clipper_insect_xfer_fun.svh"
