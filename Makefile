@@ -34,7 +34,6 @@ src/sub_env_seq/*.svh \
 src/converters/*.svh \
 src/tb/*.sv \
 src/reg_by_hand/*.svh \
-src/reg_by_hand/*.sv \
 src/reg/*.svh \
 src/reg/*.sv
 
@@ -60,6 +59,7 @@ VER_PARAMS = \
 $(LIST_LIB) \
 $(PLUS_DEFINE) \
 +incdir+${ACD_VERIF_DIR}/acd_uvm/src \
++incdir+src \
 +incdir+src/env \
 +incdir+src/sub_env \
 +incdir+src/sub_env/clipper_inp_env \
@@ -68,7 +68,8 @@ $(PLUS_DEFINE) \
 +incdir+src/seq \
 +incdir+src/sub_env_seq \
 +incdir+src/converters \
-+incdir+src
++incdir+src/reg_by_hand \
++incdir+src/reg
 
 # Module dependencies
 DEPEND = \
