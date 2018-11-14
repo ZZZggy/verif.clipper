@@ -1,0 +1,24 @@
+[git]
+itf.acd_st                      develop
+verif.vrm                       develop
+verif.modif_engine2             develop
+verif.pktlib                    develop
+verif.acd_reg_aggressor_uvm_vip develop
+verif.common_verif              develop
+verif.acd_uvm                   develop
+verif.acd_mm_uvm_vip            develop
+verif.thi_uvm_vip               develop
+verif.stream_uvm_vip            develop
+verif.protocol                  develop
+verif.class_action              develop
+verif.insect_uvm_vip            develop
+verif.pkt_key_uvc               develop
+verif.ethernet_uvm_vip          develop
+verif.mac_uvc                   develop
+verif.platform_uvc              develop
+verif.acd_st_vip                develop
+verif.nid_uvm_vip               develop
+verif.sim_cores                 develop
+verif.stream_comp_uvm_vip       develop
+verif.uvm                       develop
+verif.domain_priority_uvc       develop
