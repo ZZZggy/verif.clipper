@@ -33,6 +33,8 @@ src/seq/*.svh \
 src/sub_env_seq/*.svh \
 src/converters/*.svh \
 src/tb/*.sv \
+src/reg_by_hand/*.svh \
+src/reg_by_hand/*.sv \
 src/reg/*.svh \
 src/reg/*.sv
 
@@ -158,8 +160,6 @@ TEST_NAME  ?= sanity_test
 TIMEUNIT   ?= ps
 SOLVER_REV ?= 10.4a
 
-include ${MAKE_RUN}_sim_uvm
-
 TEST_NAME_LOG  = $(TEST_NAME)_svseed$(SV_SEED)
 
 # VSIM parameters
@@ -198,29 +198,46 @@ sim_novopt: .dummy_ver .dummy_ramfiles simlogs dofile $(SIM_COMP_TSTAMP)
 # Register generation paths
 REG_XML_SRC    = ${ACD_DESIGN_DIR}/clipper/doc/regdefs/clipper_top.xml
 REG_UVM_DEST   = src/reg/
-REG_XML_INCDIR = ${ACD_CORE_DIR}/clipper_phy_if/doc/regdefs/,${ACD_CORE_DIR}/pktgen_ats/doc/regdefs/
+REG_XML_INCDIR = "${ACD_CORE_DIR}/clipper_phy_if/doc/regdefs/,${ACD_CORE_DIR}/pktgen_ats/doc/regdefs/"
 
-.PHONY: gen hack
-gen: uvmreg hack
-# TBD : update this for LT
+include ${MAKE_RUN}_sim_uvm
 
-hack:
+.PHONY: gen_uvmreg hack_uvmreg
+gen_uvmreg: uvmreg hack_uvmreg
+
+hack_uvmreg:
 	@echo "----------------------------------------------"
 	@echo "Hacking regmodel to reuse acd_core packages..."
 	@echo "----------------------------------------------"
 	@echo "classifier2: regmodel compiled @ modular level."
-	@rm -f src/classifiers_regs.svh
-	@find ./src -type f -name 'classifiers_p[0-9]_*regs.svh' -delete
-	@cp -f src/classifiers_param_regs.svh src/classifiers_regs.svh
-	@sed -i 's/`include \"classifiers_p[[:digit:]]_pe_regs.svh\"//'        src/clipper2_top.sv
-	@sed -i 's/`include \"classifiers_p[[:digit:]]_rule_info_regs.svh\"//' src/clipper2_top.sv
-	@sed -i 's/`include \"classifiers_p[[:digit:]]_globals_regs.svh\"//'   src/clipper2_top.sv
-	@sed -i 's/`include \"classifiers_p[[:digit:]]_regs.svh\"//'           src/clipper2_top.sv
-# 	@sed -i '1i \`include \"../../../../../acd_core/classifier2/sim/src/reg/classifier2_core_regs.svh\"' src/clipper2_top.sv
-# 	@sed -i '1i \`include \"../../../../../acd_core/classifier2/sim/src/reg/class2_pe_regs.svh\"'        src/clipper2_top.sv
-# 	@sed -i '1i \`include \"../../../../../acd_core/classifier2/sim/src/reg/class2_rule_info_regs.svh\"' src/clipper2_top.sv
-# 	@sed -i '1i \`include \"../../../../../acd_core/classifier2/sim/src/reg/class2_globals_regs.svh\"'   src/clipper2_top.sv
-	@sed -i '/^$$/d' src/clipper2_top.sv
+	@rm -f src/reg/classifiers_regs.svh
+	@find ./src/reg -type f -name 'classifiers_p[0-9]_*regs.svh' -delete
+	@find ./src/reg -type f -name 'classifiers_p10_*regs.svh'    -delete
+	@find ./src/reg -type f -name 'classifiers_p11_*regs.svh'    -delete
+	@find ./src/reg -type f -name 'classifiers_p12_*regs.svh'    -delete
+	@sed -i 's/action_index_uni10g/cos_actions/'                           src/reg/cos_actions_uni10g_regs.svh
+	@sed -i 's/action_index_uni1g/cos_actions/'                            src/reg/cos_actions_uni1g_regs.svh
+	@sed -i 's/action_index_nni10g/cos_actions/'                           src/reg/cos_actions_nni10g_regs.svh
+	@sed -i 's/`include \"classifiers_p[[:digit:]]_pe_regs.svh\"//'        src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p[[:digit:]]_rule_info_regs.svh\"//' src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p[[:digit:]]_globals_regs.svh\"//'   src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p[[:digit:]]_regs.svh\"//'           src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p10_pe_regs.svh\"//'                 src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p11_pe_regs.svh\"//'                 src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p12_pe_regs.svh\"//'                 src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p10_rule_info_regs.svh\"//'          src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p11_rule_info_regs.svh\"//'          src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p12_rule_info_regs.svh\"//'          src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p10_globals_regs.svh\"//'            src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p11_globals_regs.svh\"//'            src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p12_globals_regs.svh\"//'            src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p10_regs.svh\"//'                    src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p11_regs.svh\"//'                    src/reg/clipper_top.sv
+	@sed -i 's/`include \"classifiers_p12_regs.svh\"//'                    src/reg/clipper_top.sv
+	@sed -i 's/`include \"action_index_uni1g_regs.svh\"//'                 src/reg/clipper_top.sv
+	@sed -i 's/`include \"action_index_uni10g_regs.svh\"//'                src/reg/clipper_top.sv
+	@sed -i 's/`include \"action_index_nni10g_regs.svh\"/`include \"cos_actions_regs.svh\"/' src/reg/clipper_top.sv
+	@sed -i '/^$$/d' src/reg/clipper_top.sv
 	@echo "----------------------------------------------"
 
 help::

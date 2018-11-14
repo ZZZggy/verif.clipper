@@ -1,1 +1,0 @@
-make sim TEST_NAME=cmd_proc_time_test        NOSTDOUT=1 MAXERROR=1 SV_SEED=2015 COVERAGE=1 SIM_ARGS="-coverage -assertcover +STIM_CNT_TIME_US=120"
