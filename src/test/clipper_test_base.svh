@@ -39,7 +39,7 @@ virtual class clipper_test_base extends uvm_test;
 
     function new (string name = type_name, uvm_component parent=null);
         super.new(name, parent);
-        // Creating config in the constructor to allow derived testcases to 
+        // Creating config in the constructor to allow derived testcases to
         // override default values
         cfg = clipper_test_base_cfg::type_id::create("cfg", this);
     endfunction
@@ -141,15 +141,15 @@ virtual class clipper_test_base extends uvm_test;
         `uvm_info("TEST", {"Test topology :\n", this.sprint(printer)}, UVM_DEBUG)
     endfunction
 
-    // Override: Set drain time to 50us
-    virtual task run_phase(uvm_phase phase);
-        phase.raise_objection(this);
-        super.run_phase(phase);
-
-        uvm_test_done.set_drain_time(this, 10us);
-
-        phase.drop_objection(this);
-    endtask
+//    // Override: Set drain time to 50us
+//    virtual task run_phase(uvm_phase phase);
+//        phase.raise_objection(this);
+//        super.run_phase(phase);
+//
+//        uvm_test_done.set_drain_time(this, 50us);
+//
+//        phase.drop_objection(this);
+//    endtask
 
     // Wait for resets to deassert before continuing.
     virtual task reset_phase(uvm_phase phase);
@@ -218,7 +218,7 @@ virtual class clipper_test_base extends uvm_test;
         end while(timeout < ($time + 500us) && !cal_done);
         if (!cal_done)
             `uvm_fatal("TIMEOUT", "Calibration of external memories unsuccessful!")
-
+        `uvm_info("TEST", "External memory calibrated", UVM_LOW)
         phase.drop_objection(this);
     endtask
 
@@ -393,7 +393,7 @@ virtual class clipper_test_base extends uvm_test;
     // Build predictor configuration objects
     virtual function void build_predictor_cfg();
         `uvm_info("CLIPPER_TEST_BASE", "Entering build_predictor_cfg", UVM_LOW)
-        
+
         env_cfg.predictor_cfg = clipper_predictor_cfg::type_id::create("predictor_cfg", this);
 
         // THI CPU2x predictor
@@ -461,7 +461,7 @@ virtual class clipper_test_base extends uvm_test;
         // vsim has added "mem load" to VID tables so that their priority indexes are set to lowest priority by default
         //set_type_override_by_type(vid_table_reg_block::get_type(), vid_table_reg_block_init::get_type(), 0);
     endfunction
-    
+
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
     //--------------------------------------------------------------------------
