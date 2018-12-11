@@ -108,7 +108,7 @@ class clipper_env extends platform_env#(c1lt_reg_block);
         tx_eth.agent[PORT_CPU].p_notify.connect(cpu_filter.analysis_export);
         // ?
 //        cpu_filter.others_port.connect(eth2pcth.analysis_export);
-        
+
         // Ethernet scoreboards connection
         foreach (eth_sb[i]) begin
             case (cfg.eth_sb_connect)
@@ -158,9 +158,9 @@ class clipper_env extends platform_env#(c1lt_reg_block);
 
         for (int i=0; i<NB_IF_PORTS; i++) begin
             prt      = i+1;
-            nb_pe    = &{prt>3,prt<8} ?  4 :   1;
-            nb_rule  = &{prt>3,prt<8} ? 32 : 256;
-            nb_field = &{prt>3,prt<8} ? 64 : 512;
+            nb_pe    = prt inside {PORT_1G} ?   1 :   4;
+            nb_rule  = prt inside {PORT_1G} ? 256 :  32;
+            nb_field = prt inside {PORT_1G} ? 512 :  64;
 
             reg_param.cfg[$sformatf("regmodel.classifiers.p[%0d].CLASS2_NB_PE", i)]                                              = nb_pe;
             reg_param.cfg[$sformatf("regmodel.classifiers.p[%0d].globals.pe.CLASS2_NB_PE", i)]                                   = nb_pe;
@@ -168,7 +168,7 @@ class clipper_env extends platform_env#(c1lt_reg_block);
             reg_param.cfg[{$sformatf("regmodel.classifiers.p[%0d].globals.capabilities", i), ".CLASS2_NB_FIELDS"}]               = nb_field;
             reg_param.cfg[{$sformatf("regmodel.classifiers.p[%0d].globals.capabilities", i), ".CLASS2_NB_RULES_WIDTH"}]          = prt inside {PORT_1G} ? 8 : 5;
             reg_param.cfg[{$sformatf("regmodel.classifiers.p[%0d].globals.capabilities", i), ".CLASS2_NB_FIELDS_WIDTH"}]         = prt inside {PORT_1G} ? 9 : 6;
-            reg_param.cfg[{$sformatf("regmodel.classifiers.p[%0d].globals.capabilities", i), ".CLASS2_CMPLX_CLK_PER_PS"}]        = prt inside {PORT_1G} ? 6000 : 3333;
+            reg_param.cfg[{$sformatf("regmodel.classifiers.p[%0d].globals.capabilities", i), ".CLASS2_CMPLX_CLK_PER_PS"}]        = prt inside {PORT_1G} ? 6000 : 4444;
             reg_param.cfg[{$sformatf("regmodel.classifiers.p[%0d].globals.capabilities", i), ".CLASS2_NB_COMPARATOR_PER_PE"}]    = 2;
             reg_param.cfg[{$sformatf("regmodel.classifiers.p[%0d].globals.capabilities", i), ".CLASS2_NB_COMPARATOR16b_PER_PE"}] = 2;
             reg_param.cfg[{$sformatf("regmodel.classifiers.p[%0d].rule_info", i), ".CLASS2_NB_PE"}]                              = nb_pe;

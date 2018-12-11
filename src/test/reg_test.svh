@@ -39,6 +39,8 @@ class reg_test extends acd_reg_test#(clipper_test_base);
     // Constructor
     function new(string name="reg_test", uvm_component parent = null);
         super.new(name, parent);
+        uvm_resource_db#(bit)::set("REG::dummy", "NO_REG_TESTS", 1'b1, null);
+        uvm_resource_db#(bit)::set("REG::dummy", "NO_ACD_RW_TEST", 1'b1, null);
     endfunction
 
     // Set type overrides for proper register behaviour

@@ -21,3 +21,5 @@ verif.nid_uvm_vip               develop
 verif.sim_cores                 develop
 verif.stream_comp_uvm_vip       develop
 verif.domain_priority_uvc       T0003
+
+verif.vrm                       master
