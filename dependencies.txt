@@ -1,6 +1,5 @@
 [git]
 itf.acd_st                      develop
-verif.vrm                       develop
 verif.modif_engine2             develop
 verif.pktlib                    develop
 verif.acd_reg_aggressor_uvm_vip develop

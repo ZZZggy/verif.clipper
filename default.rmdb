@@ -62,9 +62,25 @@
   </runnable>
 
   <!-- TESTS -->
-
-  <runnable name="sanity_test"        type="task" base="base_task"/>
-  <runnable name="reg_test"           type="task" base="base_task"/>
+  <runnable name="all2cpu_test"              type="task" base="base_task"/>
+  <runnable name="cmd_proc_time_test"        type="task" base="base_task"/>
+  <runnable name="cpu2fpga_test"             type="task" base="base_task"/>
+  <runnable name="cpu2if_test"               type="task" base="base_task"/>
+  <runnable name="flush_stats_test"          type="task" base="base_task"/>
+  <runnable name="hidden_rule_test"          type="task" base="base_task"/>
+  <runnable name="if2all_test"               type="task" base="base_task"/>
+  <runnable name="if2fm_test"                type="task" base="base_task"/>
+  <runnable name="if2pc_shaper_test"         type="task" base="base_task"/>
+  <runnable name="if2pc_test"                type="task" base="base_task"/>
+  <runnable name="inp_provision_test"        type="task" base="base_task"/>
+  <runnable name="management_test"           type="task" base="base_task"/>
+  <runnable name="pause_frame_test"          type="task" base="base_task"/>
+  <runnable name="reg_invalid_addr_test"     type="task" base="base_task"/>
+  <runnable name="reg_test"                  type="task" base="base_task"/>
+  <runnable name="sanity_test"               type="task" base="base_task"/>
+  <runnable name="sat_hsi_test"              type="task" base="base_task"/>
+  <runnable name="sat_test"                  type="task" base="base_task"/>
+  <runnable name="xgmac_pause_linerate_test" type="task" base="base_task"/>
 
   <!-- GROUPS -->
 
@@ -82,6 +98,24 @@
 
   <runnable name="regression" type="group">
     <members>
+        <member>all2cpu_test</member>
+        <member>cmd_proc_time_test</member>
+        <member>cpu2fpga_test</member>
+        <member>cpu2if_test</member>
+        <member>flush_stats_test</member>
+        <member>hidden_rule_test</member>
+        <member>if2all_test</member>
+        <member>if2fm_test</member>
+        <member>if2pc_shaper_test</member>
+        <member>if2pc_test</member>
+        <member>inp_provision_test</member>
+        <member>management_test</member>
+        <member>pause_frame_test</member>
+        <member>reg_invalid_addr_test</member>
+        <member>reg_test</member>
+        <member>sat_hsi_test</member>
+        <member>sat_test</member>
+        <member>xgmac_pause_linerate_test</member>
     </members>
   </runnable>
 
