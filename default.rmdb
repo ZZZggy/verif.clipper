@@ -1,0 +1,124 @@
+<?xml version="1.0" ?>
+<rmdb version="1.0" loadtcl="default" toprunnables="/test/sanity/sanity_test" options="-notimeout" xmlns:xi="http://www.w3.org/2003/XInclude">
+
+  <xi:include href="../vrm/base.rmdb"/>
+
+  <runnable name="test" type="group" base="base_group">
+    <parameters>
+      <parameter name="ext_mem"        ask="External mem"                accept="oneof(yes no)">no</parameter>
+      <parameter name="phy"            ask="PHYs included"               accept="oneof(yes no)">no</parameter>
+      <parameter name="port_speed"     ask="Port speeds port_id,0|1,port_id,0|1,..."></parameter>
+      <parameter name="thi"            ask="Use THI for register access" accept="oneof(yes no)">no</parameter>
+      <parameter name="reg_coverage"   ask="Enable register coverage"    accept="oneof(yes no)">no</parameter>
+      <parameter name="reg_path"       ask="Register access path"        accept="oneof(front back default)">default</parameter>
+      <parameter name="size_min"       ask="Minimum packet size"></parameter>
+      <parameter name="size_max"       ask="Maximum packet size"></parameter>
+      <parameter name="count_time"     ask="Run count (time or count)"></parameter>
+      <parameter name="nb_flow"        ask="Number of flows"></parameter>
+      <parameter name="rate"           ask="Rate control"></parameter>
+      <parameter name="inp_bp"         ask="Input section backpressure"  accept="oneof(yes no)">no</parameter>
+      <parameter name="inp_bp_duty_hi" ask="Backpressure hi cycles"></parameter>
+      <parameter name="inp_bp_duty_lo" ask="Backpressure lo cycles"></parameter>
+      <parameter name="inp_bp_mode"    ask="Backpressure mode" accept="oneof(READY NREADY DUTYCYCLE RAND)"></parameter>
+      <parameter name="sim_plusargs"   ask="Additional vsim plus args"></parameter>
+
+      <parameter name="plus_port_speed" type="tcl">[if {"(%port_speed%)" ne ""} {eval list "+port_speed=(%port_speed%)"}]</parameter>
+      <parameter name="plus_thi"        type="tcl">[if {"(%thi%)" == "yes"} {eval list "+THI_ENA=1"} else {eval list "+THI_ENA=0"}]</parameter>
+      <parameter name="plus_reg_cov"    type="tcl">[if {"(%reg_coverage%)" == "yes"} {eval list "+REG_COV_ENA=1"} else {eval list "+REG_COV_ENA=0"}]</parameter>
+      <parameter name="plus_reg_path"   type="tcl">[if {"(%reg_path%)" == "front"} {eval list "+UVM_REG_PATH=UVM_FRONTDOOR"} elseif {"(%reg_path%)" == "back"} {eval list "+UVM_REG_PATH=UVM_BACKDOOR"} else {eval list "+UVM_REG_PATH=UVM_DEFAULT"}]</parameter>
+      <parameter name="plus_size_min"   type="tcl">[if {"(%size_min%)" ne ""} {eval list "+SIZE_MIN=(%size_min%)"}]</parameter>
+      <parameter name="plus_size_max"   type="tcl">[if {"(%size_max%)" ne ""} {eval list "+SIZE_MAX=(%size_max%)"}]</parameter>
+      <parameter name="plus_count_time" type="tcl">[if {"(%count_time%)" ne ""} {eval list "+STIM_CNT_TIME_US=(%count_time%)"}]</parameter>
+      <parameter name="plus_nb_flow"    type="tcl">[if {"(%nb_flow%)" ne ""} {eval list "+NB_FLOW=(%nb_flow%)"}]</parameter>
+      <parameter name="plus_rate"       type="tcl">[if {"(%rate%)" ne ""} {eval list "+RATE=(%rate%)"}]</parameter>
+      <parameter name="plus_inp_bp"     type="tcl">[if {"(%inp_bp%)" == "yes"} {eval list "+INP_BP_ENA=1"} else {eval list "+INP_BP_ENA=0"}]</parameter>
+      <parameter name="plus_inp_bp_duty_hi" type="tcl">[if {"(%inp_bp_duty_hi%)" ne ""} {eval list "+INP_BP_DUTY_HI=(%inp_bp_duty_hi%)"}]</parameter>
+      <parameter name="plus_inp_bp_duty_lo" type="tcl">[if {"(%inp_bp_duty_lo%)" ne ""} {eval list "+INP_BP_DUTY_LO=(%inp_bp_duty_lo%)"}]</parameter>
+      <parameter name="plus_inp_bp_mode"    type="tcl">[if {"(%inp_bp_mode%)" ne ""} {eval list "+INP_BP_MODE=\"(%inp_bp_mode%)\""}]</parameter>
+
+      <!-- derived parameters -->
+      <parameter name="use_ext_mem"   type="tcl">[if { "(%ext_mem%)" == "no"} {eval list "-G G_USE_BEH_RAM=1"}]</parameter>
+      <parameter name="use_phy"       type="tcl">[if { "(%phy%)" == "yes"} {eval list "-G G_USE_PHY=1"}]</parameter>
+      <parameter name="vsim_plusargs"> (%sim_plusargs%) (%plus_port_speed%) (%plus_thi%) (%plus_reg_cov%) (%plus_reg_path%) (%plus_size_min%) (%plus_size_max%) (%plus_count_time%) (%plus_nb_flow%) (%plus_rate%) (%plus_inp_bp%) (%plus_inp_bp_duty_hi%) (%plus_inp_bp_duty_lo%) (%plus_inp_bp_mode%)</parameter>
+
+       <!-- VRM specific parameters -->
+      <!--parameter name="tplanfile">(%RMDBDIR%)/doc/testplan.xml</parameter-->
+
+      <!-- ACD specific parameters -->
+      <!--parameter name="vopt_args">+floatparameters+G_USE_PHY+G_USE_BEH_RAM+G_SYNTHESIS+G_USE_I2C</parameter-->
+      <parameter name="vopt_args">(%use_ext_mem%) (%use_phy%) -suppress 1130</parameter>
+      <parameter name="vsim_args">+nowarnTSCALE (%vsim_plusargs%)</parameter>
+      <parameter name="vsim_do">do (%RMDBDIR%)/vid_mem_load.do;</parameter>
+
+      <!-- convenient parameters -->
+      <parameter name="top_name">top</parameter>
+      <parameter name="top_opt">top_opt_ext_mem_(%ext_mem%)</parameter>
+      <!--parameter name="work_dir">(%make_dir%)/../lib/lib_questasim/work</parameter-->
+      <parameter name="vopt_libs">-L work -L uvm_vip -L phy_1g10g_reset_controller -L phy_1g_10g -L reconfig_8x1g10g -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L stratixv_ver -L stratixv_hssi_ver -L stratixv_pcie_hip_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L stratixv -L stratixv_hssi -L stratixv_pcie_hip</parameter>
+    </parameters>
+    <!--postScript >
+        <command>vrun -vrmdata (%DATADIR%) -status -full -html -covreport -htmldir (%DATADIR%)/report</command>
+    </postScript-->
+  </runnable>
+
+  <!-- TESTS -->
+  <runnable name="all2cpu_test"              type="task" base="base_task"/>
+  <runnable name="cmd_proc_time_test"        type="task" base="base_task"/>
+  <runnable name="cpu2fpga_test"             type="task" base="base_task"/>
+  <runnable name="cpu2if_test"               type="task" base="base_task"/>
+  <runnable name="flush_stats_test"          type="task" base="base_task"/>
+  <runnable name="hidden_rule_test"          type="task" base="base_task"/>
+  <runnable name="if2all_test"               type="task" base="base_task"/>
+  <runnable name="if2fm_test"                type="task" base="base_task"/>
+  <runnable name="if2pc_shaper_test"         type="task" base="base_task"/>
+  <runnable name="if2pc_test"                type="task" base="base_task"/>
+  <runnable name="inp_provision_test"        type="task" base="base_task"/>
+  <runnable name="management_test"           type="task" base="base_task"/>
+  <runnable name="pause_frame_test"          type="task" base="base_task"/>
+  <runnable name="reg_invalid_addr_test"     type="task" base="base_task"/>
+  <runnable name="reg_test"                  type="task" base="base_task"/>
+  <runnable name="sanity_test"               type="task" base="base_task"/>
+  <runnable name="sat_hsi_test"              type="task" base="base_task"/>
+  <runnable name="sat_test"                  type="task" base="base_task"/>
+  <runnable name="xgmac_pause_linerate_test" type="task" base="base_task"/>
+
+  <!-- GROUPS -->
+
+  <runnable name="sanity" type="group">
+    <members>
+      <member>sanity_test</member>
+    </members>
+  </runnable>
+
+  <runnable name="register" type="group">
+    <members>
+        <member>reg_test</member>
+    </members>
+  </runnable>
+
+  <runnable name="regression" type="group">
+    <members>
+        <member>all2cpu_test</member>
+        <member>cmd_proc_time_test</member>
+        <member>cpu2fpga_test</member>
+        <member>cpu2if_test</member>
+        <member>flush_stats_test</member>
+        <member>hidden_rule_test</member>
+        <member>if2all_test</member>
+        <member>if2fm_test</member>
+        <member>if2pc_shaper_test</member>
+        <member>if2pc_test</member>
+        <member>inp_provision_test</member>
+        <member>management_test</member>
+        <member>pause_frame_test</member>
+        <member>reg_invalid_addr_test</member>
+        <member>reg_test</member>
+        <member>sat_hsi_test</member>
+        <member>sat_test</member>
+        <member>xgmac_pause_linerate_test</member>
+    </members>
+  </runnable>
+
+  <runnable name="misc" type="group"/>
+
+</rmdb>

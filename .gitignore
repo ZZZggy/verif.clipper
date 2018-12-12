@@ -14,3 +14,10 @@ simlogs/
 stratixv_pcie_hip/
 stratixv_pcie_hip_ver/
 vnc_logs/
+VRMDATA*
+transcript
+.dvt*
+dvt.f
+dvt_build.log
+getdeps.log
+.project

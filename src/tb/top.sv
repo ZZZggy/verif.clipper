@@ -247,7 +247,7 @@ module top #(
      .DQS_WIDTH  (RLDRAM3_QK_W   ),
      .QVLD_WIDTH (RLDRAM3_QVLD_W )
      ) ram_if [1 : NB_RLDRAM3] (/*no ports*/);
-    
+
     //--------------------------------------------------------------------------
     // DUT miscellaneous and quasi-static IOs interface
     //--------------------------------------------------------------------------
@@ -348,24 +348,24 @@ module top #(
      // CLK & RST
      //----------------------------------------------------------------------
      .i_cpu_fpga_reset_n              (cpu_fpga_reset_n           ),
-     // Tranceivers reference clocks (Differential pairs)         
+     // Tranceivers reference clocks (Differential pairs)
      .i_ref_clk_10g                   (ref_clk_10g                ),
      .i_ref_clk_synce_r               (ref_clk_synce_r            ),
      .i_ref_clk_synce_l               (ref_clk_synce_r            ),
-     // Output ref to SyncE                                       
+     // Output ref to SyncE
      .o_fpga_synce_ref_clk            (fpga_synce_ref_clk         ),
-     // Internal refclk (required for External RAM)               
+     // Internal refclk (required for External RAM)
      .i_ref_clk_t                     (ref_clk_t                  ),
      .i_ref_clk_b                     (ref_clk_b                  ),
-     // GPS reference clock                                       
+     // GPS reference clock
      .i_gps_fpga_clk                  (gps_fpga_clk               ),
-     // External clocks                                           
+     // External clocks
      .i_mezz_fpga_external_clk        (mezz_fpga_external_clk     ),
      .o_fpga_mezz_external_clk        (fpga_mezz_external_clk     ),
-     .i_combophy_fpga_rcvclk0         (), // TBD                   
+     .i_combophy_fpga_rcvclk0         (), // TBD
      .i_combophy_fpga_rcvclk1         (), // TBD
      .o_fpga_mgmtphy_clkout           (),
-     
+
      //----------------------------------------------------------------------
      // Tranceivers (All tranceiver ports are differential pair signals)
      //----------------------------------------------------------------------
@@ -403,7 +403,7 @@ module top #(
      .o_fpga_mgmtphy_rgmii_clk        (fpga_mgmtphy_rgmii_clk     ),
      .o_fpga_mgmtphy_rgmii_ctl        (fpga_mgmtphy_rgmii_ctl     ),
      .o_fpga_mgmtphy_rgmii_d          (fpga_mgmtphy_rgmii_d       ),
-     // CPU                                                      
+     // CPU
      .i_cpu_fpga_rgmii_clk            (cpu_fpga_rgmii_clk         ),
      .i_cpu_fpga_rgmii_ctl            (cpu_fpga_rgmii_ctl         ),
      .i_cpu_fpga_rgmii_d              (cpu_fpga_rgmii_d           ),
@@ -432,7 +432,7 @@ module top #(
      .i_sfpplus_fpga_tx_fault         (sfp_if.tx_fault[7:4]       ),
      .b_fpga_sfpplus_i2cclk           (fpga_sfp_i2cclk[7:4]       ),
      .b_fpga_sfpplus_i2cdat           (fpga_sfp_i2cdat[7:4]       ),
-     // COMBO                                                     
+     // COMBO
      .o_fpga_combosfp_sfp_en_n        (sfp_if.ena_n[11:8]         ),
      .o_fpga_combosfp_tx_disable      (sfp_if.tx_disable[11:8]    ),
      .o_fpga_combosfp_rate_sel_0      (sfp_if.rate_sel[0][11:8]   ),
@@ -450,13 +450,13 @@ module top #(
      .o_fpga_sfpplus_led2_n           (misc_if.led_sfp_n[2][7:4]  ),
      .o_fpga_combosfp_led1_n          (misc_if.led_sfp_n[1][11:8] ),
      .o_fpga_combosfp_led2_n          (misc_if.led_sfp_n[2][11:8] ),
-     // Management port                                           
+     // Management port
      .o_fpga_mgmt_led1_n              (misc_if.led_mgmt_n[1]      ),
      .o_fpga_mgmt_led2_n              (misc_if.led_mgmt_n[2]      ),
-     // Copper                                                    
+     // Copper
      .o_fpga_copper_led1_n            (misc_if.led_copper_n[1]    ),
      .o_fpga_copper_led2_n            (misc_if.led_copper_n[2]    ),
-     // TBD                                                       
+     // TBD
      .i_combophy_fpga_link_fail       (1'b0                       ),
      .o_fpga_combophy_coma_mode       (                           ),
      .i_combophy_fpga_spi_clk         (1'b0                       ),
@@ -487,53 +487,53 @@ module top #(
      .i_mem_1_qk                      (ram_if[1].dqs              ),
      .i_mem_1_qk_n                    (ram_if[1].dqs_n            ),
      // Mem interface 2
-     .o_mem_2_ck                      (ram_if[2].clk_p            ), 
-     .o_mem_2_ck_n                    (ram_if[2].clk_n            ), 
-     .o_mem_2_reset_n                 (ram_if[2].rst_n            ), 
-     .o_mem_2_cs_n                    (ram_if[2].cs_n             ),  
-     .o_mem_2_we_n                    (ram_if[2].we_n             ),  
-     .o_mem_2_ref_n                   (ram_if[2].ref_n            ), 
-     .o_mem_2_ba                      (ram_if[2].ba               ),    
-     .o_mem_2_a                       (ram_if[2].addr             ),  
-     .o_mem_2_dk                      (ram_if[2].dk               ),    
-     .o_mem_2_dk_n                    (ram_if[2].dk_n             ),  
-     .o_mem_2_dm                      (ram_if[2].dm               ),    
-     .b_mem_2_dq                      (ram_if[2].dq               ),    
-     .i_mem_2_qvld                    (ram_if[2].qvld             ),  
-     .i_mem_2_qk                      (ram_if[2].dqs              ),   
-     .i_mem_2_qk_n                    (ram_if[2].dqs_n            ), 
+     .o_mem_2_ck                      (ram_if[2].clk_p            ),
+     .o_mem_2_ck_n                    (ram_if[2].clk_n            ),
+     .o_mem_2_reset_n                 (ram_if[2].rst_n            ),
+     .o_mem_2_cs_n                    (ram_if[2].cs_n             ),
+     .o_mem_2_we_n                    (ram_if[2].we_n             ),
+     .o_mem_2_ref_n                   (ram_if[2].ref_n            ),
+     .o_mem_2_ba                      (ram_if[2].ba               ),
+     .o_mem_2_a                       (ram_if[2].addr             ),
+     .o_mem_2_dk                      (ram_if[2].dk               ),
+     .o_mem_2_dk_n                    (ram_if[2].dk_n             ),
+     .o_mem_2_dm                      (ram_if[2].dm               ),
+     .b_mem_2_dq                      (ram_if[2].dq               ),
+     .i_mem_2_qvld                    (ram_if[2].qvld             ),
+     .i_mem_2_qk                      (ram_if[2].dqs              ),
+     .i_mem_2_qk_n                    (ram_if[2].dqs_n            ),
      // Mem interface 3
-     .o_mem_3_ck                      (ram_if[3].clk_p            ), 
-     .o_mem_3_ck_n                    (ram_if[3].clk_n            ), 
-     .o_mem_3_reset_n                 (ram_if[3].rst_n            ), 
-     .o_mem_3_cs_n                    (ram_if[3].cs_n             ),  
-     .o_mem_3_we_n                    (ram_if[3].we_n             ),  
-     .o_mem_3_ref_n                   (ram_if[3].ref_n            ), 
-     .o_mem_3_ba                      (ram_if[3].ba               ),    
-     .o_mem_3_a                       (ram_if[3].addr             ),  
-     .o_mem_3_dk                      (ram_if[3].dk               ),    
-     .o_mem_3_dk_n                    (ram_if[3].dk_n             ),  
-     .o_mem_3_dm                      (ram_if[3].dm               ),    
-     .b_mem_3_dq                      (ram_if[3].dq               ),    
-     .i_mem_3_qvld                    (ram_if[3].qvld             ),  
-     .i_mem_3_qk                      (ram_if[3].dqs              ),   
-     .i_mem_3_qk_n                    (ram_if[3].dqs_n            ), 
+     .o_mem_3_ck                      (ram_if[3].clk_p            ),
+     .o_mem_3_ck_n                    (ram_if[3].clk_n            ),
+     .o_mem_3_reset_n                 (ram_if[3].rst_n            ),
+     .o_mem_3_cs_n                    (ram_if[3].cs_n             ),
+     .o_mem_3_we_n                    (ram_if[3].we_n             ),
+     .o_mem_3_ref_n                   (ram_if[3].ref_n            ),
+     .o_mem_3_ba                      (ram_if[3].ba               ),
+     .o_mem_3_a                       (ram_if[3].addr             ),
+     .o_mem_3_dk                      (ram_if[3].dk               ),
+     .o_mem_3_dk_n                    (ram_if[3].dk_n             ),
+     .o_mem_3_dm                      (ram_if[3].dm               ),
+     .b_mem_3_dq                      (ram_if[3].dq               ),
+     .i_mem_3_qvld                    (ram_if[3].qvld             ),
+     .i_mem_3_qk                      (ram_if[3].dqs              ),
+     .i_mem_3_qk_n                    (ram_if[3].dqs_n            ),
      // Mem interface 4
-     .o_mem_4_ck                      (ram_if[4].clk_p            ), 
-     .o_mem_4_ck_n                    (ram_if[4].clk_n            ), 
-     .o_mem_4_reset_n                 (ram_if[4].rst_n            ), 
-     .o_mem_4_cs_n                    (ram_if[4].cs_n             ),  
-     .o_mem_4_we_n                    (ram_if[4].we_n             ),  
-     .o_mem_4_ref_n                   (ram_if[4].ref_n            ), 
-     .o_mem_4_ba                      (ram_if[4].ba               ),    
-     .o_mem_4_a                       (ram_if[4].addr             ),  
-     .o_mem_4_dk                      (ram_if[4].dk               ),    
-     .o_mem_4_dk_n                    (ram_if[4].dk_n             ),  
-     .o_mem_4_dm                      (ram_if[4].dm               ),    
-     .b_mem_4_dq                      (ram_if[4].dq               ),    
-     .i_mem_4_qvld                    (ram_if[4].qvld             ),  
-     .i_mem_4_qk                      (ram_if[4].dqs              ),   
-     .i_mem_4_qk_n                    (ram_if[4].dqs_n            ), 
+     .o_mem_4_ck                      (ram_if[4].clk_p            ),
+     .o_mem_4_ck_n                    (ram_if[4].clk_n            ),
+     .o_mem_4_reset_n                 (ram_if[4].rst_n            ),
+     .o_mem_4_cs_n                    (ram_if[4].cs_n             ),
+     .o_mem_4_we_n                    (ram_if[4].we_n             ),
+     .o_mem_4_ref_n                   (ram_if[4].ref_n            ),
+     .o_mem_4_ba                      (ram_if[4].ba               ),
+     .o_mem_4_a                       (ram_if[4].addr             ),
+     .o_mem_4_dk                      (ram_if[4].dk               ),
+     .o_mem_4_dk_n                    (ram_if[4].dk_n             ),
+     .o_mem_4_dm                      (ram_if[4].dm               ),
+     .b_mem_4_dq                      (ram_if[4].dq               ),
+     .i_mem_4_qvld                    (ram_if[4].qvld             ),
+     .i_mem_4_qk                      (ram_if[4].dqs              ),
+     .i_mem_4_qk_n                    (ram_if[4].dqs_n            ),
      //----------------------------------------------------------------------
      // RZQ calibration resistor
      //----------------------------------------------------------------------
@@ -573,42 +573,42 @@ module top #(
             // CPU port
             rgmiiconv #
             (
-             .g_disable_fcs_invert_on_tx_error (0          ),     
+             .g_disable_fcs_invert_on_tx_error (0          ),
              .g_technology                     (DEVICE_TECH)
              ) cpu_fpga_rgmiiconv
             (
-             .reset_rx_clk (gmii_rst[PORT_CPU]         ), 
-             .reset_tx_clk (gmii_clk[PORT_CPU]         ), 
-             .tx_clk       (gmii_clk[PORT_CPU]         ), 
+             .reset_rx_clk (gmii_rst[PORT_CPU]         ),
+             .reset_tx_clk (gmii_clk[PORT_CPU]         ),
+             .tx_clk       (gmii_clk[PORT_CPU]         ),
              // RGMII Transmit Interface
-             .rgmii_tx_ctl (cpu_fpga_rgmii_ctl         ), 
-             .rgmii_tx_d   (cpu_fpga_rgmii_d           ), 
+             .rgmii_tx_ctl (cpu_fpga_rgmii_ctl         ),
+             .rgmii_tx_d   (cpu_fpga_rgmii_d           ),
              // RGMII Receive Interface
-             .rgmii_rxc    (fpga_cpu_rgmii_clk         ), 
-             .rgmii_rx_ctl (fpga_cpu_rgmii_ctl         ), 
-             .rgmii_rx_d   (fpga_cpu_rgmii_d           ), 
+             .rgmii_rxc    (fpga_cpu_rgmii_clk         ),
+             .rgmii_rx_ctl (fpga_cpu_rgmii_ctl         ),
+             .rgmii_rx_d   (fpga_cpu_rgmii_d           ),
              // MII/GMII Receive Interface
              .rx_d         (gmii_tx_if[PORT_CPU].data  ),
              .rx_dv        (gmii_tx_if[PORT_CPU].valid ),
              .rx_err       (gmii_tx_if[PORT_CPU].error ),
-             .rx_crs       (                           ),     
-             .rx_col       (                           ),     
+             .rx_crs       (                           ),
+             .rx_col       (                           ),
              // GMII Transmit Interface
              .gmii_tx_d    (gmii_rx_if[PORT_CPU].data  ),
              .gmii_tx_en   (gmii_rx_if[PORT_CPU].valid ),
              .gmii_tx_err  (gmii_rx_if[PORT_CPU].error ),
              // MII Transmit Interface
-             .mii_tx_d     (4'h0                       ), 
-             .mii_tx_en    (1'b0                       ), 
-             .mii_tx_err   (1'b0                       ), 
+             .mii_tx_d     (4'h0                       ),
+             .mii_tx_en    (1'b0                       ),
+             .mii_tx_err   (1'b0                       ),
              // RGMII optional status directly from PHY
-             .rgmii_link   (                           ),     
-             .rgmii_speed  (                           ),     
-             .rgmii_dup    (                           ),     
+             .rgmii_link   (                           ),
+             .rgmii_speed  (                           ),
+             .rgmii_dup    (                           ),
              // Control
-             .ena_auto     (1'b0                       ), 
-             .set_1000     (1'b1                       ), 
-             .set_10       (1'b0                       ), 
+             .ena_auto     (1'b0                       ),
+             .set_1000     (1'b1                       ),
+             .set_10       (1'b0                       ),
              .set_fd       (1'b1                       ),
              .o_dbg        (                           )
              );
@@ -616,42 +616,42 @@ module top #(
             // MGMT port
             rgmiiconv #
             (
-             .g_disable_fcs_invert_on_tx_error (0       ),     
+             .g_disable_fcs_invert_on_tx_error (0       ),
              .g_technology                     ()                    // TBD
              ) mgmt_fpga_rgmiiconv
             (
-             .reset_rx_clk (gmii_rst[PORT_MGMT]         ), 
-             .reset_tx_clk (gmii_clk[PORT_MGMT]         ), 
-             .tx_clk       (gmii_clk[PORT_MGMT]         ), 
+             .reset_rx_clk (gmii_rst[PORT_MGMT]         ),
+             .reset_tx_clk (gmii_clk[PORT_MGMT]         ),
+             .tx_clk       (gmii_clk[PORT_MGMT]         ),
              // RGMII Transmit Interface
-             .rgmii_tx_ctl (mgmt_fpga_rgmii_ctl         ), 
-             .rgmii_tx_d   (mgmt_fpga_rgmii_d           ), 
+             .rgmii_tx_ctl (mgmt_fpga_rgmii_ctl         ),
+             .rgmii_tx_d   (mgmt_fpga_rgmii_d           ),
              // RGMII Receive Interface
-             .rgmii_rxc    (fpga_mgmt_rgmii_clk         ), 
-             .rgmii_rx_ctl (fpga_mgmt_rgmii_ctl         ), 
-             .rgmii_rx_d   (fpga_mgmt_rgmii_d           ), 
+             .rgmii_rxc    (fpga_mgmt_rgmii_clk         ),
+             .rgmii_rx_ctl (fpga_mgmt_rgmii_ctl         ),
+             .rgmii_rx_d   (fpga_mgmt_rgmii_d           ),
              // MII/GMII Receive Interface
              .rx_d         (gmii_tx_if[PORT_MGMT].data  ),
              .rx_dv        (gmii_tx_if[PORT_MGMT].valid ),
              .rx_err       (gmii_tx_if[PORT_MGMT].error ),
-             .rx_crs       (                            ),     
-             .rx_col       (                            ),     
+             .rx_crs       (                            ),
+             .rx_col       (                            ),
              // GMII Transmit Interface
              .gmii_tx_d    (gmii_rx_if[PORT_MGMT].data  ),
              .gmii_tx_en   (gmii_rx_if[PORT_MGMT].valid ),
              .gmii_tx_err  (gmii_rx_if[PORT_MGMT].error ),
              // MII Transmit Interface
-             .mii_tx_d     (4'h0                        ), 
-             .mii_tx_en    (1'b0                        ), 
-             .mii_tx_err   (1'b0                        ), 
+             .mii_tx_d     (4'h0                        ),
+             .mii_tx_en    (1'b0                        ),
+             .mii_tx_err   (1'b0                        ),
              // RGMII optional status directly from PHY
-             .rgmii_link   (                            ),     
-             .rgmii_speed  (                            ),     
-             .rgmii_dup    (                            ),     
+             .rgmii_link   (                            ),
+             .rgmii_speed  (                            ),
+             .rgmii_dup    (                            ),
              // Control
-             .ena_auto     (1'b0                        ), 
-             .set_1000     (1'b1                        ), 
-             .set_10       (1'b0                        ), 
+             .ena_auto     (1'b0                        ),
+             .set_1000     (1'b1                        ),
+             .set_10       (1'b0                        ),
              .set_fd       (1'b1                        ),
              .o_dbg        (                            )
              );
@@ -687,7 +687,7 @@ module top #(
             //TODO (NZ) If we conly use memory controller 3, we should be able to kill the bottom clock
             assign ref_clk_b = clk_125M.clk;
 
-            // TBD 
+            // TBD
             // Memory model wrapper
             /*
             mem_subsys_wrp #
@@ -740,7 +740,7 @@ module top #(
              .g_rldram3_dm_width       (2  ),
              .g_rldram3_dat_width      (36 )
              ) data_ram_top_if();
-            
+
             // Only one memory is actually used
             assign data_ram_top_if.clk = clk_125M.clk;
             assign data_ram_top_if.rst = clk_125M.rst;
@@ -762,10 +762,10 @@ module top #(
                 force `DUT_TM_HIER.i_data_ram_r_valid             = data_ram_top_if.rd_data_rdy;
                 force `DUT_TM_HIER.i_data_ram_data                = data_ram_top_if.rd_data;
                 force `DUT_TM_HIER.i_data_ram_d_req               = data_ram_top_if.data_request;
-                
+
                 force `DUT_C2CORE_HIER.acd_core_inst.tm_nb_mau_injected = 19'h0_07FF;
             end
-            
+
             assign ctrl_ram_top_if.wr_data      = `DUT_TM_HIER.o_ctrl_ram_data;
             assign ctrl_ram_top_if.rd_req       = `DUT_TM_HIER.o_ctrl_ram_r_req;
             assign ctrl_ram_top_if.wr_req       = `DUT_TM_HIER.o_ctrl_ram_w_req;
@@ -881,7 +881,7 @@ module top #(
     // TSE_MII/XGMII direct access
     //--------------------------------------------------------------------------
 
-    //-------------------------------------------------------------------------                                              
+    //-------------------------------------------------------------------------
     // Macro: TSE_CONNECT
     // Tap into the design to "skip" some internal logic using SV force (not Mentor's SignalSpy)
 `define TSE_CONNECT(IF_HW, IF_SIM) \
@@ -928,9 +928,9 @@ module top #(
     assign gmii_rx_if[``IF_SIM``].freerun_tbase = `DUT_TIMEBASE_HIER.timestamp_int;\
     assign gmii_tx_if[``IF_SIM``].freerun_tbase = `DUT_TIMEBASE_HIER.timestamp_int;\
     // end TSE_CONNECT
-    //-------------------------------------------------------------------------                                              
+    //-------------------------------------------------------------------------
 
-    //-------------------------------------------------------------------------                                              
+    //-------------------------------------------------------------------------
     // Macro: XGMAC_CONNECT
     // Skip 10G phy and connect XGMII directly to DUT internal signals
 `define XGMAC_CONNECT(IF_HW, IF_SIM) \
@@ -973,7 +973,7 @@ module top #(
     assign xgmii_rx_if[``IF_SIM``].freerun_tbase = `DUT_TIMEBASE_HIER.timestamp_int;\
     assign xgmii_tx_if[``IF_SIM``].freerun_tbase = `DUT_TIMEBASE_HIER.timestamp_int;\
     // end XGMAC_CONNECT
-    //-------------------------------------------------------------------------                                              
+    //-------------------------------------------------------------------------
 
     genvar g_ps_idx; // Port speed index
     generate
@@ -1178,7 +1178,7 @@ module top #(
         // Begin factory create and phasing based on command line argument e.g. +UVM_TESTNAME=???
         run_test();
     end
-    
+
     //-----------------------------------------------------
     // DUMMY VIRTUAL INTERFACES
     // Instead of using -permit_unmatched_virtual_intf
@@ -1189,6 +1189,9 @@ module top #(
     stream_if#(.DATA_WIDTH(64), .LATENCY(0), .USER_WIDTH(53), .NB_CH(1 )) dummy_stream_if_inp_post (1'b0, 1'b1);
     stream_if#(.DATA_WIDTH(64), .LATENCY(0), .USER_WIDTH(42), .NB_CH(1 )) dummy_stream_if_inp_pre  (1'b0, 1'b1);
     stream_if#(.DATA_WIDTH(64), .LATENCY(0), .USER_WIDTH(1 ), .NB_CH(15)) dummy_stream_if_inp_other(1'b0, 1'b1);
+    stream_if#(.DATA_WIDTH(64), .LATENCY(0), .USER_WIDTH(84), .NB_CH(15)) dummy_stream_if_user     (1'b0, 1'b1);
+    pkt_side_key_if#(.NBR_CHANNEL(16))                                    dummy_pkt_side_key       (1'b0);
+    vcx_cksm_itf                                                          dummy_vcx_cksm_itf       ();
 
 endmodule
 
