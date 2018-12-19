@@ -53,7 +53,8 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
     rand bit [30:0]   bucket_val       [];
     rand bit [47:0]   src_mac_addr;
     rand bit [47:0]   dst_mac_addr;
-    rand int unsigned gen_pkt_type; // 0:Layer 2 LBM 0VLAN, 1:Layer 3 0VLAN, 2:Layer 3 IPv6/UDP/TWAMP
+    rand int unsigned gen_pkt_type;   // 0:Layer 2 LBM 0VLAN, 1:Layer 3 0VLAN, 2:Layer 3 IPv6/UDP/TWAMP
+    rand int unsigned min_frame_size; // with gen_pkt_type=0: 64 , with gen_pkt_type=1: , with gen_pkt_type=2: 122, 
     int unsigned extra_offset_cfg;
     
 
@@ -75,7 +76,8 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
         compensation         inside {0, 4, 24};
         soft compensation    == 24;
 
-        soft gen_pkt_type    == 2;  // Layer 3 IPv6/UDP/TWAMP
+        soft gen_pkt_type    == 2;   // Layer 3 IPv6/UDP/TWAMP
+        soft min_frame_size  == 122; // with gen_pkt_type=0: 64 , with gen_pkt_type=1: , with gen_pkt_type=2: 122, 
 
         src_mac_addr         != dst_mac_addr;
 
@@ -87,7 +89,7 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
 
 //        foreach(bit_rate_in_mbps[i]) {bit_rate_in_mbps[i] inside {[100: 1000]};}
         foreach(nbr_of_pkt[i]      ) {nbr_of_pkt[i]       inside {[  1:  100]};}
-        foreach(pkt_size_in_byte[i]) {pkt_size_in_byte[i] inside {[ 64:  256]};}
+        foreach(pkt_size_in_byte[i]) {pkt_size_in_byte[i] inside {[ min_frame_size:  256]};}
         foreach(flow_number[i])      {flow_number[i]      inside {[  0:   15]};}
 
         unique{flow_number};
