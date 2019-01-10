@@ -74,7 +74,6 @@ $(PLUS_DEFINE) \
 # Module dependencies
 DEPEND = \
 ${ACD_BASIC_DIR}/pkg \
-${ACD_DESIGN_DIR}/clipper/src \
 ${ACD_VERIF_DIR}/common_verif \
 ${ACD_VERIF_DIR}/acd_uvm \
 ${ACD_VERIF_DIR}/acd_mm_uvm_vip \
@@ -90,7 +89,8 @@ ${ACD_VERIF_DIR}/ethernet_uvm_vip \
 ${ACD_VERIF_DIR}/mac_uvc \
 ${ACD_VERIF_DIR}/platform_uvc \
 ${ACD_CORE_DIR}/nwl_rldram3_ctrl/models/memory/micron \
-${ACD_CORE_DIR}/nwl_rldram3_ctrl
+${ACD_CORE_DIR}/nwl_rldram3_ctrl \
+${ACD_DESIGN_DIR}/clipper/src
 
 #################################################
 # Compilation / Optimization
