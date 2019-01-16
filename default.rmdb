@@ -54,7 +54,9 @@
       <parameter name="top_name">top</parameter>
       <parameter name="top_opt">top_opt_ext_mem_(%ext_mem%)</parameter>
       <!--parameter name="work_dir">(%make_dir%)/../lib/lib_questasim/work</parameter-->
-      <parameter name="vopt_libs">-L work -L uvm_vip -L phy_1g10g_reset_controller -L phy_1g_10g -L reconfig_8x1g10g -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L stratixv_ver -L stratixv_hssi_ver -L stratixv_pcie_hip_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L stratixv -L stratixv_hssi -L stratixv_pcie_hip</parameter>
+      <!--parameter name="vopt_libs">-L work -L uvm_vip -L phy_1g10g_reset_controller -L phy_1g_10g -L reconfig_8x1g10g -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L stratixv_ver -L stratixv_hssi_ver -L stratixv_pcie_hip_ver -L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L stratixv -L stratixv_hssi -L stratixv_pcie_hip</parameter-->
+      <!--parameter name="vopt_libs">-L work -L uvm_vip -L phy_1g10g_reset_controller -L phy_1g_10g -L reconfig_8x1g10g -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L stratixv_ver -L stratixv_hssi_ver</parameter-->
+      <parameter name="vopt_libs">-L work -L uvm_vip -L altera_mf_ver -L altera_lnsim_ver -L lpm_ver -L sgate_ver -L altera_ver -L arriaii_ver -L arriaii_hssi_ver -L stratixv_ver -L stratixv_hssi_ver -L sgate -L altera_lnsim -L stratixv -L stratixv_hssi -L altera_mf -L ethernet_xgmac -L pll_class2 -L pll_10g_synce -L pll_sys -L phy_1g10g_reset_controller -L phy_1g_reset_controller -L phy_1g_10g -L low_latency_phy_1pll -L low_latency_phy_combo -L tse_tbi -L reconfig_8x1g10g -L reconfig_c1lt -L reconfig_TestSet -L pll_xgmii</parameter>
     </parameters>
     <!--postScript >
         <command>vrun -vrmdata (%DATADIR%) -status -full -html -covreport -htmldir (%DATADIR%)/report</command>

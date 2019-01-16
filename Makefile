@@ -41,10 +41,42 @@ src/reg/*.sv
 # Chip uses Altera StratixV, Xilinx included here only for acd_basic
 LIST_LIB = \
 -L work -L uvm_vip \
+-L altera_mf_ver \
+-L altera_lnsim_ver \
+-L lpm_ver \
+-L sgate_ver \
+-L altera_ver \
+-L arriaii_ver \
+-L arriaii_hssi_ver \
+-L stratixv_ver \
+-L stratixv_hssi_ver \
+-L sgate \
+-L altera_lnsim \
+-L stratixv \
+-L stratixv_hssi \
+-L altera_mf \
+-L ethernet_xgmac \
+-L pll_class2 \
+-L pll_10g_synce \
+-L pll_sys \
+-L phy_1g10g_reset_controller \
+-L phy_1g_reset_controller \
+-L phy_1g_10g \
+-L low_latency_phy_1pll \
+-L low_latency_phy_combo \
+-L tse_tbi \
+-L reconfig_8x1g10g \
+-L reconfig_c1lt \
+-L reconfig_TestSet \
+-L pll_xgmii
+
+#LIST_LIB = \
+-L work -L uvm_vip \
 -L phy_1g10g_reset_controller -L phy_1g_10g -L reconfig_8x1g10g \
 -L altera_ver  -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver \
--L stratixv_ver -L stratixv_hssi_ver -L stratixv_pcie_hip_ver \
--L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L stratixv -L stratixv_hssi -L stratixv_pcie_hip
+-L stratixv_ver -L stratixv_hssi_ver
+#-L stratixv_pcie_hip_ver \
+#-L altera -L lpm -L sgate -L altera_mf -L altera_lnsim -L stratixv -L stratixv_hssi -L stratixv_pcie_hip
 
 #-L unisims_ver -L secureip -L unimacro_ver -L xilinxcorelib_ver
 
@@ -74,6 +106,7 @@ $(PLUS_DEFINE) \
 # Module dependencies
 DEPEND = \
 ${ACD_BASIC_DIR}/pkg \
+${ACD_DESIGN_DIR}/clipper/src \
 ${ACD_VERIF_DIR}/common_verif \
 ${ACD_VERIF_DIR}/acd_uvm \
 ${ACD_VERIF_DIR}/acd_mm_uvm_vip \
@@ -89,8 +122,7 @@ ${ACD_VERIF_DIR}/ethernet_uvm_vip \
 ${ACD_VERIF_DIR}/mac_uvc \
 ${ACD_VERIF_DIR}/platform_uvc \
 ${ACD_CORE_DIR}/nwl_rldram3_ctrl/models/memory/micron \
-${ACD_CORE_DIR}/nwl_rldram3_ctrl \
-${ACD_DESIGN_DIR}/clipper/src
+${ACD_CORE_DIR}/nwl_rldram3_ctrl
 
 #################################################
 # Compilation / Optimization

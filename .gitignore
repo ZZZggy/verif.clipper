@@ -21,3 +21,4 @@ dvt.f
 dvt_build.log
 getdeps.log
 .project
+.dummy_*
