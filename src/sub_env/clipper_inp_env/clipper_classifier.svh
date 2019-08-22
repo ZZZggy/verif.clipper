@@ -63,14 +63,18 @@ class clipper_classifier extends classifier_base#(c1lt_reg_block);
      */
     virtual function int unsigned get_last_prio_idx(ethernet_frame_t t);
         case(t.p_id)
-            1: return $size(regmodel.action_map_tables.p1.priority_index)-1;
-            2: return $size(regmodel.action_map_tables.p2.priority_index)-1;
-            3: return $size(regmodel.action_map_tables.p3.priority_index)-1;
-            4: return $size(regmodel.action_map_tables.p4.priority_index)-1;
-            5: return $size(regmodel.action_map_tables.p5.priority_index)-1;
-            6: return $size(regmodel.action_map_tables.p6.priority_index)-1;
-            7: return $size(regmodel.action_map_tables.p7.priority_index)-1;
-            8: return $size(regmodel.action_map_tables.p8.priority_index)-1;
+            1:  return $size(regmodel.action_map_tables.p1.priority_index)-1;
+            2:  return $size(regmodel.action_map_tables.p2.priority_index)-1;
+            3:  return $size(regmodel.action_map_tables.p3.priority_index)-1;
+            4:  return $size(regmodel.action_map_tables.p4.priority_index)-1;
+            5:  return $size(regmodel.action_map_tables.p5.priority_index)-1;
+            6:  return $size(regmodel.action_map_tables.p6.priority_index)-1;
+            7:  return $size(regmodel.action_map_tables.p7.priority_index)-1;
+            8:  return $size(regmodel.action_map_tables.p8.priority_index)-1;
+            9:  return $size(regmodel.action_map_tables.p9.priority_index)-1;
+            10: return $size(regmodel.action_map_tables.p10.priority_index)-1;
+            11: return $size(regmodel.action_map_tables.p11.priority_index)-1;
+            12: return $size(regmodel.action_map_tables.p12.priority_index)-1;
             default: begin
                 `uvm_fatal("PORTERR", $sformatf("Port %0d undefined user port index to get last prio index.", t.p_id))
             end
@@ -144,9 +148,9 @@ class clipper_classifier extends classifier_base#(c1lt_reg_block);
                     end
                 endcase
 
-                res = regmodel.class_stats.class_stats_cpu[i].stat[j].packet_count.predict(count.packets_good + count.packets_bad);
+                res = regmodel.class_stats.class_stats_cpu[i-1].stat[j].packet_count.predict(count.packets_good + count.packets_bad);
 //                res = regmodel.class_stats.class_stats_cpu[i].stat[j].byte_count.predict(count.bytes_good + count.bytes_bad);
-                regmodel.class_stats.class_stats_cpu[i].stat[j].mirror(status, .check(UVM_CHECK));
+                regmodel.class_stats.class_stats_cpu[i-1].stat[j].mirror(status, .check(UVM_CHECK));
 
             end
 

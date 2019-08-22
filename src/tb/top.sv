@@ -736,9 +736,9 @@ module top #(
              .g_ram_req_units          (4  ),
              .g_ram_burst_len          (2  ),
              .g_rldram3_bank_add_width (4  ),
-             .g_rldram3_add_width      (21 ),
+             .g_rldram3_add_width      (19 ),
              .g_rldram3_dm_width       (2  ),
-             .g_rldram3_dat_width      (36 )
+             .g_rldram3_dat_width      (72 )
              ) data_ram_top_if();
 
             // Only one memory is actually used
@@ -1190,8 +1190,8 @@ module top #(
     stream_if#(.DATA_WIDTH(64), .LATENCY(0), .USER_WIDTH(42), .NB_CH(1 )) dummy_stream_if_inp_pre  (1'b0, 1'b1);
     stream_if#(.DATA_WIDTH(64), .LATENCY(0), .USER_WIDTH(1 ), .NB_CH(15)) dummy_stream_if_inp_other(1'b0, 1'b1);
     stream_if#(.DATA_WIDTH(64), .LATENCY(0), .USER_WIDTH(84), .NB_CH(15)) dummy_stream_if_user     (1'b0, 1'b1);
-    pkt_side_key_if#(.NBR_CHANNEL(16))                                    dummy_pkt_side_key       (1'b0);
-    vcx_cksm_itf                                                          dummy_vcx_cksm_itf       ();
+//    pkt_side_key_if#(.NBR_CHANNEL(16))                                    dummy_pkt_side_key       (1'b0);
+//    vcx_cksm_itf                                                          dummy_vcx_cksm_itf       ();
 
 endmodule
 

@@ -85,14 +85,18 @@ function bit is_sw_up_soam(ethernet_frame_t t);\
     // FIXME\
     // !isInternalLoopbackActive\
     case(t.p_id)\
-        1: return ~regmodel.globals.tlcs.port1_loopback_ena.get();\
-        2: return ~regmodel.globals.tlcs.port2_loopback_ena.get();\
-        3: return ~regmodel.globals.tlcs.port3_loopback_ena.get();\
-        4: return ~regmodel.globals.tlcs.port4_loopback_ena.get();\
-        5: return ~regmodel.globals.tlcs.port5_loopback_ena.get();\
-        6: return ~regmodel.globals.tlcs.port6_loopback_ena.get();\
-        7: return ~regmodel.globals.tlcs.port7_loopback_ena.get();\
-        8: return ~regmodel.globals.tlcs.port8_loopback_ena.get();\
+        1: return  ~regmodel.globals.tlcs.port1_loopback_ena.get();\
+        2: return  ~regmodel.globals.tlcs.port2_loopback_ena.get();\
+        3: return  ~regmodel.globals.tlcs.port3_loopback_ena.get();\
+        4: return  ~regmodel.globals.tlcs.port4_loopback_ena.get();\
+        5: return  ~regmodel.globals.tlcs.port5_loopback_ena.get();\
+        6: return  ~regmodel.globals.tlcs.port6_loopback_ena.get();\
+        7: return  ~regmodel.globals.tlcs.port7_loopback_ena.get();\
+        8: return  ~regmodel.globals.tlcs.port8_loopback_ena.get();\
+        9: return  ~regmodel.globals.tlcs.port9_loopback_ena.get();\
+        10: return ~regmodel.globals.tlcs.port10_loopback_ena.get();\
+        11: return ~regmodel.globals.tlcs.port11_loopback_ena.get();\
+        12: return ~regmodel.globals.tlcs.port12_loopback_ena.get();\
         default: `uvm_fatal("PORTERR", $sformatf("Unknown user port: %0d", t.p_id))\
     endcase\
     //if ((regmodel.np_if.np_if_ctrl[addr].port_local_in_ena.port_int_lpbk_in_ena.get() == 1)\
@@ -295,7 +299,7 @@ class clipper_class_rule_generic extends class_rule_base#(c1lt_reg_block);
         s = {s, $sformatf("\n is_lp_mac_addr(SA)   = %0b", is_lp_mac_addr(t.p_id, t.sa))};
         s = {s, $sformatf("\n logical_port         = %0d", get_logical_port(t.p_id))};
         s = {s, $sformatf("\n is_lp_ring           = %0b", is_lp_ring(t.p_id))};
-        s = {s, $sformatf("\n is_ft_drop_match     = %0b", is_ft_drop_match(t), tpid, vid)};
+        s = {s, $sformatf("\n is_ft_drop_match     = %0b", is_ft_drop_match(t))};
         s = {s, $sformatf("\n is_l2_tunneling_flag = %0b", is_l2_tunneling_flag(t.p_id, vid))};
         s = {s, $sformatf("\n is_cfm_flag          = %0b", is_cfm_flag(t.p_id, vid))};
         s = {s, $sformatf("\n is_bcast_mgmt_flag   = %0b", is_bcast_mgmt_flag(t.p_id, vid))};

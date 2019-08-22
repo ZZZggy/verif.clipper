@@ -80,8 +80,8 @@ class clipper_class_rule_complex extends uvm_component implements class_rule_fil
         stream_trans_t stream;
         stream_trans_extensions ext;
         pkt_key_item key;
-        pkt_side_key_item side_key;
-        vcx_partial_cksm_item cksm;
+//        pkt_side_key_item side_key;
+//        vcx_partial_cksm_item cksm;
 
         // create stream from ethernet frame
         raw = t.to_uvm_tlm_generic_payload("stream", 0);
@@ -93,8 +93,8 @@ class clipper_class_rule_complex extends uvm_component implements class_rule_fil
 
         // extract
 
-        key = extract[t.p_id-1].extract_key(stream, side_key, cksm);
-        `uvm_info("PREDICT::COMPLEX", key.convert2string(), UVM_DEBUG)
+//        key = extract[t.p_id-1].extract_key(stream, side_key, cksm);
+//        `uvm_info("PREDICT::COMPLEX", key.convert2string(), UVM_DEBUG)
 
         // classify
         return classifier[t.p_id-1].classify(key);
