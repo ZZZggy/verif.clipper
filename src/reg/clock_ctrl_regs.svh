@@ -505,6 +505,9 @@ class clock_ctrl_synce_ctrl_reg extends uvm_reg;
     // Variable: force_holdover
     // Forces the onboard SI5317C jitter cleaning PLL to freeze VCO
     rand uvm_reg_field force_holdover;
+    // Variable: clk_sel_si5392a_in1
+    // SyncE clock selection for external jitter cleaner SI5392A in1
+    rand uvm_reg_field clk_sel_si5392a_in1;
     // Variable: local_osc_mask
     // Masks the readiness of the 125MHz local oscillator
     rand uvm_reg_field local_osc_mask;
@@ -538,6 +541,9 @@ class clock_ctrl_synce_ctrl_reg extends uvm_reg;
     // Variable: quad_phy_1_recovered_clk_mask
     // Masks the readiness of the Quad Phy recovered clock 1
     rand uvm_reg_field quad_phy_1_recovered_clk_mask;
+    // Variable: clk_oe_si5392a_in1
+    // Control the output enable for SI5392A second SyncE Clock.
+    rand uvm_reg_field clk_oe_si5392a_in1;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -575,6 +581,7 @@ class clock_ctrl_synce_ctrl_reg extends uvm_reg;
         clk_sel_fsm_disable_revertive = uvm_reg_field::type_id::create("clk_sel_fsm_disable_revertive", , get_full_name());
         clk_sel_fsm_revertive_mode = uvm_reg_field::type_id::create("clk_sel_fsm_revertive_mode", , get_full_name());
         force_holdover = uvm_reg_field::type_id::create("force_holdover", , get_full_name());
+        clk_sel_si5392a_in1 = uvm_reg_field::type_id::create("clk_sel_si5392a_in1", , get_full_name());
         local_osc_mask = uvm_reg_field::type_id::create("local_osc_mask", , get_full_name());
         port1_recovered_clk_mask = uvm_reg_field::type_id::create("port1_recovered_clk_mask", , get_full_name());
         port2_recovered_clk_mask = uvm_reg_field::type_id::create("port2_recovered_clk_mask", , get_full_name());
@@ -586,6 +593,7 @@ class clock_ctrl_synce_ctrl_reg extends uvm_reg;
         port8_recovered_clk_mask = uvm_reg_field::type_id::create("port8_recovered_clk_mask", , get_full_name());
         quad_phy_0_recovered_clk_mask = uvm_reg_field::type_id::create("quad_phy_0_recovered_clk_mask", , get_full_name());
         quad_phy_1_recovered_clk_mask = uvm_reg_field::type_id::create("quad_phy_1_recovered_clk_mask", , get_full_name());
+        clk_oe_si5392a_in1 = uvm_reg_field::type_id::create("clk_oe_si5392a_in1", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
         clk_sel_fsm_master.configure(this, 4, 0, "RW", 0, 'h0, 1, 1, 0);
@@ -594,6 +602,7 @@ class clock_ctrl_synce_ctrl_reg extends uvm_reg;
         clk_sel_fsm_disable_revertive.configure(this, 1, 9, "RW", 0, 'h0, 1, 1, 0);
         clk_sel_fsm_revertive_mode.configure(this, 1, 10, "RW", 0, 'h0, 1, 1, 0);
         force_holdover.configure(this, 1, 11, "RW", 0, 'h0, 1, 1, 0);
+        clk_sel_si5392a_in1.configure(this, 4, 12, "RW", 0, 'h0, 1, 1, 0);
         local_osc_mask.configure(this, 1, 16, "RW", 0, 'h0, 1, 1, 0);
         port1_recovered_clk_mask.configure(this, 1, 17, "RW", 0, 'h0, 1, 1, 0);
         port2_recovered_clk_mask.configure(this, 1, 18, "RW", 0, 'h0, 1, 1, 0);
@@ -605,6 +614,7 @@ class clock_ctrl_synce_ctrl_reg extends uvm_reg;
         port8_recovered_clk_mask.configure(this, 1, 24, "RW", 0, 'h0, 1, 1, 0);
         quad_phy_0_recovered_clk_mask.configure(this, 1, 25, "RW", 0, 'h0, 1, 1, 0);
         quad_phy_1_recovered_clk_mask.configure(this, 1, 26, "RW", 0, 'h0, 1, 1, 0);
+        clk_oe_si5392a_in1.configure(this, 1, 31, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -694,6 +704,7 @@ class clock_ctrl_synce_ctrl_reg extends uvm_reg;
         $swrite(s, "%0s\n%24s=0x%0h", s, clk_sel_fsm_disable_revertive.get_name, clk_sel_fsm_disable_revertive.value);
         $swrite(s, "%0s\n%24s=0x%0h", s, clk_sel_fsm_revertive_mode.get_name, clk_sel_fsm_revertive_mode.value);
         $swrite(s, "%0s\n%24s=0x%0h", s, force_holdover.get_name, force_holdover.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, clk_sel_si5392a_in1.get_name, clk_sel_si5392a_in1.value);
         $swrite(s, "%0s\n%24s=0x%0h", s, local_osc_mask.get_name, local_osc_mask.value);
         $swrite(s, "%0s\n%24s=0x%0h", s, port1_recovered_clk_mask.get_name, port1_recovered_clk_mask.value);
         $swrite(s, "%0s\n%24s=0x%0h", s, port2_recovered_clk_mask.get_name, port2_recovered_clk_mask.value);
@@ -705,6 +716,7 @@ class clock_ctrl_synce_ctrl_reg extends uvm_reg;
         $swrite(s, "%0s\n%24s=0x%0h", s, port8_recovered_clk_mask.get_name, port8_recovered_clk_mask.value);
         $swrite(s, "%0s\n%24s=0x%0h", s, quad_phy_0_recovered_clk_mask.get_name, quad_phy_0_recovered_clk_mask.value);
         $swrite(s, "%0s\n%24s=0x%0h", s, quad_phy_1_recovered_clk_mask.get_name, quad_phy_1_recovered_clk_mask.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, clk_oe_si5392a_in1.get_name, clk_oe_si5392a_in1.value);
         return s;
     endfunction
 
@@ -736,6 +748,8 @@ class clock_ctrl_synce_ctrl_reg_cover extends uvm_object;
         clk_sel_fsm_revertive_mode_rd: coverpoint r.clk_sel_fsm_revertive_mode.value iff  (is_read);
         force_holdover_wr: coverpoint r.force_holdover.value iff (!is_read);
         force_holdover_rd: coverpoint r.force_holdover.value iff  (is_read);
+        clk_sel_si5392a_in1_wr: coverpoint r.clk_sel_si5392a_in1.value iff (!is_read);
+        clk_sel_si5392a_in1_rd: coverpoint r.clk_sel_si5392a_in1.value iff  (is_read);
         local_osc_mask_wr: coverpoint r.local_osc_mask.value iff (!is_read);
         local_osc_mask_rd: coverpoint r.local_osc_mask.value iff  (is_read);
         port1_recovered_clk_mask_wr: coverpoint r.port1_recovered_clk_mask.value iff (!is_read);
@@ -758,6 +772,8 @@ class clock_ctrl_synce_ctrl_reg_cover extends uvm_object;
         quad_phy_0_recovered_clk_mask_rd: coverpoint r.quad_phy_0_recovered_clk_mask.value iff  (is_read);
         quad_phy_1_recovered_clk_mask_wr: coverpoint r.quad_phy_1_recovered_clk_mask.value iff (!is_read);
         quad_phy_1_recovered_clk_mask_rd: coverpoint r.quad_phy_1_recovered_clk_mask.value iff  (is_read);
+        clk_oe_si5392a_in1_wr: coverpoint r.clk_oe_si5392a_in1.value iff (!is_read);
+        clk_oe_si5392a_in1_rd: coverpoint r.clk_oe_si5392a_in1.value iff  (is_read);
     endgroup
 
     `uvm_object_utils(clock_ctrl_reg_pkg::clock_ctrl_synce_ctrl_reg_cover)

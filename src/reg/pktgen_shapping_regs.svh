@@ -19,7 +19,7 @@
 //
 //------------------------------------------------------------------------------
 // !!! AUTO-GENERATED FILE !!!
-// Register definitions for inspector register block.
+// Register definitions for pktgen_shapping register block.
 //
 // To enable per-instance coverage: regmodel...set_per_instance_coverage(1, UVM_(NO_)HIER);
 // To enable singleton coverage:    regmodel...set_per_instance_coverage(0, UVM_(NO_)HIER);
@@ -36,25 +36,25 @@
 `include "uvm_macros.svh"
 
 //---------------------------------------------------------
-// Group: inspector
+// Group: pktgen_shapping
 //---------------------------------------------------------
 
-package inspector_reg_pkg;
+package pktgen_shapping_reg_pkg;
     import uvm_pkg::*;
     import acd_uvm_pkg::*;
 
-typedef class inspector_latency_min_reg_cover;
+typedef class shapping_shapping_bucket_reg_cover;
 
-// Class: inspector_latency_min_reg
-// Register inspector.latency_min: 64 lsb of the 72 bit internal register in read. 36 lsb of the 72 bit internal register in write [36 bit latency_max | 36 bit latency_min]
-class inspector_latency_min_reg extends uvm_reg;
+// Class: shapping_shapping_bucket_reg
+// Register shapping.shapping_bucket: 32 bits value, offset binary representation!!!(example 0x7fffffff represent value -1)
+class shapping_shapping_bucket_reg extends uvm_reg;
 
-    // Variable: latency_min
-    // 
-    rand uvm_reg_field latency_min;
-    // Variable: latency_max_27downto0
-    // 
-    rand uvm_reg_field latency_max_27downto0;
+    // Variable: signbit
+    // 0=minus  ; 1=plus
+    rand uvm_reg_field signbit;
+    // Variable: bucket_val
+    // Bucket Value
+    rand uvm_reg_field bucket_val;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -62,20 +62,20 @@ class inspector_latency_min_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_latency_min_reg_cover cg_all;
+    static shapping_shapping_bucket_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_latency_min_reg_cover cg;
+    shapping_shapping_bucket_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_latency_min_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_shapping_bucket_reg)
 
     // Constructor: new
-    function new(string name = "inspector_latency_min");
+    function new(string name = "shapping_shapping_bucket");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -86,12 +86,12 @@ class inspector_latency_min_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        latency_min = uvm_reg_field::type_id::create("latency_min", , get_full_name());
-        latency_max_27downto0 = uvm_reg_field::type_id::create("latency_max_27downto0", , get_full_name());
+        signbit = uvm_reg_field::type_id::create("signbit", , get_full_name());
+        bucket_val = uvm_reg_field::type_id::create("bucket_val", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        latency_min.configure(this, 36, 0, "rw", 0, 'h0, 1, 1, 0);
-        latency_max_27downto0.configure(this, 28, 36, "ro", 0, 'h0, 1, 1, 0);
+        signbit.configure(this, 1, 31, "RW", 0, 'h0, 1, 1, 0);
+        bucket_val.configure(this, 31, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -137,11 +137,11 @@ class inspector_latency_min_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_latency_min_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_shapping_bucket_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_latency_min_reg_cover::get();
+            cg_all = shapping_shapping_bucket_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -175,38 +175,38 @@ class inspector_latency_min_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, latency_min.get_name, latency_min.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, latency_max_27downto0.get_name, latency_max_27downto0.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, signbit.get_name, signbit.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, bucket_val.get_name, bucket_val.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_latency_min_reg_cover
+// Class: shapping_shapping_bucket_reg_cover
 // Register coverage object.
-class inspector_latency_min_reg_cover extends uvm_object;
+class shapping_shapping_bucket_reg_cover extends uvm_object;
 
-    static local inspector_latency_min_reg_cover m_inst;
+    static local shapping_shapping_bucket_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_latency_min_reg r;
+    shapping_shapping_bucket_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        latency_min_wr: coverpoint r.latency_min.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        latency_min_rd: coverpoint r.latency_min.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-        latency_max_27downto0_wr: coverpoint r.latency_max_27downto0.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        latency_max_27downto0_rd: coverpoint r.latency_max_27downto0.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        signbit_wr: coverpoint r.signbit.value iff (!is_read);
+        signbit_rd: coverpoint r.signbit.value iff  (is_read);
+        bucket_val_wr: coverpoint r.bucket_val.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        bucket_val_rd: coverpoint r.bucket_val.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_latency_min_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_shapping_bucket_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_latency_min_reg_cover");
+    /*protected*/ function new(string name="shapping_shapping_bucket_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -222,9 +222,9 @@ class inspector_latency_min_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_latency_min_reg_cover get();
+    static function shapping_shapping_bucket_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_latency_min_reg_cover::type_id::create("cg");
+            m_inst = shapping_shapping_bucket_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -232,24 +232,21 @@ class inspector_latency_min_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_latency_min_reg _r, bit is_read);
+    virtual function void sample(shapping_shapping_bucket_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_latency_max_reg_cover;
+typedef class shapping_credit_reg_cover;
 
-// Class: inspector_latency_max_reg
-// Register inspector.latency_max: 64 msb of the 72 bit internal register in read. 36 msb of the 72 bit internal register in write [36 bit latency_max | 36 bit latency_min]
-class inspector_latency_max_reg extends uvm_reg;
+// Class: shapping_credit_reg
+// Register shapping.credit: credit_value added into bucket at every total_period (total_period programmed in next register)
+class shapping_credit_reg extends uvm_reg;
 
-    // Variable: latency_min_35downto8
-    // 
-    rand uvm_reg_field latency_min_35downto8;
-    // Variable: latency_max
-    // 
-    rand uvm_reg_field latency_max;
+    // Variable: credit_value
+    // credit_value[bytes] = (rate[bit/sec] * total_period [sec] ) / 8
+    rand uvm_reg_field credit_value;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -257,20 +254,20 @@ class inspector_latency_max_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_latency_max_reg_cover cg_all;
+    static shapping_credit_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_latency_max_reg_cover cg;
+    shapping_credit_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_latency_max_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_credit_reg)
 
     // Constructor: new
-    function new(string name = "inspector_latency_max");
+    function new(string name = "shapping_credit");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -281,12 +278,10 @@ class inspector_latency_max_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        latency_min_35downto8 = uvm_reg_field::type_id::create("latency_min_35downto8", , get_full_name());
-        latency_max = uvm_reg_field::type_id::create("latency_max", , get_full_name());
+        credit_value = uvm_reg_field::type_id::create("credit_value", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        latency_min_35downto8.configure(this, 28, 0, "ro", 0, 'h0, 1, 1, 0);
-        latency_max.configure(this, 36, 28, "rw", 0, 'h0, 1, 1, 0);
+        credit_value.configure(this, 32, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -332,11 +327,11 @@ class inspector_latency_max_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_latency_max_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_credit_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_latency_max_reg_cover::get();
+            cg_all = shapping_credit_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -370,38 +365,35 @@ class inspector_latency_max_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, latency_min_35downto8.get_name, latency_min_35downto8.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, latency_max.get_name, latency_max.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, credit_value.get_name, credit_value.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_latency_max_reg_cover
+// Class: shapping_credit_reg_cover
 // Register coverage object.
-class inspector_latency_max_reg_cover extends uvm_object;
+class shapping_credit_reg_cover extends uvm_object;
 
-    static local inspector_latency_max_reg_cover m_inst;
+    static local shapping_credit_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_latency_max_reg r;
+    shapping_credit_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        latency_min_35downto8_wr: coverpoint r.latency_min_35downto8.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        latency_min_35downto8_rd: coverpoint r.latency_min_35downto8.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-        latency_max_wr: coverpoint r.latency_max.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        latency_max_rd: coverpoint r.latency_max.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        credit_value_wr: coverpoint r.credit_value.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        credit_value_rd: coverpoint r.credit_value.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_latency_max_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_credit_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_latency_max_reg_cover");
+    /*protected*/ function new(string name="shapping_credit_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -417,9 +409,9 @@ class inspector_latency_max_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_latency_max_reg_cover get();
+    static function shapping_credit_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_latency_max_reg_cover::type_id::create("cg");
+            m_inst = shapping_credit_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -427,24 +419,21 @@ class inspector_latency_max_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_latency_max_reg _r, bit is_read);
+    virtual function void sample(shapping_credit_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_jitter_min_reg_cover;
+typedef class shapping_period_reg_cover;
 
-// Class: inspector_jitter_min_reg
-// Register inspector.jitter_min: 64 lsb of the 72 bit internal register in read. 36 lsb of the 72 bit internal register in write [36 bit jitter_max | 36 bit jitter_min]
-class inspector_jitter_min_reg extends uvm_reg;
+// Class: shapping_period_reg
+// Register shapping.period: period at which credits are added into bucket
+class shapping_period_reg extends uvm_reg;
 
-    // Variable: jitter_min
-    // 
-    rand uvm_reg_field jitter_min;
-    // Variable: jitter_max_27downto0
-    // 
-    rand uvm_reg_field jitter_max_27downto0;
+    // Variable: period_factor
+    // total period = period_value x (period_factor + 1) where period_value is 320E-09 for 1G plateforms and 160E-09 for 10G plateforms
+    rand uvm_reg_field period_factor;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -452,20 +441,20 @@ class inspector_jitter_min_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_jitter_min_reg_cover cg_all;
+    static shapping_period_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_jitter_min_reg_cover cg;
+    shapping_period_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_jitter_min_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_period_reg)
 
     // Constructor: new
-    function new(string name = "inspector_jitter_min");
+    function new(string name = "shapping_period");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -476,12 +465,10 @@ class inspector_jitter_min_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        jitter_min = uvm_reg_field::type_id::create("jitter_min", , get_full_name());
-        jitter_max_27downto0 = uvm_reg_field::type_id::create("jitter_max_27downto0", , get_full_name());
+        period_factor = uvm_reg_field::type_id::create("period_factor", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        jitter_min.configure(this, 36, 0, "rw", 0, 'h0, 1, 1, 0);
-        jitter_max_27downto0.configure(this, 28, 36, "ro", 0, 'h0, 1, 1, 0);
+        period_factor.configure(this, 32, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -527,11 +514,11 @@ class inspector_jitter_min_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_jitter_min_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_period_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_jitter_min_reg_cover::get();
+            cg_all = shapping_period_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -565,38 +552,35 @@ class inspector_jitter_min_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, jitter_min.get_name, jitter_min.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, jitter_max_27downto0.get_name, jitter_max_27downto0.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, period_factor.get_name, period_factor.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_jitter_min_reg_cover
+// Class: shapping_period_reg_cover
 // Register coverage object.
-class inspector_jitter_min_reg_cover extends uvm_object;
+class shapping_period_reg_cover extends uvm_object;
 
-    static local inspector_jitter_min_reg_cover m_inst;
+    static local shapping_period_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_jitter_min_reg r;
+    shapping_period_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        jitter_min_wr: coverpoint r.jitter_min.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        jitter_min_rd: coverpoint r.jitter_min.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-        jitter_max_27downto0_wr: coverpoint r.jitter_max_27downto0.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        jitter_max_27downto0_rd: coverpoint r.jitter_max_27downto0.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        period_factor_wr: coverpoint r.period_factor.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        period_factor_rd: coverpoint r.period_factor.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_jitter_min_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_period_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_jitter_min_reg_cover");
+    /*protected*/ function new(string name="shapping_period_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -612,9 +596,9 @@ class inspector_jitter_min_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_jitter_min_reg_cover get();
+    static function shapping_period_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_jitter_min_reg_cover::type_id::create("cg");
+            m_inst = shapping_period_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -622,24 +606,24 @@ class inspector_jitter_min_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_jitter_min_reg _r, bit is_read);
+    virtual function void sample(shapping_period_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_jitter_max_reg_cover;
+typedef class shapping_shapping_mode_reg_cover;
 
-// Class: inspector_jitter_max_reg
-// Register inspector.jitter_max: 64 msb of the 72 bit internal register in read. 36 msb of the 72 bit internal register in write [36 bit jitter_max | 36 bit jitter_min]
-class inspector_jitter_max_reg extends uvm_reg;
+// Class: shapping_shapping_mode_reg
+// Register shapping.shapping_mode: 
+class shapping_shapping_mode_reg extends uvm_reg;
 
-    // Variable: jitter_min_35downto8
+    // Variable: shapping_mode_sel
+    // shaping mode selection
+    rand uvm_reg_field shapping_mode_sel;
+    // Variable: shapping_ena
     // 
-    rand uvm_reg_field jitter_min_35downto8;
-    // Variable: jitter_max
-    // 
-    rand uvm_reg_field jitter_max;
+    rand uvm_reg_field shapping_ena;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -647,20 +631,20 @@ class inspector_jitter_max_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_jitter_max_reg_cover cg_all;
+    static shapping_shapping_mode_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_jitter_max_reg_cover cg;
+    shapping_shapping_mode_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_jitter_max_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_shapping_mode_reg)
 
     // Constructor: new
-    function new(string name = "inspector_jitter_max");
+    function new(string name = "shapping_shapping_mode");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -671,12 +655,12 @@ class inspector_jitter_max_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        jitter_min_35downto8 = uvm_reg_field::type_id::create("jitter_min_35downto8", , get_full_name());
-        jitter_max = uvm_reg_field::type_id::create("jitter_max", , get_full_name());
+        shapping_mode_sel = uvm_reg_field::type_id::create("shapping_mode_sel", , get_full_name());
+        shapping_ena = uvm_reg_field::type_id::create("shapping_ena", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        jitter_min_35downto8.configure(this, 28, 0, "ro", 0, 'h0, 1, 1, 0);
-        jitter_max.configure(this, 36, 28, "rw", 0, 'h0, 1, 1, 0);
+        shapping_mode_sel.configure(this, 2, 0, "RW", 0, 'h0, 1, 1, 0);
+        shapping_ena.configure(this, 1, 3, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -722,11 +706,11 @@ class inspector_jitter_max_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_jitter_max_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_shapping_mode_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_jitter_max_reg_cover::get();
+            cg_all = shapping_shapping_mode_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -760,38 +744,38 @@ class inspector_jitter_max_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, jitter_min_35downto8.get_name, jitter_min_35downto8.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, jitter_max.get_name, jitter_max.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, shapping_mode_sel.get_name, shapping_mode_sel.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, shapping_ena.get_name, shapping_ena.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_jitter_max_reg_cover
+// Class: shapping_shapping_mode_reg_cover
 // Register coverage object.
-class inspector_jitter_max_reg_cover extends uvm_object;
+class shapping_shapping_mode_reg_cover extends uvm_object;
 
-    static local inspector_jitter_max_reg_cover m_inst;
+    static local shapping_shapping_mode_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_jitter_max_reg r;
+    shapping_shapping_mode_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        jitter_min_35downto8_wr: coverpoint r.jitter_min_35downto8.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        jitter_min_35downto8_rd: coverpoint r.jitter_min_35downto8.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-        jitter_max_wr: coverpoint r.jitter_max.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        jitter_max_rd: coverpoint r.jitter_max.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        shapping_mode_sel_wr: coverpoint r.shapping_mode_sel.value iff (!is_read);
+        shapping_mode_sel_rd: coverpoint r.shapping_mode_sel.value iff  (is_read);
+        shapping_ena_wr: coverpoint r.shapping_ena.value iff (!is_read);
+        shapping_ena_rd: coverpoint r.shapping_ena.value iff  (is_read);
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_jitter_max_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_shapping_mode_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_jitter_max_reg_cover");
+    /*protected*/ function new(string name="shapping_shapping_mode_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -807,9 +791,9 @@ class inspector_jitter_max_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_jitter_max_reg_cover get();
+    static function shapping_shapping_mode_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_jitter_max_reg_cover::type_id::create("cg");
+            m_inst = shapping_shapping_mode_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -817,21 +801,21 @@ class inspector_jitter_max_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_jitter_max_reg _r, bit is_read);
+    virtual function void sample(shapping_shapping_mode_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_sum_latency_reg_cover;
+typedef class shapping_duration_bucket_reg_cover;
 
-// Class: inspector_sum_latency_reg
-// Register inspector.sum_latency: 
-class inspector_sum_latency_reg extends uvm_reg;
+// Class: shapping_duration_bucket_reg
+// Register shapping.duration_bucket: 
+class shapping_duration_bucket_reg extends uvm_reg;
 
-    // Variable: sum_latency
+    // Variable: duration_bucket
     // 
-    rand uvm_reg_field sum_latency;
+    rand uvm_reg_field duration_bucket;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -839,20 +823,20 @@ class inspector_sum_latency_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_sum_latency_reg_cover cg_all;
+    static shapping_duration_bucket_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_sum_latency_reg_cover cg;
+    shapping_duration_bucket_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_sum_latency_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_duration_bucket_reg)
 
     // Constructor: new
-    function new(string name = "inspector_sum_latency");
+    function new(string name = "shapping_duration_bucket");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -863,10 +847,10 @@ class inspector_sum_latency_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        sum_latency = uvm_reg_field::type_id::create("sum_latency", , get_full_name());
+        duration_bucket = uvm_reg_field::type_id::create("duration_bucket", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        sum_latency.configure(this, 64, 0, "RW", 0, 'h0, 1, 1, 0);
+        duration_bucket.configure(this, 48, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -912,11 +896,11 @@ class inspector_sum_latency_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_sum_latency_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_duration_bucket_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_sum_latency_reg_cover::get();
+            cg_all = shapping_duration_bucket_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -950,35 +934,35 @@ class inspector_sum_latency_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, sum_latency.get_name, sum_latency.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, duration_bucket.get_name, duration_bucket.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_sum_latency_reg_cover
+// Class: shapping_duration_bucket_reg_cover
 // Register coverage object.
-class inspector_sum_latency_reg_cover extends uvm_object;
+class shapping_duration_bucket_reg_cover extends uvm_object;
 
-    static local inspector_sum_latency_reg_cover m_inst;
+    static local shapping_duration_bucket_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_sum_latency_reg r;
+    shapping_duration_bucket_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        sum_latency_wr: coverpoint r.sum_latency.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        sum_latency_rd: coverpoint r.sum_latency.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        duration_bucket_wr: coverpoint r.duration_bucket.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        duration_bucket_rd: coverpoint r.duration_bucket.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_sum_latency_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_duration_bucket_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_sum_latency_reg_cover");
+    /*protected*/ function new(string name="shapping_duration_bucket_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -994,9 +978,9 @@ class inspector_sum_latency_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_sum_latency_reg_cover get();
+    static function shapping_duration_bucket_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_sum_latency_reg_cover::type_id::create("cg");
+            m_inst = shapping_duration_bucket_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -1004,21 +988,21 @@ class inspector_sum_latency_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_sum_latency_reg _r, bit is_read);
+    virtual function void sample(shapping_duration_bucket_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_sum_jitter_reg_cover;
+typedef class shapping_duration_mode_reg_cover;
 
-// Class: inspector_sum_jitter_reg
-// Register inspector.sum_jitter: 
-class inspector_sum_jitter_reg extends uvm_reg;
+// Class: shapping_duration_mode_reg
+// Register shapping.duration_mode: 
+class shapping_duration_mode_reg extends uvm_reg;
 
-    // Variable: sum_jitter
-    // 
-    rand uvm_reg_field sum_jitter;
+    // Variable: duration_mode_sel
+    // 00:  Bytes 01:  Packets 10:  Seconds 11:   Infinite
+    rand uvm_reg_field duration_mode_sel;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -1026,20 +1010,20 @@ class inspector_sum_jitter_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_sum_jitter_reg_cover cg_all;
+    static shapping_duration_mode_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_sum_jitter_reg_cover cg;
+    shapping_duration_mode_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_sum_jitter_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_duration_mode_reg)
 
     // Constructor: new
-    function new(string name = "inspector_sum_jitter");
+    function new(string name = "shapping_duration_mode");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -1050,10 +1034,10 @@ class inspector_sum_jitter_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        sum_jitter = uvm_reg_field::type_id::create("sum_jitter", , get_full_name());
+        duration_mode_sel = uvm_reg_field::type_id::create("duration_mode_sel", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        sum_jitter.configure(this, 64, 0, "RW", 0, 'h0, 1, 1, 0);
+        duration_mode_sel.configure(this, 2, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -1099,11 +1083,11 @@ class inspector_sum_jitter_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_sum_jitter_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_duration_mode_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_sum_jitter_reg_cover::get();
+            cg_all = shapping_duration_mode_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -1137,35 +1121,35 @@ class inspector_sum_jitter_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, sum_jitter.get_name, sum_jitter.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, duration_mode_sel.get_name, duration_mode_sel.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_sum_jitter_reg_cover
+// Class: shapping_duration_mode_reg_cover
 // Register coverage object.
-class inspector_sum_jitter_reg_cover extends uvm_object;
+class shapping_duration_mode_reg_cover extends uvm_object;
 
-    static local inspector_sum_jitter_reg_cover m_inst;
+    static local shapping_duration_mode_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_sum_jitter_reg r;
+    shapping_duration_mode_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        sum_jitter_wr: coverpoint r.sum_jitter.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        sum_jitter_rd: coverpoint r.sum_jitter.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        duration_mode_sel_wr: coverpoint r.duration_mode_sel.value iff (!is_read);
+        duration_mode_sel_rd: coverpoint r.duration_mode_sel.value iff  (is_read);
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_sum_jitter_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_duration_mode_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_sum_jitter_reg_cover");
+    /*protected*/ function new(string name="shapping_duration_mode_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -1181,9 +1165,9 @@ class inspector_sum_jitter_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_sum_jitter_reg_cover get();
+    static function shapping_duration_mode_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_sum_jitter_reg_cover::type_id::create("cg");
+            m_inst = shapping_duration_mode_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -1191,24 +1175,30 @@ class inspector_sum_jitter_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_sum_jitter_reg _r, bit is_read);
+    virtual function void sample(shapping_duration_mode_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_bytes_good_reg_cover;
+typedef class shapping_emix_table_reg_cover;
 
-// Class: inspector_bytes_good_reg
-// Register inspector.bytes_good: 64 lsb of the 72 bit internal register in read. 36 lsb of the 72 bit internal register in write [36 bit pkts_good | 36 bit bytes_good]
-class inspector_bytes_good_reg extends uvm_reg;
+// Class: shapping_emix_table_reg
+// Register shapping.emix_table: E-MIX packet size table (for readback : consecutive accesses will auto increment index.  Read 8 times to retrieve complete table)
+class shapping_emix_table_reg extends uvm_reg;
 
-    // Variable: bytes_good
+    // Variable: unused2
     // 
-    rand uvm_reg_field bytes_good;
-    // Variable: pkts_good_27downto0
+    rand uvm_reg_field unused2;
+    // Variable: sequence_value_index
+    // selects E-MIX packet size value being programmed in field sequence value[13:0]
+    rand uvm_reg_field sequence_value_index;
+    // Variable: unused1
     // 
-    rand uvm_reg_field pkts_good_27downto0;
+    rand uvm_reg_field unused1;
+    // Variable: sequence_value
+    // E-MIX packet size value 0 to 7     
+    rand uvm_reg_field sequence_value;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -1216,20 +1206,20 @@ class inspector_bytes_good_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_bytes_good_reg_cover cg_all;
+    static shapping_emix_table_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_bytes_good_reg_cover cg;
+    shapping_emix_table_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_bytes_good_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_emix_table_reg)
 
     // Constructor: new
-    function new(string name = "inspector_bytes_good");
+    function new(string name = "shapping_emix_table");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -1240,12 +1230,16 @@ class inspector_bytes_good_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        bytes_good = uvm_reg_field::type_id::create("bytes_good", , get_full_name());
-        pkts_good_27downto0 = uvm_reg_field::type_id::create("pkts_good_27downto0", , get_full_name());
+        unused2 = uvm_reg_field::type_id::create("unused2", , get_full_name());
+        sequence_value_index = uvm_reg_field::type_id::create("sequence_value_index", , get_full_name());
+        unused1 = uvm_reg_field::type_id::create("unused1", , get_full_name());
+        sequence_value = uvm_reg_field::type_id::create("sequence_value", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        bytes_good.configure(this, 36, 0, "rw", 0, 'h0, 1, 1, 0);
-        pkts_good_27downto0.configure(this, 28, 36, "ro", 0, 'h0, 1, 1, 0);
+        unused2.configure(this, 1, 31, "RW", 0, 'h0, 1, 1, 0);
+        sequence_value_index.configure(this, 3, 28, "RW", 0, 'h0, 1, 1, 0);
+        unused1.configure(this, 14, 14, "RW", 0, 'h0, 1, 1, 0);
+        sequence_value.configure(this, 14, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -1291,11 +1285,11 @@ class inspector_bytes_good_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_bytes_good_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_emix_table_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_bytes_good_reg_cover::get();
+            cg_all = shapping_emix_table_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -1329,38 +1323,44 @@ class inspector_bytes_good_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, bytes_good.get_name, bytes_good.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, pkts_good_27downto0.get_name, pkts_good_27downto0.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, unused2.get_name, unused2.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, sequence_value_index.get_name, sequence_value_index.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, unused1.get_name, unused1.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, sequence_value.get_name, sequence_value.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_bytes_good_reg_cover
+// Class: shapping_emix_table_reg_cover
 // Register coverage object.
-class inspector_bytes_good_reg_cover extends uvm_object;
+class shapping_emix_table_reg_cover extends uvm_object;
 
-    static local inspector_bytes_good_reg_cover m_inst;
+    static local shapping_emix_table_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_bytes_good_reg r;
+    shapping_emix_table_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        bytes_good_wr: coverpoint r.bytes_good.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        bytes_good_rd: coverpoint r.bytes_good.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-        pkts_good_27downto0_wr: coverpoint r.pkts_good_27downto0.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        pkts_good_27downto0_rd: coverpoint r.pkts_good_27downto0.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        unused2_wr: coverpoint r.unused2.value iff (!is_read);
+        unused2_rd: coverpoint r.unused2.value iff  (is_read);
+        sequence_value_index_wr: coverpoint r.sequence_value_index.value iff (!is_read);
+        sequence_value_index_rd: coverpoint r.sequence_value_index.value iff  (is_read);
+        unused1_wr: coverpoint r.unused1.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        unused1_rd: coverpoint r.unused1.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        sequence_value_wr: coverpoint r.sequence_value.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        sequence_value_rd: coverpoint r.sequence_value.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_bytes_good_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_emix_table_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_bytes_good_reg_cover");
+    /*protected*/ function new(string name="shapping_emix_table_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -1376,9 +1376,9 @@ class inspector_bytes_good_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_bytes_good_reg_cover get();
+    static function shapping_emix_table_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_bytes_good_reg_cover::type_id::create("cg");
+            m_inst = shapping_emix_table_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -1386,24 +1386,51 @@ class inspector_bytes_good_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_bytes_good_reg _r, bit is_read);
+    virtual function void sample(shapping_emix_table_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_pkts_good_reg_cover;
+typedef class shapping_info0_mode_emix_reg_cover;
 
-// Class: inspector_pkts_good_reg
-// Register inspector.pkts_good: 64 msb of the 72 bit internal register in read. 36 msb of the 72 bit internal register in write [36 bit pkts_good | 36 bit bytes_good]
-class inspector_pkts_good_reg extends uvm_reg;
+// Class: shapping_info0_mode_emix_reg
+// Register shapping.info0_mode_emix: Info0 register definition in mode EMIX
+class shapping_info0_mode_emix_reg extends uvm_reg;
 
-    // Variable: bytes_good_35downto8
-    // 
-    rand uvm_reg_field bytes_good_35downto8;
-    // Variable: pkts_good
-    // 
-    rand uvm_reg_field pkts_good;
+    // Variable: mode
+    // 00: E-MIX, 01: undefined, 10: step_interval, 11: pseudo_random
+    rand uvm_reg_field mode;
+    // Variable: last_ptr
+    // points to the last value used in E-MIX packet size table
+    rand uvm_reg_field last_ptr;
+    // Variable: first_ptr
+    // points to the first value used in E-MIX packet size table
+    rand uvm_reg_field first_ptr;
+    // Variable: ptr_weight7
+    // Number of consecutive times sequence_value7 will be repeated.
+    rand uvm_reg_field ptr_weight7;
+    // Variable: ptr_weight6
+    //    &quot;    &quot;      &quot;        &quot;   sequence value6   &quot;   &quot;     &quot;    
+    rand uvm_reg_field ptr_weight6;
+    // Variable: ptr_weight5
+    //    &quot;    &quot;      &quot;        &quot;   sequence value5   &quot;   &quot;     &quot;    
+    rand uvm_reg_field ptr_weight5;
+    // Variable: ptr_weight4
+    //    &quot;    &quot;      &quot;        &quot;   sequence value4   &quot;   &quot;     &quot;    
+    rand uvm_reg_field ptr_weight4;
+    // Variable: ptr_weight3
+    //    &quot;    &quot;      &quot;        &quot;   sequence value3   &quot;   &quot;     &quot;    
+    rand uvm_reg_field ptr_weight3;
+    // Variable: ptr_weight2
+    //    &quot;    &quot;      &quot;        &quot;   sequence value2   &quot;   &quot;     &quot;    
+    rand uvm_reg_field ptr_weight2;
+    // Variable: ptr_weight1
+    //    &quot;    &quot;      &quot;        &quot;   sequence value1   &quot;   &quot;     &quot;    
+    rand uvm_reg_field ptr_weight1;
+    // Variable: ptr_weight0
+    //    &quot;    &quot;      &quot;        &quot;   sequence value0   &quot;   &quot;     &quot;    
+    rand uvm_reg_field ptr_weight0;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -1411,20 +1438,20 @@ class inspector_pkts_good_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_pkts_good_reg_cover cg_all;
+    static shapping_info0_mode_emix_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_pkts_good_reg_cover cg;
+    shapping_info0_mode_emix_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_pkts_good_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info0_mode_emix_reg)
 
     // Constructor: new
-    function new(string name = "inspector_pkts_good");
+    function new(string name = "shapping_info0_mode_emix");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -1435,12 +1462,30 @@ class inspector_pkts_good_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        bytes_good_35downto8 = uvm_reg_field::type_id::create("bytes_good_35downto8", , get_full_name());
-        pkts_good = uvm_reg_field::type_id::create("pkts_good", , get_full_name());
+        mode = uvm_reg_field::type_id::create("mode", , get_full_name());
+        last_ptr = uvm_reg_field::type_id::create("last_ptr", , get_full_name());
+        first_ptr = uvm_reg_field::type_id::create("first_ptr", , get_full_name());
+        ptr_weight7 = uvm_reg_field::type_id::create("ptr_weight7", , get_full_name());
+        ptr_weight6 = uvm_reg_field::type_id::create("ptr_weight6", , get_full_name());
+        ptr_weight5 = uvm_reg_field::type_id::create("ptr_weight5", , get_full_name());
+        ptr_weight4 = uvm_reg_field::type_id::create("ptr_weight4", , get_full_name());
+        ptr_weight3 = uvm_reg_field::type_id::create("ptr_weight3", , get_full_name());
+        ptr_weight2 = uvm_reg_field::type_id::create("ptr_weight2", , get_full_name());
+        ptr_weight1 = uvm_reg_field::type_id::create("ptr_weight1", , get_full_name());
+        ptr_weight0 = uvm_reg_field::type_id::create("ptr_weight0", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        bytes_good_35downto8.configure(this, 28, 0, "ro", 0, 'h0, 1, 1, 0);
-        pkts_good.configure(this, 36, 28, "rw", 0, 'h0, 1, 1, 0);
+        mode.configure(this, 2, 30, "RW", 0, 'h0, 1, 1, 0);
+        last_ptr.configure(this, 3, 27, "RW", 0, 'h0, 1, 1, 0);
+        first_ptr.configure(this, 3, 24, "RW", 0, 'h0, 1, 1, 0);
+        ptr_weight7.configure(this, 3, 21, "RW", 0, 'h0, 1, 1, 0);
+        ptr_weight6.configure(this, 3, 18, "RW", 0, 'h0, 1, 1, 0);
+        ptr_weight5.configure(this, 3, 15, "RW", 0, 'h0, 1, 1, 0);
+        ptr_weight4.configure(this, 3, 12, "RW", 0, 'h0, 1, 1, 0);
+        ptr_weight3.configure(this, 3, 9, "RW", 0, 'h0, 1, 1, 0);
+        ptr_weight2.configure(this, 3, 6, "RW", 0, 'h0, 1, 1, 0);
+        ptr_weight1.configure(this, 3, 3, "RW", 0, 'h0, 1, 1, 0);
+        ptr_weight0.configure(this, 3, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -1486,11 +1531,11 @@ class inspector_pkts_good_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_pkts_good_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_info0_mode_emix_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_pkts_good_reg_cover::get();
+            cg_all = shapping_info0_mode_emix_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -1524,38 +1569,65 @@ class inspector_pkts_good_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, bytes_good_35downto8.get_name, bytes_good_35downto8.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, pkts_good.get_name, pkts_good.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, mode.get_name, mode.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, last_ptr.get_name, last_ptr.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, first_ptr.get_name, first_ptr.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, ptr_weight7.get_name, ptr_weight7.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, ptr_weight6.get_name, ptr_weight6.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, ptr_weight5.get_name, ptr_weight5.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, ptr_weight4.get_name, ptr_weight4.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, ptr_weight3.get_name, ptr_weight3.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, ptr_weight2.get_name, ptr_weight2.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, ptr_weight1.get_name, ptr_weight1.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, ptr_weight0.get_name, ptr_weight0.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_pkts_good_reg_cover
+// Class: shapping_info0_mode_emix_reg_cover
 // Register coverage object.
-class inspector_pkts_good_reg_cover extends uvm_object;
+class shapping_info0_mode_emix_reg_cover extends uvm_object;
 
-    static local inspector_pkts_good_reg_cover m_inst;
+    static local shapping_info0_mode_emix_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_pkts_good_reg r;
+    shapping_info0_mode_emix_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        bytes_good_35downto8_wr: coverpoint r.bytes_good_35downto8.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        bytes_good_35downto8_rd: coverpoint r.bytes_good_35downto8.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-        pkts_good_wr: coverpoint r.pkts_good.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        pkts_good_rd: coverpoint r.pkts_good.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        mode_wr: coverpoint r.mode.value iff (!is_read);
+        mode_rd: coverpoint r.mode.value iff  (is_read);
+        last_ptr_wr: coverpoint r.last_ptr.value iff (!is_read);
+        last_ptr_rd: coverpoint r.last_ptr.value iff  (is_read);
+        first_ptr_wr: coverpoint r.first_ptr.value iff (!is_read);
+        first_ptr_rd: coverpoint r.first_ptr.value iff  (is_read);
+        ptr_weight7_wr: coverpoint r.ptr_weight7.value iff (!is_read);
+        ptr_weight7_rd: coverpoint r.ptr_weight7.value iff  (is_read);
+        ptr_weight6_wr: coverpoint r.ptr_weight6.value iff (!is_read);
+        ptr_weight6_rd: coverpoint r.ptr_weight6.value iff  (is_read);
+        ptr_weight5_wr: coverpoint r.ptr_weight5.value iff (!is_read);
+        ptr_weight5_rd: coverpoint r.ptr_weight5.value iff  (is_read);
+        ptr_weight4_wr: coverpoint r.ptr_weight4.value iff (!is_read);
+        ptr_weight4_rd: coverpoint r.ptr_weight4.value iff  (is_read);
+        ptr_weight3_wr: coverpoint r.ptr_weight3.value iff (!is_read);
+        ptr_weight3_rd: coverpoint r.ptr_weight3.value iff  (is_read);
+        ptr_weight2_wr: coverpoint r.ptr_weight2.value iff (!is_read);
+        ptr_weight2_rd: coverpoint r.ptr_weight2.value iff  (is_read);
+        ptr_weight1_wr: coverpoint r.ptr_weight1.value iff (!is_read);
+        ptr_weight1_rd: coverpoint r.ptr_weight1.value iff  (is_read);
+        ptr_weight0_wr: coverpoint r.ptr_weight0.value iff (!is_read);
+        ptr_weight0_rd: coverpoint r.ptr_weight0.value iff  (is_read);
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_pkts_good_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info0_mode_emix_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_pkts_good_reg_cover");
+    /*protected*/ function new(string name="shapping_info0_mode_emix_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -1571,9 +1643,9 @@ class inspector_pkts_good_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_pkts_good_reg_cover get();
+    static function shapping_info0_mode_emix_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_pkts_good_reg_cover::type_id::create("cg");
+            m_inst = shapping_info0_mode_emix_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -1581,24 +1653,33 @@ class inspector_pkts_good_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_pkts_good_reg _r, bit is_read);
+    virtual function void sample(shapping_info0_mode_emix_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_bytes_bad_reg_cover;
+typedef class shapping_info0_mode_step_interval_reg_cover;
 
-// Class: inspector_bytes_bad_reg
-// Register inspector.bytes_bad: 64 lsb of the 72 bit internal register in read. 36 lsb of the 72 bit internal register in write [36 bit pkts_bad | 36 bit bytes_bad]
-class inspector_bytes_bad_reg extends uvm_reg;
+// Class: shapping_info0_mode_step_interval_reg
+// Register shapping.info0_mode_step_interval: Info0 register definition in mode step interval (FPGA SIMULATION -&gt; SOFT SHOULD IGNORE)
+class shapping_info0_mode_step_interval_reg extends uvm_reg;
 
-    // Variable: bytes_bad
+    // Variable: mode
+    // 00: e-mix, 01: undefined, 10: STEP_INTERVAL, 11: pseudo_random
+    rand uvm_reg_field mode;
+    // Variable: direction_init
     // 
-    rand uvm_reg_field bytes_bad;
-    // Variable: pkts_bad_27downto0
+    rand uvm_reg_field direction_init;
+    // Variable: direction_mode
+    // 0: one; 1: two
+    rand uvm_reg_field direction_mode;
+    // Variable: max_size
     // 
-    rand uvm_reg_field pkts_bad_27downto0;
+    rand uvm_reg_field max_size;
+    // Variable: min_size
+    // 
+    rand uvm_reg_field min_size;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -1606,20 +1687,20 @@ class inspector_bytes_bad_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_bytes_bad_reg_cover cg_all;
+    static shapping_info0_mode_step_interval_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_bytes_bad_reg_cover cg;
+    shapping_info0_mode_step_interval_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_bytes_bad_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info0_mode_step_interval_reg)
 
     // Constructor: new
-    function new(string name = "inspector_bytes_bad");
+    function new(string name = "shapping_info0_mode_step_interval");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -1630,12 +1711,18 @@ class inspector_bytes_bad_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        bytes_bad = uvm_reg_field::type_id::create("bytes_bad", , get_full_name());
-        pkts_bad_27downto0 = uvm_reg_field::type_id::create("pkts_bad_27downto0", , get_full_name());
+        mode = uvm_reg_field::type_id::create("mode", , get_full_name());
+        direction_init = uvm_reg_field::type_id::create("direction_init", , get_full_name());
+        direction_mode = uvm_reg_field::type_id::create("direction_mode", , get_full_name());
+        max_size = uvm_reg_field::type_id::create("max_size", , get_full_name());
+        min_size = uvm_reg_field::type_id::create("min_size", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        bytes_bad.configure(this, 36, 0, "rw", 0, 'h0, 1, 1, 0);
-        pkts_bad_27downto0.configure(this, 28, 36, "ro", 0, 'h0, 1, 1, 0);
+        mode.configure(this, 2, 30, "RW", 0, 'h0, 1, 1, 0);
+        direction_init.configure(this, 1, 29, "RW", 0, 'h0, 1, 1, 0);
+        direction_mode.configure(this, 1, 28, "RW", 0, 'h0, 1, 1, 0);
+        max_size.configure(this, 14, 14, "RW", 0, 'h0, 1, 1, 0);
+        min_size.configure(this, 14, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -1681,11 +1768,11 @@ class inspector_bytes_bad_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_bytes_bad_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_info0_mode_step_interval_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_bytes_bad_reg_cover::get();
+            cg_all = shapping_info0_mode_step_interval_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -1719,38 +1806,47 @@ class inspector_bytes_bad_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, bytes_bad.get_name, bytes_bad.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, pkts_bad_27downto0.get_name, pkts_bad_27downto0.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, mode.get_name, mode.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, direction_init.get_name, direction_init.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, direction_mode.get_name, direction_mode.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, max_size.get_name, max_size.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, min_size.get_name, min_size.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_bytes_bad_reg_cover
+// Class: shapping_info0_mode_step_interval_reg_cover
 // Register coverage object.
-class inspector_bytes_bad_reg_cover extends uvm_object;
+class shapping_info0_mode_step_interval_reg_cover extends uvm_object;
 
-    static local inspector_bytes_bad_reg_cover m_inst;
+    static local shapping_info0_mode_step_interval_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_bytes_bad_reg r;
+    shapping_info0_mode_step_interval_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        bytes_bad_wr: coverpoint r.bytes_bad.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        bytes_bad_rd: coverpoint r.bytes_bad.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-        pkts_bad_27downto0_wr: coverpoint r.pkts_bad_27downto0.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        pkts_bad_27downto0_rd: coverpoint r.pkts_bad_27downto0.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        mode_wr: coverpoint r.mode.value iff (!is_read);
+        mode_rd: coverpoint r.mode.value iff  (is_read);
+        direction_init_wr: coverpoint r.direction_init.value iff (!is_read);
+        direction_init_rd: coverpoint r.direction_init.value iff  (is_read);
+        direction_mode_wr: coverpoint r.direction_mode.value iff (!is_read);
+        direction_mode_rd: coverpoint r.direction_mode.value iff  (is_read);
+        max_size_wr: coverpoint r.max_size.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        max_size_rd: coverpoint r.max_size.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        min_size_wr: coverpoint r.min_size.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        min_size_rd: coverpoint r.min_size.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_bytes_bad_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info0_mode_step_interval_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_bytes_bad_reg_cover");
+    /*protected*/ function new(string name="shapping_info0_mode_step_interval_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -1766,9 +1862,9 @@ class inspector_bytes_bad_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_bytes_bad_reg_cover get();
+    static function shapping_info0_mode_step_interval_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_bytes_bad_reg_cover::type_id::create("cg");
+            m_inst = shapping_info0_mode_step_interval_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -1776,24 +1872,27 @@ class inspector_bytes_bad_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_bytes_bad_reg _r, bit is_read);
+    virtual function void sample(shapping_info0_mode_step_interval_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_pkts_bad_reg_cover;
+typedef class shapping_info0_mode_pseudo_random_reg_cover;
 
-// Class: inspector_pkts_bad_reg
-// Register inspector.pkts_bad: 64 msb of the 72 bit internal register in read. 36 msb of the 72 bit internal register in write [36 bit pkts_bad | 36 bit bytes_bad]
-class inspector_pkts_bad_reg extends uvm_reg;
+// Class: shapping_info0_mode_pseudo_random_reg
+// Register shapping.info0_mode_pseudo_random: Info0 register definition in mode pseudo random
+class shapping_info0_mode_pseudo_random_reg extends uvm_reg;
 
-    // Variable: bytes_bad_35downto8
-    // 
-    rand uvm_reg_field bytes_bad_35downto8;
-    // Variable: pkts_bad
-    // 
-    rand uvm_reg_field pkts_bad;
+    // Variable: mode
+    // 00: e-mix, 01: undefined, 10: step_interval, 11:PSEUDO_RANDOM
+    rand uvm_reg_field mode;
+    // Variable: max_size_offset
+    // equals to (max_pkt_size - min_pkt_size) setting max_size_offset field to 0 is equivalent to selecting constant packet size example1 [31:0] = 0xC0000040 (max_size_offset = 0) -&gt; sets to constant packet size 64 bytes&gt; example1 [31:0] = 0xC16B8040 (max_size_offset = 1454) -&gt; sets to pseudo random 64-1518 bytes
+    rand uvm_reg_field max_size_offset;
+    // Variable: min_size
+    // minimum pkt size
+    rand uvm_reg_field min_size;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -1801,20 +1900,20 @@ class inspector_pkts_bad_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_pkts_bad_reg_cover cg_all;
+    static shapping_info0_mode_pseudo_random_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_pkts_bad_reg_cover cg;
+    shapping_info0_mode_pseudo_random_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_pkts_bad_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info0_mode_pseudo_random_reg)
 
     // Constructor: new
-    function new(string name = "inspector_pkts_bad");
+    function new(string name = "shapping_info0_mode_pseudo_random");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -1825,12 +1924,14 @@ class inspector_pkts_bad_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        bytes_bad_35downto8 = uvm_reg_field::type_id::create("bytes_bad_35downto8", , get_full_name());
-        pkts_bad = uvm_reg_field::type_id::create("pkts_bad", , get_full_name());
+        mode = uvm_reg_field::type_id::create("mode", , get_full_name());
+        max_size_offset = uvm_reg_field::type_id::create("max_size_offset", , get_full_name());
+        min_size = uvm_reg_field::type_id::create("min_size", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        bytes_bad_35downto8.configure(this, 28, 0, "ro", 0, 'h0, 1, 1, 0);
-        pkts_bad.configure(this, 36, 28, "rw", 0, 'h0, 1, 1, 0);
+        mode.configure(this, 2, 30, "RW", 0, 'h0, 1, 1, 0);
+        max_size_offset.configure(this, 14, 14, "RW", 0, 'h0, 1, 1, 0);
+        min_size.configure(this, 14, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -1876,11 +1977,11 @@ class inspector_pkts_bad_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_pkts_bad_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_info0_mode_pseudo_random_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_pkts_bad_reg_cover::get();
+            cg_all = shapping_info0_mode_pseudo_random_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -1914,38 +2015,41 @@ class inspector_pkts_bad_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, bytes_bad_35downto8.get_name, bytes_bad_35downto8.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, pkts_bad.get_name, pkts_bad.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, mode.get_name, mode.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, max_size_offset.get_name, max_size_offset.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, min_size.get_name, min_size.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_pkts_bad_reg_cover
+// Class: shapping_info0_mode_pseudo_random_reg_cover
 // Register coverage object.
-class inspector_pkts_bad_reg_cover extends uvm_object;
+class shapping_info0_mode_pseudo_random_reg_cover extends uvm_object;
 
-    static local inspector_pkts_bad_reg_cover m_inst;
+    static local shapping_info0_mode_pseudo_random_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_pkts_bad_reg r;
+    shapping_info0_mode_pseudo_random_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        bytes_bad_35downto8_wr: coverpoint r.bytes_bad_35downto8.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        bytes_bad_35downto8_rd: coverpoint r.bytes_bad_35downto8.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-        pkts_bad_wr: coverpoint r.pkts_bad.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        pkts_bad_rd: coverpoint r.pkts_bad.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        mode_wr: coverpoint r.mode.value iff (!is_read);
+        mode_rd: coverpoint r.mode.value iff  (is_read);
+        max_size_offset_wr: coverpoint r.max_size_offset.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        max_size_offset_rd: coverpoint r.max_size_offset.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        min_size_wr: coverpoint r.min_size.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        min_size_rd: coverpoint r.min_size.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_pkts_bad_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info0_mode_pseudo_random_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_pkts_bad_reg_cover");
+    /*protected*/ function new(string name="shapping_info0_mode_pseudo_random_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -1961,9 +2065,9 @@ class inspector_pkts_bad_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_pkts_bad_reg_cover get();
+    static function shapping_info0_mode_pseudo_random_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_pkts_bad_reg_cover::type_id::create("cg");
+            m_inst = shapping_info0_mode_pseudo_random_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -1971,24 +2075,21 @@ class inspector_pkts_bad_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_pkts_bad_reg _r, bit is_read);
+    virtual function void sample(shapping_info0_mode_pseudo_random_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_first_ts_reg_cover;
+typedef class shapping_info1_mode_step_interval_reg_cover;
 
-// Class: inspector_first_ts_reg
-// Register inspector.first_ts: 
-class inspector_first_ts_reg extends uvm_reg;
+// Class: shapping_info1_mode_step_interval_reg
+// Register shapping.info1_mode_step_interval: Info1 register definition in mode step_interval (FPGA SIMULATION -&gt; SOFT SHOULD IGNORE)
+class shapping_info1_mode_step_interval_reg extends uvm_reg;
 
-    // Variable: first_ts
+    // Variable: step_size
     // 
-    rand uvm_reg_field first_ts;
-    // Variable: ts_select
-    // bit [40] selects timebase : '0'(default) = regular, '1' = free run
-    rand uvm_reg_field ts_select;
+    rand uvm_reg_field step_size;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -1996,20 +2097,20 @@ class inspector_first_ts_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_first_ts_reg_cover cg_all;
+    static shapping_info1_mode_step_interval_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_first_ts_reg_cover cg;
+    shapping_info1_mode_step_interval_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_first_ts_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info1_mode_step_interval_reg)
 
     // Constructor: new
-    function new(string name = "inspector_first_ts");
+    function new(string name = "shapping_info1_mode_step_interval");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -2020,12 +2121,10 @@ class inspector_first_ts_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        first_ts = uvm_reg_field::type_id::create("first_ts", , get_full_name());
-        ts_select = uvm_reg_field::type_id::create("ts_select", , get_full_name());
+        step_size = uvm_reg_field::type_id::create("step_size", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        first_ts.configure(this, 40, 0, "RW", 0, 'h0, 1, 1, 0);
-        ts_select.configure(this, 1, 40, "RW", 0, 'h0, 1, 1, 0);
+        step_size.configure(this, 10, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -2071,11 +2170,11 @@ class inspector_first_ts_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_first_ts_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_info1_mode_step_interval_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_first_ts_reg_cover::get();
+            cg_all = shapping_info1_mode_step_interval_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -2109,38 +2208,35 @@ class inspector_first_ts_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, first_ts.get_name, first_ts.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, ts_select.get_name, ts_select.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, step_size.get_name, step_size.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_first_ts_reg_cover
+// Class: shapping_info1_mode_step_interval_reg_cover
 // Register coverage object.
-class inspector_first_ts_reg_cover extends uvm_object;
+class shapping_info1_mode_step_interval_reg_cover extends uvm_object;
 
-    static local inspector_first_ts_reg_cover m_inst;
+    static local shapping_info1_mode_step_interval_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_first_ts_reg r;
+    shapping_info1_mode_step_interval_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        first_ts_wr: coverpoint r.first_ts.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        first_ts_rd: coverpoint r.first_ts.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-        ts_select_wr: coverpoint r.ts_select.value iff (!is_read);
-        ts_select_rd: coverpoint r.ts_select.value iff  (is_read);
+        step_size_wr: coverpoint r.step_size.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        step_size_rd: coverpoint r.step_size.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_first_ts_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info1_mode_step_interval_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_first_ts_reg_cover");
+    /*protected*/ function new(string name="shapping_info1_mode_step_interval_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -2156,9 +2252,9 @@ class inspector_first_ts_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_first_ts_reg_cover get();
+    static function shapping_info1_mode_step_interval_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_first_ts_reg_cover::type_id::create("cg");
+            m_inst = shapping_info1_mode_step_interval_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -2166,21 +2262,27 @@ class inspector_first_ts_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_first_ts_reg _r, bit is_read);
+    virtual function void sample(shapping_info1_mode_step_interval_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_last_ts_reg_cover;
+typedef class shapping_info2_emix_reg_cover;
 
-// Class: inspector_last_ts_reg
-// Register inspector.last_ts: 
-class inspector_last_ts_reg extends uvm_reg;
+// Class: shapping_info2_emix_reg
+// Register shapping.info2_emix: Info2 register definition in E-mix mode
+class shapping_info2_emix_reg extends uvm_reg;
 
-    // Variable: last_ts
-    // 
-    rand uvm_reg_field last_ts;
+    // Variable: ptr_weight2
+    // field written by pktgen only, CPU write access is blocked
+    rand uvm_reg_field ptr_weight2;
+    // Variable: next_weight
+    // field written by pktgen only, CPU write access is blocked
+    rand uvm_reg_field next_weight;
+    // Variable: next_size
+    // field written by pktgen only, CPU write access is blocked
+    rand uvm_reg_field next_size;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -2188,20 +2290,20 @@ class inspector_last_ts_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_last_ts_reg_cover cg_all;
+    static shapping_info2_emix_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_last_ts_reg_cover cg;
+    shapping_info2_emix_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_last_ts_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info2_emix_reg)
 
     // Constructor: new
-    function new(string name = "inspector_last_ts");
+    function new(string name = "shapping_info2_emix");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -2212,10 +2314,14 @@ class inspector_last_ts_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        last_ts = uvm_reg_field::type_id::create("last_ts", , get_full_name());
+        ptr_weight2 = uvm_reg_field::type_id::create("ptr_weight2", , get_full_name());
+        next_weight = uvm_reg_field::type_id::create("next_weight", , get_full_name());
+        next_size = uvm_reg_field::type_id::create("next_size", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        last_ts.configure(this, 40, 0, "RW", 0, 'h0, 1, 1, 0);
+        ptr_weight2.configure(this, 3, 17, "RW", 0, 'h0, 1, 1, 0);
+        next_weight.configure(this, 3, 14, "RW", 0, 'h0, 1, 1, 0);
+        next_size.configure(this, 13, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -2261,11 +2367,11 @@ class inspector_last_ts_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_last_ts_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_info2_emix_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_last_ts_reg_cover::get();
+            cg_all = shapping_info2_emix_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -2299,35 +2405,41 @@ class inspector_last_ts_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, last_ts.get_name, last_ts.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, ptr_weight2.get_name, ptr_weight2.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, next_weight.get_name, next_weight.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, next_size.get_name, next_size.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_last_ts_reg_cover
+// Class: shapping_info2_emix_reg_cover
 // Register coverage object.
-class inspector_last_ts_reg_cover extends uvm_object;
+class shapping_info2_emix_reg_cover extends uvm_object;
 
-    static local inspector_last_ts_reg_cover m_inst;
+    static local shapping_info2_emix_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_last_ts_reg r;
+    shapping_info2_emix_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        last_ts_wr: coverpoint r.last_ts.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        last_ts_rd: coverpoint r.last_ts.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        ptr_weight2_wr: coverpoint r.ptr_weight2.value iff (!is_read);
+        ptr_weight2_rd: coverpoint r.ptr_weight2.value iff  (is_read);
+        next_weight_wr: coverpoint r.next_weight.value iff (!is_read);
+        next_weight_rd: coverpoint r.next_weight.value iff  (is_read);
+        next_size_wr: coverpoint r.next_size.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        next_size_rd: coverpoint r.next_size.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_last_ts_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info2_emix_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_last_ts_reg_cover");
+    /*protected*/ function new(string name="shapping_info2_emix_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -2343,9 +2455,9 @@ class inspector_last_ts_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_last_ts_reg_cover get();
+    static function shapping_info2_emix_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_last_ts_reg_cover::type_id::create("cg");
+            m_inst = shapping_info2_emix_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -2353,33 +2465,24 @@ class inspector_last_ts_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_last_ts_reg _r, bit is_read);
+    virtual function void sample(shapping_info2_emix_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_next_seq_no_reg_cover;
+typedef class shapping_info2_mode_step_interval_reg_cover;
 
-// Class: inspector_next_seq_no_reg
-// Register inspector.next_seq_no: 
-class inspector_next_seq_no_reg extends uvm_reg;
+// Class: shapping_info2_mode_step_interval_reg
+// Register shapping.info2_mode_step_interval: Info2 register definition in step interval mode (FPGA SIMULATION -&gt; SOFT SHOULD IGNORE)
+class shapping_info2_mode_step_interval_reg extends uvm_reg;
 
-    // Variable: next_seq_no
+    // Variable: next_direction
+    // 0:+; 1:-
+    rand uvm_reg_field next_direction;
+    // Variable: next_size
     // 
-    rand uvm_reg_field next_seq_no;
-    // Variable: overflow
-    // 
-    rand uvm_reg_field overflow;
-    // Variable: first_bad
-    // 
-    rand uvm_reg_field first_bad;
-    // Variable: gap
-    // 
-    rand uvm_reg_field gap;
-    // Variable: first_good
-    // 
-    rand uvm_reg_field first_good;
+    rand uvm_reg_field next_size;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -2387,20 +2490,20 @@ class inspector_next_seq_no_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_next_seq_no_reg_cover cg_all;
+    static shapping_info2_mode_step_interval_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_next_seq_no_reg_cover cg;
+    shapping_info2_mode_step_interval_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_next_seq_no_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info2_mode_step_interval_reg)
 
     // Constructor: new
-    function new(string name = "inspector_next_seq_no");
+    function new(string name = "shapping_info2_mode_step_interval");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -2411,18 +2514,12 @@ class inspector_next_seq_no_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        next_seq_no = uvm_reg_field::type_id::create("next_seq_no", , get_full_name());
-        overflow = uvm_reg_field::type_id::create("overflow", , get_full_name());
-        first_bad = uvm_reg_field::type_id::create("first_bad", , get_full_name());
-        gap = uvm_reg_field::type_id::create("gap", , get_full_name());
-        first_good = uvm_reg_field::type_id::create("first_good", , get_full_name());
+        next_direction = uvm_reg_field::type_id::create("next_direction", , get_full_name());
+        next_size = uvm_reg_field::type_id::create("next_size", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        next_seq_no.configure(this, 24, 0, "RW", 0, 'h0, 1, 1, 0);
-        overflow.configure(this, 1, 32, "RW", 0, 'h0, 1, 1, 0);
-        first_bad.configure(this, 1, 33, "RW", 0, 'h0, 1, 1, 0);
-        gap.configure(this, 1, 34, "RW", 0, 'h0, 1, 1, 0);
-        first_good.configure(this, 1, 35, "RW", 0, 'h0, 1, 1, 0);
+        next_direction.configure(this, 1, 14, "RW", 0, 'h0, 1, 1, 0);
+        next_size.configure(this, 14, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -2468,11 +2565,11 @@ class inspector_next_seq_no_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_next_seq_no_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_info2_mode_step_interval_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_next_seq_no_reg_cover::get();
+            cg_all = shapping_info2_mode_step_interval_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -2506,47 +2603,38 @@ class inspector_next_seq_no_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, next_seq_no.get_name, next_seq_no.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, overflow.get_name, overflow.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, first_bad.get_name, first_bad.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, gap.get_name, gap.value);
-        $swrite(s, "%0s\n%24s=0x%0h", s, first_good.get_name, first_good.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, next_direction.get_name, next_direction.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, next_size.get_name, next_size.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_next_seq_no_reg_cover
+// Class: shapping_info2_mode_step_interval_reg_cover
 // Register coverage object.
-class inspector_next_seq_no_reg_cover extends uvm_object;
+class shapping_info2_mode_step_interval_reg_cover extends uvm_object;
 
-    static local inspector_next_seq_no_reg_cover m_inst;
+    static local shapping_info2_mode_step_interval_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_next_seq_no_reg r;
+    shapping_info2_mode_step_interval_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        next_seq_no_wr: coverpoint r.next_seq_no.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        next_seq_no_rd: coverpoint r.next_seq_no.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-        overflow_wr: coverpoint r.overflow.value iff (!is_read);
-        overflow_rd: coverpoint r.overflow.value iff  (is_read);
-        first_bad_wr: coverpoint r.first_bad.value iff (!is_read);
-        first_bad_rd: coverpoint r.first_bad.value iff  (is_read);
-        gap_wr: coverpoint r.gap.value iff (!is_read);
-        gap_rd: coverpoint r.gap.value iff  (is_read);
-        first_good_wr: coverpoint r.first_good.value iff (!is_read);
-        first_good_rd: coverpoint r.first_good.value iff  (is_read);
+        next_direction_wr: coverpoint r.next_direction.value iff (!is_read);
+        next_direction_rd: coverpoint r.next_direction.value iff  (is_read);
+        next_size_wr: coverpoint r.next_size.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        next_size_rd: coverpoint r.next_size.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_next_seq_no_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info2_mode_step_interval_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_next_seq_no_reg_cover");
+    /*protected*/ function new(string name="shapping_info2_mode_step_interval_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -2562,9 +2650,9 @@ class inspector_next_seq_no_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_next_seq_no_reg_cover get();
+    static function shapping_info2_mode_step_interval_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_next_seq_no_reg_cover::type_id::create("cg");
+            m_inst = shapping_info2_mode_step_interval_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -2572,21 +2660,27 @@ class inspector_next_seq_no_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_next_seq_no_reg _r, bit is_read);
+    virtual function void sample(shapping_info2_mode_step_interval_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_last_latency_reg_cover;
+typedef class shapping_info2_mode_pseudo_random_reg_cover;
 
-// Class: inspector_last_latency_reg
-// Register inspector.last_latency: 
-class inspector_last_latency_reg extends uvm_reg;
+// Class: shapping_info2_mode_pseudo_random_reg
+// Register shapping.info2_mode_pseudo_random: Info2 register definition in pseudo random mode
+class shapping_info2_mode_pseudo_random_reg extends uvm_reg;
 
-    // Variable: last_latency
+    // Variable: last_random
     // 
-    rand uvm_reg_field last_latency;
+    rand uvm_reg_field last_random;
+    // Variable: random_special_zero
+    // 
+    rand uvm_reg_field random_special_zero;
+    // Variable: next_size
+    // Must initialize to min_size from info0_mode3 register
+    rand uvm_reg_field next_size;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -2594,20 +2688,20 @@ class inspector_last_latency_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_last_latency_reg_cover cg_all;
+    static shapping_info2_mode_pseudo_random_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_last_latency_reg_cover cg;
+    shapping_info2_mode_pseudo_random_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_last_latency_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info2_mode_pseudo_random_reg)
 
     // Constructor: new
-    function new(string name = "inspector_last_latency");
+    function new(string name = "shapping_info2_mode_pseudo_random");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -2618,10 +2712,14 @@ class inspector_last_latency_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        last_latency = uvm_reg_field::type_id::create("last_latency", , get_full_name());
+        last_random = uvm_reg_field::type_id::create("last_random", , get_full_name());
+        random_special_zero = uvm_reg_field::type_id::create("random_special_zero", , get_full_name());
+        next_size = uvm_reg_field::type_id::create("next_size", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        last_latency.configure(this, 36, 0, "RW", 0, 'h0, 1, 1, 0);
+        last_random.configure(this, 16, 15, "RW", 0, 'h0, 1, 1, 0);
+        random_special_zero.configure(this, 1, 14, "RW", 0, 'h0, 1, 1, 0);
+        next_size.configure(this, 14, 0, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -2667,11 +2765,11 @@ class inspector_last_latency_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_last_latency_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_info2_mode_pseudo_random_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_last_latency_reg_cover::get();
+            cg_all = shapping_info2_mode_pseudo_random_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -2705,35 +2803,41 @@ class inspector_last_latency_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, last_latency.get_name, last_latency.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, last_random.get_name, last_random.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, random_special_zero.get_name, random_special_zero.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, next_size.get_name, next_size.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_last_latency_reg_cover
+// Class: shapping_info2_mode_pseudo_random_reg_cover
 // Register coverage object.
-class inspector_last_latency_reg_cover extends uvm_object;
+class shapping_info2_mode_pseudo_random_reg_cover extends uvm_object;
 
-    static local inspector_last_latency_reg_cover m_inst;
+    static local shapping_info2_mode_pseudo_random_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_last_latency_reg r;
+    shapping_info2_mode_pseudo_random_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        last_latency_wr: coverpoint r.last_latency.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        last_latency_rd: coverpoint r.last_latency.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        last_random_wr: coverpoint r.last_random.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        last_random_rd: coverpoint r.last_random.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        random_special_zero_wr: coverpoint r.random_special_zero.value iff (!is_read);
+        random_special_zero_rd: coverpoint r.random_special_zero.value iff  (is_read);
+        next_size_wr: coverpoint r.next_size.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        next_size_rd: coverpoint r.next_size.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_last_latency_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_info2_mode_pseudo_random_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_last_latency_reg_cover");
+    /*protected*/ function new(string name="shapping_info2_mode_pseudo_random_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -2749,9 +2853,9 @@ class inspector_last_latency_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_last_latency_reg_cover get();
+    static function shapping_info2_mode_pseudo_random_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_last_latency_reg_cover::type_id::create("cg");
+            m_inst = shapping_info2_mode_pseudo_random_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -2759,21 +2863,21 @@ class inspector_last_latency_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_last_latency_reg _r, bit is_read);
+    virtual function void sample(shapping_info2_mode_pseudo_random_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_last_jitter_reg_cover;
+typedef class shapping_pkt_count_reg_cover;
 
-// Class: inspector_last_jitter_reg
-// Register inspector.last_jitter: 
-class inspector_last_jitter_reg extends uvm_reg;
+// Class: shapping_pkt_count_reg
+// Register shapping.pkt_count: 
+class shapping_pkt_count_reg extends uvm_reg;
 
-    // Variable: last_jitter
-    // 
-    rand uvm_reg_field last_jitter;
+    // Variable: pkts
+    // The counter is cleared on a low to high transition of the associated flow_ena control bit
+    rand uvm_reg_field pkts;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -2781,20 +2885,20 @@ class inspector_last_jitter_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_last_jitter_reg_cover cg_all;
+    static shapping_pkt_count_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_last_jitter_reg_cover cg;
+    shapping_pkt_count_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_last_jitter_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_pkt_count_reg)
 
     // Constructor: new
-    function new(string name = "inspector_last_jitter");
+    function new(string name = "shapping_pkt_count");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -2805,10 +2909,10 @@ class inspector_last_jitter_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        last_jitter = uvm_reg_field::type_id::create("last_jitter", , get_full_name());
+        pkts = uvm_reg_field::type_id::create("pkts", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        last_jitter.configure(this, 36, 0, "RW", 0, 'h0, 1, 1, 0);
+        pkts.configure(this, 32, 0, "RO", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -2854,11 +2958,11 @@ class inspector_last_jitter_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_last_jitter_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_pkt_count_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_last_jitter_reg_cover::get();
+            cg_all = shapping_pkt_count_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -2892,35 +2996,35 @@ class inspector_last_jitter_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, last_jitter.get_name, last_jitter.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, pkts.get_name, pkts.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_last_jitter_reg_cover
+// Class: shapping_pkt_count_reg_cover
 // Register coverage object.
-class inspector_last_jitter_reg_cover extends uvm_object;
+class shapping_pkt_count_reg_cover extends uvm_object;
 
-    static local inspector_last_jitter_reg_cover m_inst;
+    static local shapping_pkt_count_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_last_jitter_reg r;
+    shapping_pkt_count_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        last_jitter_wr: coverpoint r.last_jitter.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        last_jitter_rd: coverpoint r.last_jitter.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        pkts_wr: coverpoint r.pkts.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        pkts_rd: coverpoint r.pkts.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_last_jitter_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_pkt_count_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_last_jitter_reg_cover");
+    /*protected*/ function new(string name="shapping_pkt_count_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -2936,9 +3040,9 @@ class inspector_last_jitter_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_last_jitter_reg_cover get();
+    static function shapping_pkt_count_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_last_jitter_reg_cover::type_id::create("cg");
+            m_inst = shapping_pkt_count_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -2946,21 +3050,21 @@ class inspector_last_jitter_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_last_jitter_reg _r, bit is_read);
+    virtual function void sample(shapping_pkt_count_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_gap_max_reg_cover;
+typedef class shapping_byte_count_reg_cover;
 
-// Class: inspector_gap_max_reg
-// Register inspector.gap_max: 
-class inspector_gap_max_reg extends uvm_reg;
+// Class: shapping_byte_count_reg
+// Register shapping.byte_count: 
+class shapping_byte_count_reg extends uvm_reg;
 
-    // Variable: gap_max
-    // 
-    rand uvm_reg_field gap_max;
+    // Variable: bytes
+    // The counter is cleared on a low to high transition of the associated flow_ena control bit
+    rand uvm_reg_field bytes;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -2968,20 +3072,20 @@ class inspector_gap_max_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_gap_max_reg_cover cg_all;
+    static shapping_byte_count_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_gap_max_reg_cover cg;
+    shapping_byte_count_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_gap_max_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_byte_count_reg)
 
     // Constructor: new
-    function new(string name = "inspector_gap_max");
+    function new(string name = "shapping_byte_count");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -2992,10 +3096,10 @@ class inspector_gap_max_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        gap_max = uvm_reg_field::type_id::create("gap_max", , get_full_name());
+        bytes = uvm_reg_field::type_id::create("bytes", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        gap_max.configure(this, 25, 0, "RW", 0, 'h0, 1, 1, 0);
+        bytes.configure(this, 32, 0, "RO", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -3041,11 +3145,11 @@ class inspector_gap_max_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_gap_max_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_byte_count_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_gap_max_reg_cover::get();
+            cg_all = shapping_byte_count_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -3079,35 +3183,35 @@ class inspector_gap_max_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, gap_max.get_name, gap_max.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, bytes.get_name, bytes.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_gap_max_reg_cover
+// Class: shapping_byte_count_reg_cover
 // Register coverage object.
-class inspector_gap_max_reg_cover extends uvm_object;
+class shapping_byte_count_reg_cover extends uvm_object;
 
-    static local inspector_gap_max_reg_cover m_inst;
+    static local shapping_byte_count_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_gap_max_reg r;
+    shapping_byte_count_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        gap_max_wr: coverpoint r.gap_max.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        gap_max_rd: coverpoint r.gap_max.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        bytes_wr: coverpoint r.bytes.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        bytes_rd: coverpoint r.bytes.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_gap_max_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_byte_count_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_gap_max_reg_cover");
+    /*protected*/ function new(string name="shapping_byte_count_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -3123,9 +3227,9 @@ class inspector_gap_max_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_gap_max_reg_cover get();
+    static function shapping_byte_count_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_gap_max_reg_cover::type_id::create("cg");
+            m_inst = shapping_byte_count_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -3133,21 +3237,45 @@ class inspector_gap_max_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_gap_max_reg _r, bit is_read);
+    virtual function void sample(shapping_byte_count_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
 
 endclass
-typedef class inspector_gap_reg_cover;
+typedef class shapping_last_pkt_size_reg_cover;
 
-// Class: inspector_gap_reg
-// Register inspector.gap: 
-class inspector_gap_reg extends uvm_reg;
+// Class: shapping_last_pkt_size_reg
+// Register shapping.last_pkt_size: last pkt size field is flow based 0x0e[13:0] = flow 0, 0x1e[13:0] = flow1... 0x7e[13:0] = flow7 all other fields are applicable to all flows 0x0e[63:15] = 0x1e[63:15] ... = 0x7e[63:15]
+class shapping_last_pkt_size_reg extends uvm_reg;
 
-    // Variable: gap
+    // Variable: dbg_pkt_afull
+    // debug signal : back bressure applied on pktgen
+    rand uvm_reg_field dbg_pkt_afull;
+    // Variable: dbg_pkt_request_valid
+    // debug signal : indicate if there are packet requests in FIFO
+    rand uvm_reg_field dbg_pkt_request_valid;
+    // Variable: dbg_size_rdy
+    // debug signal : size module readiness status
+    rand uvm_reg_field dbg_size_rdy;
+    // Variable: dbg_duration_rdy
+    // debug signal : duration module readiness status -&gt; [flow3:0]
+    rand uvm_reg_field dbg_duration_rdy;
+    // Variable: dbg_shapping_ready
+    // debug signal : shapping module readiness status (bucket positive) -&gt; [flow3:0]
+    rand uvm_reg_field dbg_shapping_ready;
+    // Variable: dbg_pktgen_fsm_state
+    // debug signal : current fsm state (see pktgen instantiation for states definition (1G or 10G)
+    rand uvm_reg_field dbg_pktgen_fsm_state;
+    // Variable: dbg_unused
+    // debug signal : unused
+    rand uvm_reg_field dbg_unused;
+    // Variable: dbg_pktgen_remain_bytes_cnt
+    // debug signal : decrementing counter is state machine indicating remaining bytes to insert into current packet
+    rand uvm_reg_field dbg_pktgen_remain_bytes_cnt;
+    // Variable: last_pkt_sent_size
     // 
-    rand uvm_reg_field gap;
+    rand uvm_reg_field last_pkt_sent_size;
 
     // Variable: m_params
     // Parameter key/value lookup.
@@ -3155,20 +3283,20 @@ class inspector_gap_reg extends uvm_reg;
 
     // Variable: cg
     // Coverage object. Static to reduce memory usage.
-    static inspector_gap_reg_cover cg_all;
+    static shapping_last_pkt_size_reg_cover cg_all;
 
     // Variable: cg
     // Coverage object.
-    inspector_gap_reg_cover cg;
+    shapping_last_pkt_size_reg_cover cg;
 
     // Variable: is_read
     // Last access type.
     protected bit is_read;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_gap_reg)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_last_pkt_size_reg)
 
     // Constructor: new
-    function new(string name = "inspector_gap");
+    function new(string name = "shapping_last_pkt_size");
         super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
     endfunction
 
@@ -3179,10 +3307,26 @@ class inspector_gap_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
-        gap = uvm_reg_field::type_id::create("gap", , get_full_name());
+        dbg_pkt_afull = uvm_reg_field::type_id::create("dbg_pkt_afull", , get_full_name());
+        dbg_pkt_request_valid = uvm_reg_field::type_id::create("dbg_pkt_request_valid", , get_full_name());
+        dbg_size_rdy = uvm_reg_field::type_id::create("dbg_size_rdy", , get_full_name());
+        dbg_duration_rdy = uvm_reg_field::type_id::create("dbg_duration_rdy", , get_full_name());
+        dbg_shapping_ready = uvm_reg_field::type_id::create("dbg_shapping_ready", , get_full_name());
+        dbg_pktgen_fsm_state = uvm_reg_field::type_id::create("dbg_pktgen_fsm_state", , get_full_name());
+        dbg_unused = uvm_reg_field::type_id::create("dbg_unused", , get_full_name());
+        dbg_pktgen_remain_bytes_cnt = uvm_reg_field::type_id::create("dbg_pktgen_remain_bytes_cnt", , get_full_name());
+        last_pkt_sent_size = uvm_reg_field::type_id::create("last_pkt_sent_size", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        gap.configure(this, 36, 0, "RW", 0, 'h0, 1, 1, 0);
+        dbg_pkt_afull.configure(this, 1, 62, "RO", 0, 'h0, 1, 1, 0);
+        dbg_pkt_request_valid.configure(this, 1, 61, "RO", 0, 'h0, 1, 1, 0);
+        dbg_size_rdy.configure(this, 1, 60, "RO", 0, 'h0, 1, 1, 0);
+        dbg_duration_rdy.configure(this, 4, 56, "RO", 0, 'h0, 1, 1, 0);
+        dbg_shapping_ready.configure(this, 4, 52, "RO", 0, 'h0, 1, 1, 0);
+        dbg_pktgen_fsm_state.configure(this, 4, 48, "RO", 0, 'h0, 1, 1, 0);
+        dbg_unused.configure(this, 1, 47, "RO", 0, 'h0, 1, 1, 0);
+        dbg_pktgen_remain_bytes_cnt.configure(this, 15, 32, "RO", 0, 'h0, 1, 1, 0);
+        last_pkt_sent_size.configure(this, 14, 0, "RO", 0, 'h0, 1, 1, 0);
     endfunction
 
 
@@ -3228,11 +3372,11 @@ class inspector_gap_reg extends uvm_reg;
         if (cg_per_instance) begin
             if (cg == null) begin
                 //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_gap_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+                cg = shapping_last_pkt_size_reg_cover::type_id::create({this.get_full_name(), ".cg"});
             end
         end else begin
             //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_gap_reg_cover::get();
+            cg_all = shapping_last_pkt_size_reg_cover::get();
         end
         this.add_coverage(models);
     endfunction
@@ -3266,35 +3410,59 @@ class inspector_gap_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, gap.get_name, gap.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, dbg_pkt_afull.get_name, dbg_pkt_afull.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, dbg_pkt_request_valid.get_name, dbg_pkt_request_valid.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, dbg_size_rdy.get_name, dbg_size_rdy.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, dbg_duration_rdy.get_name, dbg_duration_rdy.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, dbg_shapping_ready.get_name, dbg_shapping_ready.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, dbg_pktgen_fsm_state.get_name, dbg_pktgen_fsm_state.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, dbg_unused.get_name, dbg_unused.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, dbg_pktgen_remain_bytes_cnt.get_name, dbg_pktgen_remain_bytes_cnt.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, last_pkt_sent_size.get_name, last_pkt_sent_size.value);
         return s;
     endfunction
 
 endclass
 
 
-// Class: inspector_gap_reg_cover
+// Class: shapping_last_pkt_size_reg_cover
 // Register coverage object.
-class inspector_gap_reg_cover extends uvm_object;
+class shapping_last_pkt_size_reg_cover extends uvm_object;
 
-    static local inspector_gap_reg_cover m_inst;
+    static local shapping_last_pkt_size_reg_cover m_inst;
 
     // Variable: r
     // Handle to register to sample
-    inspector_gap_reg r;
+    shapping_last_pkt_size_reg r;
 
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
-        gap_wr: coverpoint r.gap.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        gap_rd: coverpoint r.gap.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        dbg_pkt_afull_wr: coverpoint r.dbg_pkt_afull.value iff (!is_read);
+        dbg_pkt_afull_rd: coverpoint r.dbg_pkt_afull.value iff  (is_read);
+        dbg_pkt_request_valid_wr: coverpoint r.dbg_pkt_request_valid.value iff (!is_read);
+        dbg_pkt_request_valid_rd: coverpoint r.dbg_pkt_request_valid.value iff  (is_read);
+        dbg_size_rdy_wr: coverpoint r.dbg_size_rdy.value iff (!is_read);
+        dbg_size_rdy_rd: coverpoint r.dbg_size_rdy.value iff  (is_read);
+        dbg_duration_rdy_wr: coverpoint r.dbg_duration_rdy.value iff (!is_read);
+        dbg_duration_rdy_rd: coverpoint r.dbg_duration_rdy.value iff  (is_read);
+        dbg_shapping_ready_wr: coverpoint r.dbg_shapping_ready.value iff (!is_read);
+        dbg_shapping_ready_rd: coverpoint r.dbg_shapping_ready.value iff  (is_read);
+        dbg_pktgen_fsm_state_wr: coverpoint r.dbg_pktgen_fsm_state.value iff (!is_read);
+        dbg_pktgen_fsm_state_rd: coverpoint r.dbg_pktgen_fsm_state.value iff  (is_read);
+        dbg_unused_wr: coverpoint r.dbg_unused.value iff (!is_read);
+        dbg_unused_rd: coverpoint r.dbg_unused.value iff  (is_read);
+        dbg_pktgen_remain_bytes_cnt_wr: coverpoint r.dbg_pktgen_remain_bytes_cnt.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        dbg_pktgen_remain_bytes_cnt_rd: coverpoint r.dbg_pktgen_remain_bytes_cnt.value iff  (is_read) { bins bin[16] = {[0:$]}; }
+        last_pkt_sent_size_wr: coverpoint r.last_pkt_sent_size.value iff (!is_read) { bins bin[16] = {[0:$]}; }
+        last_pkt_sent_size_rd: coverpoint r.last_pkt_sent_size.value iff  (is_read) { bins bin[16] = {[0:$]}; }
     endgroup
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_gap_reg_cover)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::shapping_last_pkt_size_reg_cover)
 
     // Constructor: new
     // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_gap_reg_cover");
+    /*protected*/ function new(string name="shapping_last_pkt_size_reg_cover");
         super.new(name);
         cg = new(/*name*/);
     endfunction
@@ -3310,9 +3478,9 @@ class inspector_gap_reg_cover extends uvm_object;
 
     // Function: get
     // Get the coverage object singleton.
-    static function inspector_gap_reg_cover get();
+    static function shapping_last_pkt_size_reg_cover get();
         if (m_inst == null) begin
-            m_inst = inspector_gap_reg_cover::type_id::create("cg");
+            m_inst = shapping_last_pkt_size_reg_cover::type_id::create("cg");
         end
         return m_inst;
     endfunction
@@ -3320,568 +3488,7 @@ class inspector_gap_reg_cover extends uvm_object;
 
     // Function: sample
     // Sample the register for coverage.
-    virtual function void sample(inspector_gap_reg _r, bit is_read);
-        r = _r;
-        cg.sample(is_read);
-    endfunction
-
-endclass
-typedef class inspector_out_of_seq_or_dup_reg_cover;
-
-// Class: inspector_out_of_seq_or_dup_reg
-// Register inspector.out_of_seq_or_dup: 
-class inspector_out_of_seq_or_dup_reg extends uvm_reg;
-
-    // Variable: out_of_seq_or_dup
-    // 
-    rand uvm_reg_field out_of_seq_or_dup;
-
-    // Variable: m_params
-    // Parameter key/value lookup.
-    static protected acd_reg_param_cfg m_params;
-
-    // Variable: cg
-    // Coverage object. Static to reduce memory usage.
-    static inspector_out_of_seq_or_dup_reg_cover cg_all;
-
-    // Variable: cg
-    // Coverage object.
-    inspector_out_of_seq_or_dup_reg_cover cg;
-
-    // Variable: is_read
-    // Last access type.
-    protected bit is_read;
-
-    `uvm_object_utils(inspector_reg_pkg::inspector_out_of_seq_or_dup_reg)
-
-    // Constructor: new
-    function new(string name = "inspector_out_of_seq_or_dup");
-        super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
-    endfunction
-
-
-    // Function: build
-    virtual function void build();
-        if ((m_params == null) && has_params())
-            if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
-                `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
-
-        out_of_seq_or_dup = uvm_reg_field::type_id::create("out_of_seq_or_dup", , get_full_name());
-
-        // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        out_of_seq_or_dup.configure(this, 36, 0, "RW", 0, 'h0, 1, 1, 0);
-    endfunction
-
-
-    // Function: RMW
-    // Helper task for read-modify-write based on mask.
-    // Ones in the mask position indicate bits to modify.
-    task RMW(output uvm_status_e status, input uvm_reg_data_t data, input uvm_reg_data_t mask);
-        uvm_reg_data_t tmp;
-
-        // read
-        read(status, tmp);
-        // modify
-        tmp &= ~mask;
-        tmp |= data & mask;
-        //write
-        write(status, tmp);
-    endtask
-
-
-    // Function: post_write
-    // Add message after access.
-    virtual task post_write(uvm_reg_item rw);
-        super.post_write(rw);
-        is_read = 0;
-        `uvm_info("REG", $sformatf("%0s WRITE=0x%0h ADDR=0x%0h%0s", this.get_full_name(), this.get(), this.get_address(), this.fields2string()), UVM_MEDIUM)
-        sample_values();
-    endtask
-
-
-    // Function: post_read
-    // Add message after access.
-    virtual task post_read(uvm_reg_item rw);
-        super.post_read(rw);
-        is_read = 1;
-        `uvm_info("REG", $sformatf("%0s READ=0x%0h ADDR=0x%0h%0s", this.get_full_name(), this.get(), this.get_address(), this.fields2string()), UVM_MEDIUM)
-        sample_values();
-    endtask
-
-
-    // Function: enable_coverage
-    // Build coverage object if it doesn't already exist.
-    function void enable_coverage(uvm_reg_cvr_t models, bit cg_per_instance=0);
-        if (cg_per_instance) begin
-            if (cg == null) begin
-                //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_out_of_seq_or_dup_reg_cover::type_id::create({this.get_full_name(), ".cg"});
-            end
-        end else begin
-            //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_out_of_seq_or_dup_reg_cover::get();
-        end
-        this.add_coverage(models);
-    endfunction
-
-
-    // Function: sample_values
-    // Called in post-actions
-    virtual function void sample_values();
-        // Sample only if coverage object has been created
-        if(cg != null) begin
-            cg.sample(this, is_read);
-        end
-        if (cg_all != null) begin
-            cg_all.sample(this, is_read);
-        end
-    endfunction
-
-
-    // Function: sample
-    // Sample the raw transaction
-    //function void sample(uvm_reg_data_t data, uvm_reg_data_t byte_en, bit is_read, uvm_reg_map map);
-
-
-    // Function: has_params
-    function int unsigned has_params();
-        has_params = 0;
-        has_params += 0;
-    endfunction
-
-    // Function: fields2string
-    // Stringify fields.
-    virtual function string fields2string();
-        string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, out_of_seq_or_dup.get_name, out_of_seq_or_dup.value);
-        return s;
-    endfunction
-
-endclass
-
-
-// Class: inspector_out_of_seq_or_dup_reg_cover
-// Register coverage object.
-class inspector_out_of_seq_or_dup_reg_cover extends uvm_object;
-
-    static local inspector_out_of_seq_or_dup_reg_cover m_inst;
-
-    // Variable: r
-    // Handle to register to sample
-    inspector_out_of_seq_or_dup_reg r;
-
-    covergroup cg with function sample(bit is_read);
-        option.per_instance = 1;
-        type_option.merge_instances = 1;
-        out_of_seq_or_dup_wr: coverpoint r.out_of_seq_or_dup.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        out_of_seq_or_dup_rd: coverpoint r.out_of_seq_or_dup.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-    endgroup
-
-    `uvm_object_utils(inspector_reg_pkg::inspector_out_of_seq_or_dup_reg_cover)
-
-    // Constructor: new
-    // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_out_of_seq_or_dup_reg_cover");
-        super.new(name);
-        cg = new(/*name*/);
-    endfunction
-
-
-    // Function: set_name
-    // Override function to set name of covergroup.
-    virtual function void set_name(string name);
-        super.set_name(name);
-        cg.option.name = name;
-    endfunction
-
-
-    // Function: get
-    // Get the coverage object singleton.
-    static function inspector_out_of_seq_or_dup_reg_cover get();
-        if (m_inst == null) begin
-            m_inst = inspector_out_of_seq_or_dup_reg_cover::type_id::create("cg");
-        end
-        return m_inst;
-    endfunction
-
-
-    // Function: sample
-    // Sample the register for coverage.
-    virtual function void sample(inspector_out_of_seq_or_dup_reg _r, bit is_read);
-        r = _r;
-        cg.sample(is_read);
-    endfunction
-
-endclass
-typedef class inspector_first_gap_reg_cover;
-
-// Class: inspector_first_gap_reg
-// Register inspector.first_gap: 
-class inspector_first_gap_reg extends uvm_reg;
-
-    // Variable: first_gap
-    // 
-    rand uvm_reg_field first_gap;
-
-    // Variable: m_params
-    // Parameter key/value lookup.
-    static protected acd_reg_param_cfg m_params;
-
-    // Variable: cg
-    // Coverage object. Static to reduce memory usage.
-    static inspector_first_gap_reg_cover cg_all;
-
-    // Variable: cg
-    // Coverage object.
-    inspector_first_gap_reg_cover cg;
-
-    // Variable: is_read
-    // Last access type.
-    protected bit is_read;
-
-    `uvm_object_utils(inspector_reg_pkg::inspector_first_gap_reg)
-
-    // Constructor: new
-    function new(string name = "inspector_first_gap");
-        super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
-    endfunction
-
-
-    // Function: build
-    virtual function void build();
-        if ((m_params == null) && has_params())
-            if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
-                `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
-
-        first_gap = uvm_reg_field::type_id::create("first_gap", , get_full_name());
-
-        // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        first_gap.configure(this, 24, 0, "RW", 0, 'h0, 1, 1, 0);
-    endfunction
-
-
-    // Function: RMW
-    // Helper task for read-modify-write based on mask.
-    // Ones in the mask position indicate bits to modify.
-    task RMW(output uvm_status_e status, input uvm_reg_data_t data, input uvm_reg_data_t mask);
-        uvm_reg_data_t tmp;
-
-        // read
-        read(status, tmp);
-        // modify
-        tmp &= ~mask;
-        tmp |= data & mask;
-        //write
-        write(status, tmp);
-    endtask
-
-
-    // Function: post_write
-    // Add message after access.
-    virtual task post_write(uvm_reg_item rw);
-        super.post_write(rw);
-        is_read = 0;
-        `uvm_info("REG", $sformatf("%0s WRITE=0x%0h ADDR=0x%0h%0s", this.get_full_name(), this.get(), this.get_address(), this.fields2string()), UVM_MEDIUM)
-        sample_values();
-    endtask
-
-
-    // Function: post_read
-    // Add message after access.
-    virtual task post_read(uvm_reg_item rw);
-        super.post_read(rw);
-        is_read = 1;
-        `uvm_info("REG", $sformatf("%0s READ=0x%0h ADDR=0x%0h%0s", this.get_full_name(), this.get(), this.get_address(), this.fields2string()), UVM_MEDIUM)
-        sample_values();
-    endtask
-
-
-    // Function: enable_coverage
-    // Build coverage object if it doesn't already exist.
-    function void enable_coverage(uvm_reg_cvr_t models, bit cg_per_instance=0);
-        if (cg_per_instance) begin
-            if (cg == null) begin
-                //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_first_gap_reg_cover::type_id::create({this.get_full_name(), ".cg"});
-            end
-        end else begin
-            //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_first_gap_reg_cover::get();
-        end
-        this.add_coverage(models);
-    endfunction
-
-
-    // Function: sample_values
-    // Called in post-actions
-    virtual function void sample_values();
-        // Sample only if coverage object has been created
-        if(cg != null) begin
-            cg.sample(this, is_read);
-        end
-        if (cg_all != null) begin
-            cg_all.sample(this, is_read);
-        end
-    endfunction
-
-
-    // Function: sample
-    // Sample the raw transaction
-    //function void sample(uvm_reg_data_t data, uvm_reg_data_t byte_en, bit is_read, uvm_reg_map map);
-
-
-    // Function: has_params
-    function int unsigned has_params();
-        has_params = 0;
-        has_params += 0;
-    endfunction
-
-    // Function: fields2string
-    // Stringify fields.
-    virtual function string fields2string();
-        string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, first_gap.get_name, first_gap.value);
-        return s;
-    endfunction
-
-endclass
-
-
-// Class: inspector_first_gap_reg_cover
-// Register coverage object.
-class inspector_first_gap_reg_cover extends uvm_object;
-
-    static local inspector_first_gap_reg_cover m_inst;
-
-    // Variable: r
-    // Handle to register to sample
-    inspector_first_gap_reg r;
-
-    covergroup cg with function sample(bit is_read);
-        option.per_instance = 1;
-        type_option.merge_instances = 1;
-        first_gap_wr: coverpoint r.first_gap.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        first_gap_rd: coverpoint r.first_gap.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-    endgroup
-
-    `uvm_object_utils(inspector_reg_pkg::inspector_first_gap_reg_cover)
-
-    // Constructor: new
-    // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_first_gap_reg_cover");
-        super.new(name);
-        cg = new(/*name*/);
-    endfunction
-
-
-    // Function: set_name
-    // Override function to set name of covergroup.
-    virtual function void set_name(string name);
-        super.set_name(name);
-        cg.option.name = name;
-    endfunction
-
-
-    // Function: get
-    // Get the coverage object singleton.
-    static function inspector_first_gap_reg_cover get();
-        if (m_inst == null) begin
-            m_inst = inspector_first_gap_reg_cover::type_id::create("cg");
-        end
-        return m_inst;
-    endfunction
-
-
-    // Function: sample
-    // Sample the register for coverage.
-    virtual function void sample(inspector_first_gap_reg _r, bit is_read);
-        r = _r;
-        cg.sample(is_read);
-    endfunction
-
-endclass
-typedef class inspector_last_pkt_size_reg_cover;
-
-// Class: inspector_last_pkt_size_reg
-// Register inspector.last_pkt_size: 
-class inspector_last_pkt_size_reg extends uvm_reg;
-
-    // Variable: last_pkt_size
-    // 
-    rand uvm_reg_field last_pkt_size;
-
-    // Variable: m_params
-    // Parameter key/value lookup.
-    static protected acd_reg_param_cfg m_params;
-
-    // Variable: cg
-    // Coverage object. Static to reduce memory usage.
-    static inspector_last_pkt_size_reg_cover cg_all;
-
-    // Variable: cg
-    // Coverage object.
-    inspector_last_pkt_size_reg_cover cg;
-
-    // Variable: is_read
-    // Last access type.
-    protected bit is_read;
-
-    `uvm_object_utils(inspector_reg_pkg::inspector_last_pkt_size_reg)
-
-    // Constructor: new
-    function new(string name = "inspector_last_pkt_size");
-        super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
-    endfunction
-
-
-    // Function: build
-    virtual function void build();
-        if ((m_params == null) && has_params())
-            if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
-                `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
-
-        last_pkt_size = uvm_reg_field::type_id::create("last_pkt_size", , get_full_name());
-
-        // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
-        last_pkt_size.configure(this, 14, 0, "RW", 0, 'h0, 1, 1, 0);
-    endfunction
-
-
-    // Function: RMW
-    // Helper task for read-modify-write based on mask.
-    // Ones in the mask position indicate bits to modify.
-    task RMW(output uvm_status_e status, input uvm_reg_data_t data, input uvm_reg_data_t mask);
-        uvm_reg_data_t tmp;
-
-        // read
-        read(status, tmp);
-        // modify
-        tmp &= ~mask;
-        tmp |= data & mask;
-        //write
-        write(status, tmp);
-    endtask
-
-
-    // Function: post_write
-    // Add message after access.
-    virtual task post_write(uvm_reg_item rw);
-        super.post_write(rw);
-        is_read = 0;
-        `uvm_info("REG", $sformatf("%0s WRITE=0x%0h ADDR=0x%0h%0s", this.get_full_name(), this.get(), this.get_address(), this.fields2string()), UVM_MEDIUM)
-        sample_values();
-    endtask
-
-
-    // Function: post_read
-    // Add message after access.
-    virtual task post_read(uvm_reg_item rw);
-        super.post_read(rw);
-        is_read = 1;
-        `uvm_info("REG", $sformatf("%0s READ=0x%0h ADDR=0x%0h%0s", this.get_full_name(), this.get(), this.get_address(), this.fields2string()), UVM_MEDIUM)
-        sample_values();
-    endtask
-
-
-    // Function: enable_coverage
-    // Build coverage object if it doesn't already exist.
-    function void enable_coverage(uvm_reg_cvr_t models, bit cg_per_instance=0);
-        if (cg_per_instance) begin
-            if (cg == null) begin
-                //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
-                cg = inspector_last_pkt_size_reg_cover::type_id::create({this.get_full_name(), ".cg"});
-            end
-        end else begin
-            //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
-            cg_all = inspector_last_pkt_size_reg_cover::get();
-        end
-        this.add_coverage(models);
-    endfunction
-
-
-    // Function: sample_values
-    // Called in post-actions
-    virtual function void sample_values();
-        // Sample only if coverage object has been created
-        if(cg != null) begin
-            cg.sample(this, is_read);
-        end
-        if (cg_all != null) begin
-            cg_all.sample(this, is_read);
-        end
-    endfunction
-
-
-    // Function: sample
-    // Sample the raw transaction
-    //function void sample(uvm_reg_data_t data, uvm_reg_data_t byte_en, bit is_read, uvm_reg_map map);
-
-
-    // Function: has_params
-    function int unsigned has_params();
-        has_params = 0;
-        has_params += 0;
-    endfunction
-
-    // Function: fields2string
-    // Stringify fields.
-    virtual function string fields2string();
-        string s="";
-        $swrite(s, "%0s\n%24s=0x%0h", s, last_pkt_size.get_name, last_pkt_size.value);
-        return s;
-    endfunction
-
-endclass
-
-
-// Class: inspector_last_pkt_size_reg_cover
-// Register coverage object.
-class inspector_last_pkt_size_reg_cover extends uvm_object;
-
-    static local inspector_last_pkt_size_reg_cover m_inst;
-
-    // Variable: r
-    // Handle to register to sample
-    inspector_last_pkt_size_reg r;
-
-    covergroup cg with function sample(bit is_read);
-        option.per_instance = 1;
-        type_option.merge_instances = 1;
-        last_pkt_size_wr: coverpoint r.last_pkt_size.value iff (!is_read) { bins bin[16] = {[0:$]}; }
-        last_pkt_size_rd: coverpoint r.last_pkt_size.value iff  (is_read) { bins bin[16] = {[0:$]}; }
-    endgroup
-
-    `uvm_object_utils(inspector_reg_pkg::inspector_last_pkt_size_reg_cover)
-
-    // Constructor: new
-    // Note that to be truly singleton, the constructor should be protected.
-    /*protected*/ function new(string name="inspector_last_pkt_size_reg_cover");
-        super.new(name);
-        cg = new(/*name*/);
-    endfunction
-
-
-    // Function: set_name
-    // Override function to set name of covergroup.
-    virtual function void set_name(string name);
-        super.set_name(name);
-        cg.option.name = name;
-    endfunction
-
-
-    // Function: get
-    // Get the coverage object singleton.
-    static function inspector_last_pkt_size_reg_cover get();
-        if (m_inst == null) begin
-            m_inst = inspector_last_pkt_size_reg_cover::type_id::create("cg");
-        end
-        return m_inst;
-    endfunction
-
-
-    // Function: sample
-    // Sample the register for coverage.
-    virtual function void sample(inspector_last_pkt_size_reg _r, bit is_read);
+    virtual function void sample(shapping_last_pkt_size_reg _r, bit is_read);
         r = _r;
         cg.sample(is_read);
     endfunction
@@ -3892,33 +3499,30 @@ endclass
 
 
 
-// Class: inspector_reg_block
-// Register Block .inspector: 
-class inspector_reg_block extends uvm_reg_block;
+// Class: pktgen_shapping_reg_block
+// Register Block .pktgen_shapping: 
+class pktgen_shapping_reg_block extends uvm_reg_block;
 
     // Validate register width
     local static bit valid_reg_data_width = check_data_width(`UVM_REG_DATA_WIDTH);
 
-    rand inspector_latency_min_reg latency_min;
-    rand inspector_latency_max_reg latency_max;
-    rand inspector_jitter_min_reg jitter_min;
-    rand inspector_jitter_max_reg jitter_max;
-    rand inspector_sum_latency_reg sum_latency;
-    rand inspector_sum_jitter_reg sum_jitter;
-    rand inspector_bytes_good_reg bytes_good;
-    rand inspector_pkts_good_reg pkts_good;
-    rand inspector_bytes_bad_reg bytes_bad;
-    rand inspector_pkts_bad_reg pkts_bad;
-    rand inspector_first_ts_reg first_ts;
-    rand inspector_last_ts_reg last_ts;
-    rand inspector_next_seq_no_reg next_seq_no;
-    rand inspector_last_latency_reg last_latency;
-    rand inspector_last_jitter_reg last_jitter;
-    rand inspector_gap_max_reg gap_max;
-    rand inspector_gap_reg gap;
-    rand inspector_out_of_seq_or_dup_reg out_of_seq_or_dup;
-    rand inspector_first_gap_reg first_gap;
-    rand inspector_last_pkt_size_reg last_pkt_size;
+    rand shapping_shapping_bucket_reg shapping_bucket;
+    rand shapping_credit_reg credit;
+    rand shapping_period_reg period;
+    rand shapping_shapping_mode_reg shapping_mode;
+    rand shapping_duration_bucket_reg duration_bucket;
+    rand shapping_duration_mode_reg duration_mode;
+    rand shapping_emix_table_reg emix_table;
+    rand shapping_info0_mode_emix_reg info0_mode_emix;
+    rand shapping_info0_mode_step_interval_reg info0_mode_step_interval;
+    rand shapping_info0_mode_pseudo_random_reg info0_mode_pseudo_random;
+    rand shapping_info1_mode_step_interval_reg info1_mode_step_interval;
+    rand shapping_info2_emix_reg info2_emix;
+    rand shapping_info2_mode_step_interval_reg info2_mode_step_interval;
+    rand shapping_info2_mode_pseudo_random_reg info2_mode_pseudo_random;
+    rand shapping_pkt_count_reg pkt_count;
+    rand shapping_byte_count_reg byte_count;
+    rand shapping_last_pkt_size_reg last_pkt_size;
 
     // Variable: params
     // Parameter key/value lookup.
@@ -3928,10 +3532,10 @@ class inspector_reg_block extends uvm_reg_block;
     // Assert to construct all sub-block and register covergroups per instance rather than singleton
     protected bit cg_per_instance;
 
-    `uvm_object_utils(inspector_reg_pkg::inspector_reg_block)
+    `uvm_object_utils(pktgen_shapping_reg_pkg::pktgen_shapping_reg_block)
 
     // Constructor: new
-    function new(string name = "inspector_reg_block");
+    function new(string name = "pktgen_shapping_reg_block");
         super.new(name, UVM_NO_COVERAGE);
     endfunction
 
@@ -3943,91 +3547,79 @@ class inspector_reg_block extends uvm_reg_block;
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
 
-        latency_min = inspector_latency_min_reg::type_id::create("latency_min", , get_full_name());
-        latency_max = inspector_latency_max_reg::type_id::create("latency_max", , get_full_name());
-        jitter_min = inspector_jitter_min_reg::type_id::create("jitter_min", , get_full_name());
-        jitter_max = inspector_jitter_max_reg::type_id::create("jitter_max", , get_full_name());
-        sum_latency = inspector_sum_latency_reg::type_id::create("sum_latency", , get_full_name());
-        sum_jitter = inspector_sum_jitter_reg::type_id::create("sum_jitter", , get_full_name());
-        bytes_good = inspector_bytes_good_reg::type_id::create("bytes_good", , get_full_name());
-        pkts_good = inspector_pkts_good_reg::type_id::create("pkts_good", , get_full_name());
-        bytes_bad = inspector_bytes_bad_reg::type_id::create("bytes_bad", , get_full_name());
-        pkts_bad = inspector_pkts_bad_reg::type_id::create("pkts_bad", , get_full_name());
-        first_ts = inspector_first_ts_reg::type_id::create("first_ts", , get_full_name());
-        last_ts = inspector_last_ts_reg::type_id::create("last_ts", , get_full_name());
-        next_seq_no = inspector_next_seq_no_reg::type_id::create("next_seq_no", , get_full_name());
-        last_latency = inspector_last_latency_reg::type_id::create("last_latency", , get_full_name());
-        last_jitter = inspector_last_jitter_reg::type_id::create("last_jitter", , get_full_name());
-        gap_max = inspector_gap_max_reg::type_id::create("gap_max", , get_full_name());
-        gap = inspector_gap_reg::type_id::create("gap", , get_full_name());
-        out_of_seq_or_dup = inspector_out_of_seq_or_dup_reg::type_id::create("out_of_seq_or_dup", , get_full_name());
-        first_gap = inspector_first_gap_reg::type_id::create("first_gap", , get_full_name());
-        last_pkt_size = inspector_last_pkt_size_reg::type_id::create("last_pkt_size", , get_full_name());
+        shapping_bucket = shapping_shapping_bucket_reg::type_id::create("shapping_bucket", , get_full_name());
+        credit = shapping_credit_reg::type_id::create("credit", , get_full_name());
+        period = shapping_period_reg::type_id::create("period", , get_full_name());
+        shapping_mode = shapping_shapping_mode_reg::type_id::create("shapping_mode", , get_full_name());
+        duration_bucket = shapping_duration_bucket_reg::type_id::create("duration_bucket", , get_full_name());
+        duration_mode = shapping_duration_mode_reg::type_id::create("duration_mode", , get_full_name());
+        emix_table = shapping_emix_table_reg::type_id::create("emix_table", , get_full_name());
+        info0_mode_emix = shapping_info0_mode_emix_reg::type_id::create("info0_mode_emix", , get_full_name());
+        info0_mode_step_interval = shapping_info0_mode_step_interval_reg::type_id::create("info0_mode_step_interval", , get_full_name());
+        info0_mode_pseudo_random = shapping_info0_mode_pseudo_random_reg::type_id::create("info0_mode_pseudo_random", , get_full_name());
+        info1_mode_step_interval = shapping_info1_mode_step_interval_reg::type_id::create("info1_mode_step_interval", , get_full_name());
+        info2_emix = shapping_info2_emix_reg::type_id::create("info2_emix", , get_full_name());
+        info2_mode_step_interval = shapping_info2_mode_step_interval_reg::type_id::create("info2_mode_step_interval", , get_full_name());
+        info2_mode_pseudo_random = shapping_info2_mode_pseudo_random_reg::type_id::create("info2_mode_pseudo_random", , get_full_name());
+        pkt_count = shapping_pkt_count_reg::type_id::create("pkt_count", , get_full_name());
+        byte_count = shapping_byte_count_reg::type_id::create("byte_count", , get_full_name());
+        last_pkt_size = shapping_last_pkt_size_reg::type_id::create("last_pkt_size", , get_full_name());
 
-        latency_min.configure(this);
-        latency_max.configure(this);
-        jitter_min.configure(this);
-        jitter_max.configure(this);
-        sum_latency.configure(this);
-        sum_jitter.configure(this);
-        bytes_good.configure(this);
-        pkts_good.configure(this);
-        bytes_bad.configure(this);
-        pkts_bad.configure(this);
-        first_ts.configure(this);
-        last_ts.configure(this);
-        next_seq_no.configure(this);
-        last_latency.configure(this);
-        last_jitter.configure(this);
-        gap_max.configure(this);
-        gap.configure(this);
-        out_of_seq_or_dup.configure(this);
-        first_gap.configure(this);
+        shapping_bucket.configure(this);
+        credit.configure(this);
+        period.configure(this);
+        shapping_mode.configure(this);
+        duration_bucket.configure(this);
+        duration_mode.configure(this);
+        emix_table.configure(this);
+        info0_mode_emix.configure(this);
+        info0_mode_step_interval.configure(this);
+        info0_mode_pseudo_random.configure(this);
+        info1_mode_step_interval.configure(this);
+        info2_emix.configure(this);
+        info2_mode_step_interval.configure(this);
+        info2_mode_pseudo_random.configure(this);
+        pkt_count.configure(this);
+        byte_count.configure(this);
         last_pkt_size.configure(this);
 
-        latency_min.build();
-        latency_max.build();
-        jitter_min.build();
-        jitter_max.build();
-        sum_latency.build();
-        sum_jitter.build();
-        bytes_good.build();
-        pkts_good.build();
-        bytes_bad.build();
-        pkts_bad.build();
-        first_ts.build();
-        last_ts.build();
-        next_seq_no.build();
-        last_latency.build();
-        last_jitter.build();
-        gap_max.build();
-        gap.build();
-        out_of_seq_or_dup.build();
-        first_gap.build();
+        shapping_bucket.build();
+        credit.build();
+        period.build();
+        shapping_mode.build();
+        duration_bucket.build();
+        duration_mode.build();
+        emix_table.build();
+        info0_mode_emix.build();
+        info0_mode_step_interval.build();
+        info0_mode_pseudo_random.build();
+        info1_mode_step_interval.build();
+        info2_emix.build();
+        info2_mode_step_interval.build();
+        info2_mode_pseudo_random.build();
+        pkt_count.build();
+        byte_count.build();
         last_pkt_size.build();
 
         // define default map
-        default_map = create_map("inspector_default_map", 'h0, `UVM_REG_DATA_WIDTH/8, UVM_NO_ENDIAN, 0);
-        this.default_map.add_reg(latency_min, 'h0, "RW");
-        this.default_map.add_reg(latency_max, 'h10, "RW");
-        this.default_map.add_reg(jitter_min, 'h1, "RW");
-        this.default_map.add_reg(jitter_max, 'h11, "RW");
-        this.default_map.add_reg(sum_latency, 'h2, "RW");
-        this.default_map.add_reg(sum_jitter, 'h3, "RW");
-        this.default_map.add_reg(bytes_good, 'h4, "RW");
-        this.default_map.add_reg(pkts_good, 'h14, "RW");
-        this.default_map.add_reg(bytes_bad, 'h5, "RW");
-        this.default_map.add_reg(pkts_bad, 'h15, "RW");
-        this.default_map.add_reg(first_ts, 'h6, "RW");
-        this.default_map.add_reg(last_ts, 'h7, "RW");
-        this.default_map.add_reg(next_seq_no, 'h8, "RW");
-        this.default_map.add_reg(last_latency, 'h9, "RW");
-        this.default_map.add_reg(last_jitter, 'hA, "RW");
-        this.default_map.add_reg(gap_max, 'hB, "RW");
-        this.default_map.add_reg(gap, 'hC, "RW");
-        this.default_map.add_reg(out_of_seq_or_dup, 'hD, "RW");
-        this.default_map.add_reg(first_gap, 'hE, "RW");
-        this.default_map.add_reg(last_pkt_size, 'hF, "RW");
+        default_map = create_map("pktgen_shapping_default_map", 'h0, `UVM_REG_DATA_WIDTH/8, UVM_NO_ENDIAN, 0);
+        this.default_map.add_reg(shapping_bucket, 'h0, "RW");
+        this.default_map.add_reg(credit, 'h1, "RW");
+        this.default_map.add_reg(period, 'h2, "RW");
+        this.default_map.add_reg(shapping_mode, 'h3, "RW");
+        this.default_map.add_reg(duration_bucket, 'h4, "RW");
+        this.default_map.add_reg(duration_mode, 'h5, "RW");
+        this.default_map.add_reg(emix_table, 'h8, "RW");
+        this.default_map.add_reg(info0_mode_emix, 'h9, "RW");
+        this.default_map.add_reg(info0_mode_step_interval, 'h9, "RW");
+        this.default_map.add_reg(info0_mode_pseudo_random, 'h9, "RW");
+        this.default_map.add_reg(info1_mode_step_interval, 'hA, "RW");
+        this.default_map.add_reg(info2_emix, 'hB, "RW");
+        this.default_map.add_reg(info2_mode_step_interval, 'hB, "RW");
+        this.default_map.add_reg(info2_mode_pseudo_random, 'hB, "RW");
+        this.default_map.add_reg(pkt_count, 'hC, "RO");
+        this.default_map.add_reg(byte_count, 'hD, "RO");
+        this.default_map.add_reg(last_pkt_size, 'hE, "RO");
 
         // Recursively lock register model and build the address map to enable
         // uvm_reg_map::get_reg_by_offset() and uvm_reg_map::get_mem_by_offset() methods.
@@ -4054,25 +3646,22 @@ class inspector_reg_block extends uvm_reg_block;
     virtual function uvm_reg_cvr_t set_coverage(uvm_reg_cvr_t is_on);
         //void'(uvm_config_db#(bit)::get(null, get_full_name(), "cg_per_instance", cg_per_instance));
         set_coverage = super.set_coverage(is_on);
-        latency_min.enable_coverage(is_on, this.cg_per_instance);
-        latency_max.enable_coverage(is_on, this.cg_per_instance);
-        jitter_min.enable_coverage(is_on, this.cg_per_instance);
-        jitter_max.enable_coverage(is_on, this.cg_per_instance);
-        sum_latency.enable_coverage(is_on, this.cg_per_instance);
-        sum_jitter.enable_coverage(is_on, this.cg_per_instance);
-        bytes_good.enable_coverage(is_on, this.cg_per_instance);
-        pkts_good.enable_coverage(is_on, this.cg_per_instance);
-        bytes_bad.enable_coverage(is_on, this.cg_per_instance);
-        pkts_bad.enable_coverage(is_on, this.cg_per_instance);
-        first_ts.enable_coverage(is_on, this.cg_per_instance);
-        last_ts.enable_coverage(is_on, this.cg_per_instance);
-        next_seq_no.enable_coverage(is_on, this.cg_per_instance);
-        last_latency.enable_coverage(is_on, this.cg_per_instance);
-        last_jitter.enable_coverage(is_on, this.cg_per_instance);
-        gap_max.enable_coverage(is_on, this.cg_per_instance);
-        gap.enable_coverage(is_on, this.cg_per_instance);
-        out_of_seq_or_dup.enable_coverage(is_on, this.cg_per_instance);
-        first_gap.enable_coverage(is_on, this.cg_per_instance);
+        shapping_bucket.enable_coverage(is_on, this.cg_per_instance);
+        credit.enable_coverage(is_on, this.cg_per_instance);
+        period.enable_coverage(is_on, this.cg_per_instance);
+        shapping_mode.enable_coverage(is_on, this.cg_per_instance);
+        duration_bucket.enable_coverage(is_on, this.cg_per_instance);
+        duration_mode.enable_coverage(is_on, this.cg_per_instance);
+        emix_table.enable_coverage(is_on, this.cg_per_instance);
+        info0_mode_emix.enable_coverage(is_on, this.cg_per_instance);
+        info0_mode_step_interval.enable_coverage(is_on, this.cg_per_instance);
+        info0_mode_pseudo_random.enable_coverage(is_on, this.cg_per_instance);
+        info1_mode_step_interval.enable_coverage(is_on, this.cg_per_instance);
+        info2_emix.enable_coverage(is_on, this.cg_per_instance);
+        info2_mode_step_interval.enable_coverage(is_on, this.cg_per_instance);
+        info2_mode_pseudo_random.enable_coverage(is_on, this.cg_per_instance);
+        pkt_count.enable_coverage(is_on, this.cg_per_instance);
+        byte_count.enable_coverage(is_on, this.cg_per_instance);
         last_pkt_size.enable_coverage(is_on, this.cg_per_instance);
         // Use UVM_CVR_ALL for hierarchical enabling.
         if(is_on == UVM_CVR_ALL) begin

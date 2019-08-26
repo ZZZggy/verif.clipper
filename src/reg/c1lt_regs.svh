@@ -55,7 +55,7 @@ package c1lt_reg_pkg;
     import acd_seq_checker_reg_reg_pkg::*;
     import mac_if_reg_pkg::*;
     import mac10g_if_reg_pkg::*;
-    import inspector_multi_flow_block_reg_pkg::*;
+    import inspector_reg_pkg::*;
     import phy_if_reg_pkg::*;
     import q_map_tbl_reg_pkg::*;
     import pktgen_reg_pkg::*;
@@ -96,7 +96,6 @@ class c1lt_reg_block extends uvm_reg_block;
     rand cos_mark_tbl_reg_block cos_mark_table_port;
     rand acd_seq_checker_reg_reg_block acd_seq_checker_reg;
     rand mac_if_reg_block mac_if;
-    rand inspector_multi_flow_block_reg_block inspector;
     rand phy_if_reg_block phy_if;
     rand q_map_tbl_reg_block q_mapping_table;
     rand pktgen_reg_block pktgen;
@@ -112,6 +111,7 @@ class c1lt_reg_block extends uvm_reg_block;
     rand classifiers_reg_block classifiers;
     rand access_logger_reg_block access_logger;
     rand mac10g_if_reg_block mac10g_if[];
+    rand inspector_reg_block inspector[];
     rand cpu_monitor_domain_action_reg_block cpu_monitor_action[];
 
     // Variable: params
@@ -137,6 +137,7 @@ class c1lt_reg_block extends uvm_reg_block;
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
         mac10g_if = new[4];
+        inspector = new[16];
         cpu_monitor_action = new[12];
 
         globals = chip_global_reg_block::type_id::create("globals", , get_full_name());
@@ -151,7 +152,6 @@ class c1lt_reg_block extends uvm_reg_block;
         cos_mark_table_port = cos_mark_tbl_reg_block::type_id::create("cos_mark_table_port", , get_full_name());
         acd_seq_checker_reg = acd_seq_checker_reg_reg_block::type_id::create("acd_seq_checker_reg", , get_full_name());
         mac_if = mac_if_reg_block::type_id::create("mac_if", , get_full_name());
-        inspector = inspector_multi_flow_block_reg_block::type_id::create("inspector", , get_full_name());
         phy_if = phy_if_reg_block::type_id::create("phy_if", , get_full_name());
         q_mapping_table = q_map_tbl_reg_block::type_id::create("q_mapping_table", , get_full_name());
         pktgen = pktgen_reg_block::type_id::create("pktgen", , get_full_name());
@@ -169,6 +169,9 @@ class c1lt_reg_block extends uvm_reg_block;
         foreach(mac10g_if[m]) begin
             mac10g_if[m] = mac10g_if_reg_block::type_id::create($sformatf("mac10g_if[%0d]",m), , get_full_name());
         end
+        foreach(inspector[m]) begin
+            inspector[m] = inspector_reg_block::type_id::create($sformatf("inspector[%0d]",m), , get_full_name());
+        end
         foreach(cpu_monitor_action[m]) begin
             cpu_monitor_action[m] = cpu_monitor_domain_action_reg_block::type_id::create($sformatf("cpu_monitor_action[%0d]",m), , get_full_name());
         end
@@ -185,7 +188,6 @@ class c1lt_reg_block extends uvm_reg_block;
         cos_mark_table_port.configure(this);
         acd_seq_checker_reg.configure(this);
         mac_if.configure(this);
-        inspector.configure(this);
         phy_if.configure(this);
         q_mapping_table.configure(this);
         pktgen.configure(this);
@@ -203,6 +205,9 @@ class c1lt_reg_block extends uvm_reg_block;
         foreach(mac10g_if[m]) begin
             mac10g_if[m].configure(this);
         end
+        foreach(inspector[m]) begin
+            inspector[m].configure(this);
+        end
         foreach(cpu_monitor_action[m]) begin
             cpu_monitor_action[m].configure(this);
         end
@@ -219,7 +224,6 @@ class c1lt_reg_block extends uvm_reg_block;
         cos_mark_table_port.build();
         acd_seq_checker_reg.build();
         mac_if.build();
-        inspector.build();
         phy_if.build();
         q_mapping_table.build();
         pktgen.build();
@@ -236,6 +240,9 @@ class c1lt_reg_block extends uvm_reg_block;
         access_logger.build();
         foreach(mac10g_if[m]) begin
             mac10g_if[m].build();
+        end
+        foreach(inspector[m]) begin
+            inspector[m].build();
         end
         foreach(cpu_monitor_action[m]) begin
             cpu_monitor_action[m].build();
@@ -255,7 +262,6 @@ class c1lt_reg_block extends uvm_reg_block;
         this.default_map.add_submap(this.cos_mark_table_port.default_map, 'h800);
         this.default_map.add_submap(this.acd_seq_checker_reg.default_map, 'h900);
         this.default_map.add_submap(this.mac_if.default_map, 'h1000);
-        this.default_map.add_submap(this.inspector.default_map, 'h6000);
         this.default_map.add_submap(this.phy_if.default_map, 'h8000);
         this.default_map.add_submap(this.q_mapping_table.default_map, 'hC000);
         this.default_map.add_submap(this.pktgen.default_map, 'h10000);
@@ -272,6 +278,9 @@ class c1lt_reg_block extends uvm_reg_block;
         this.default_map.add_submap(this.access_logger.default_map, 'hE0000);
         foreach(mac10g_if[m]) begin
             this.default_map.add_submap(this.mac10g_if[m].default_map, 'h4000 + m*('h200));
+        end
+        foreach(inspector[m]) begin
+            this.default_map.add_submap(this.inspector[m].default_map, 'h6000 + m*('h20));
         end
         foreach(cpu_monitor_action[m]) begin
             this.default_map.add_submap(this.cpu_monitor_action[m].default_map, 'h70000 + m*('h100));
@@ -303,7 +312,6 @@ class c1lt_reg_block extends uvm_reg_block;
             cos_mark_table_port.set_per_instance_coverage(per_inst, hier);
             acd_seq_checker_reg.set_per_instance_coverage(per_inst, hier);
             mac_if.set_per_instance_coverage(per_inst, hier);
-            inspector.set_per_instance_coverage(per_inst, hier);
             phy_if.set_per_instance_coverage(per_inst, hier);
             q_mapping_table.set_per_instance_coverage(per_inst, hier);
             pktgen.set_per_instance_coverage(per_inst, hier);
@@ -320,6 +328,9 @@ class c1lt_reg_block extends uvm_reg_block;
             access_logger.set_per_instance_coverage(per_inst, hier);
             foreach(mac10g_if[m]) begin
                 mac10g_if[m].set_per_instance_coverage(per_inst, hier);
+            end
+            foreach(inspector[m]) begin
+                inspector[m].set_per_instance_coverage(per_inst, hier);
             end
             foreach(cpu_monitor_action[m]) begin
                 cpu_monitor_action[m].set_per_instance_coverage(per_inst, hier);
@@ -361,8 +372,6 @@ class c1lt_reg_block extends uvm_reg_block;
             void'(acd_seq_checker_reg.set_coverage(is_on));
             //void'(uvm_config_db#(bit)::set(null, mac_if.get_full_name(), "cg_per_instance", cg_per_instance));
             void'(mac_if.set_coverage(is_on));
-            //void'(uvm_config_db#(bit)::set(null, inspector.get_full_name(), "cg_per_instance", cg_per_instance));
-            void'(inspector.set_coverage(is_on));
             //void'(uvm_config_db#(bit)::set(null, phy_if.get_full_name(), "cg_per_instance", cg_per_instance));
             void'(phy_if.set_coverage(is_on));
             //void'(uvm_config_db#(bit)::set(null, q_mapping_table.get_full_name(), "cg_per_instance", cg_per_instance));
@@ -394,6 +403,10 @@ class c1lt_reg_block extends uvm_reg_block;
             foreach(mac10g_if[m]) begin
                 //void'(uvm_config_db#(bit)::set(null, mac10g_if[m].get_full_name(), "cg_per_instance", cg_per_instance));
                 void'(mac10g_if[m].set_coverage(is_on));
+            end
+            foreach(inspector[m]) begin
+                //void'(uvm_config_db#(bit)::set(null, inspector[m].get_full_name(), "cg_per_instance", cg_per_instance));
+                void'(inspector[m].set_coverage(is_on));
             end
             foreach(cpu_monitor_action[m]) begin
                 //void'(uvm_config_db#(bit)::set(null, cpu_monitor_action[m].get_full_name(), "cg_per_instance", cg_per_instance));

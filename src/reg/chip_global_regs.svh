@@ -1372,11 +1372,17 @@ typedef class globals_mon_cfg_reg_cover;
 // Register globals.mon_cfg: 
 class globals_mon_cfg_reg extends uvm_reg;
 
+    // Variable: mon1_port
+    // NOT USED. Monitor-1 is connected on port-12 only
+    rand uvm_reg_field mon1_port;
     // Variable: mon1_ena
-    // Enable monitor-1 on port-12
+    // 
     rand uvm_reg_field mon1_ena;
+    // Variable: mon2_port
+    // NOT USED. Monitor-2 is connected on port-8 only
+    rand uvm_reg_field mon2_port;
     // Variable: mon2_ena
-    // Enable monitor-2 on port-8
+    // 
     rand uvm_reg_field mon2_ena;
 
     // Variable: m_params
@@ -1409,11 +1415,15 @@ class globals_mon_cfg_reg extends uvm_reg;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
+        mon1_port = uvm_reg_field::type_id::create("mon1_port", , get_full_name());
         mon1_ena = uvm_reg_field::type_id::create("mon1_ena", , get_full_name());
+        mon2_port = uvm_reg_field::type_id::create("mon2_port", , get_full_name());
         mon2_ena = uvm_reg_field::type_id::create("mon2_ena", , get_full_name());
 
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
+        mon1_port.configure(this, 4, 0, "RW", 0, 'hC, 1, 1, 0);
         mon1_ena.configure(this, 1, 4, "RW", 0, 'h0, 1, 1, 0);
+        mon2_port.configure(this, 4, 8, "RW", 0, 'h8, 1, 1, 0);
         mon2_ena.configure(this, 1, 12, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
@@ -1498,7 +1508,9 @@ class globals_mon_cfg_reg extends uvm_reg;
     // Stringify fields.
     virtual function string fields2string();
         string s="";
+        $swrite(s, "%0s\n%24s=0x%0h", s, mon1_port.get_name, mon1_port.value);
         $swrite(s, "%0s\n%24s=0x%0h", s, mon1_ena.get_name, mon1_ena.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, mon2_port.get_name, mon2_port.value);
         $swrite(s, "%0s\n%24s=0x%0h", s, mon2_ena.get_name, mon2_ena.value);
         return s;
     endfunction
@@ -1519,8 +1531,12 @@ class globals_mon_cfg_reg_cover extends uvm_object;
     covergroup cg with function sample(bit is_read);
         option.per_instance = 1;
         type_option.merge_instances = 1;
+        mon1_port_wr: coverpoint r.mon1_port.value iff (!is_read);
+        mon1_port_rd: coverpoint r.mon1_port.value iff  (is_read);
         mon1_ena_wr: coverpoint r.mon1_ena.value iff (!is_read);
         mon1_ena_rd: coverpoint r.mon1_ena.value iff  (is_read);
+        mon2_port_wr: coverpoint r.mon2_port.value iff (!is_read);
+        mon2_port_rd: coverpoint r.mon2_port.value iff  (is_read);
         mon2_ena_wr: coverpoint r.mon2_ena.value iff (!is_read);
         mon2_ena_rd: coverpoint r.mon2_ena.value iff  (is_read);
     endgroup
