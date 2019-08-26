@@ -27,7 +27,7 @@
 // SAT internal loopback test
 class sat_test extends clipper_test_base;
 
-    pktgen_reg_seq pktgen;
+    pktgen_reg_seq  pktgen;
 
     `uvm_component_utils(sat_test)
 
@@ -37,8 +37,8 @@ class sat_test extends clipper_test_base;
         // Configure TRF ports at 10Gbps
         cfg.port_speed[5:8] = '{PS_10G, PS_10G, PS_10G, PS_10G};
         cfg.eot_win_cnt = 100; // 10us drain
-        // Enable CLI overrides for test parameters
-        parse_cli_test_cfg();
+//        // Enable CLI overrides for test parameters
+//        parse_cli_test_cfg();
     endfunction
 
     // Send a packet per USER interface
@@ -49,8 +49,6 @@ class sat_test extends clipper_test_base;
 
         phase.raise_objection(this);
 
-        ctrl_vif.loopback_en = 14'h1FFE;
-        
         pktgen = pktgen_reg_seq::type_id::create("pktgen");
         pktgen.regmodel = env.regmodel.pktgen;
 
@@ -59,6 +57,7 @@ class sat_test extends clipper_test_base;
 
         poll_seq = pktgen_poll_duration_seq::type_id::create("poll_seq");
         poll_seq.regmodel = env.regmodel.pktgen;
+        ctrl_vif.loopback_en = 14'h1FFE;
 
         // Setup loopback and inspector
         for(int i=PORT_IF; i <= PORT_IF_LAST; i++) begin
@@ -71,44 +70,37 @@ class sat_test extends clipper_test_base;
                 }
             }) `randerr
             catchall.start(null);
-            `uvm_info("TEST", catchall.convert2string(), UVM_LOW)
         end
+        env.regmodel.globals.tlcs.update(status);
 
         // Configure PKTGEN
-        if (!(pktgen.randomize() with
-            {
-             outgoing_port       == 5;
-             nbr_of_flow         == 1;
-             bit_rate_in_mbps[0] == 10000; ////990;
-             bucket_val[0]       == 'h7fffffff; // 0x7fffffff to initialise to -1
-             gen_pkt_type        == 0;
-             }
-            )) `randerr
+        
+//        if (!pktgen.randomize()) `randerr
+
+
+        if (!pktgen.randomize() with {
+            gen_pkt_type == 1;
+            nbr_of_flow  == 2;
+            pkt_size_in_byte[0] == 60;
+            pkt_size_in_byte[1] == 60;
+            outgoing_port       == 5;
+        }) `randerr
+
+
+            
         `uvm_info("TEST", pktgen.convert2string(), UVM_LOW)
         pktgen.start(null);
-
-        // Configure the inspector exta offset based on the selected gen_pkt_type
-        env.regmodel.inspector.inspector_global.cfg_auto_mode.extra_offset_auto_mode_ipv6.set(pktgen.extra_offset_cfg);
-        env.regmodel.inspector.inspector_global.cfg_auto_mode.update(status);
-
         pktgen.enable_flow();
-
-        // By default the port shaper are closed
-        env.regmodel.tm.shaper.shaper_group_0.params_cir[0].cbs.set(4);
-        env.regmodel.tm.shaper.shaper_group_0.params_cir[0].cir.set(80000);
-        env.regmodel.tm.shaper.shaper_group_0.params_cir[0].cir_max.set(80000);
-        env.regmodel.tm.shaper.shaper_group_0.params_cir[0].cir_ena.set(0);
-        env.regmodel.tm.shaper.shaper_group_0.params_cir[0].update(status);
 
         // Wait for test to finish
         poll_seq.start(null);
 
         // Predict class_total_stats
- //       env.predictor.insect.classifier.stats[pktgen.outgoing_port].classified.packets_good = pktgen.nbr_of_pkt.sum();
- //       env.predictor.insect.classifier.stats[pktgen.outgoing_port].classified.packets_bad  = 0;
- //       env.predictor.insect.classifier.stats[pktgen.outgoing_port].classified.bytes_good = 0;
+        env.predictor.insect.classifier.stats[pktgen.outgoing_port].classified.packets_good = pktgen.nbr_of_pkt.sum();
+        env.predictor.insect.classifier.stats[pktgen.outgoing_port].classified.packets_bad  = 0;
+        env.predictor.insect.classifier.stats[pktgen.outgoing_port].classified.bytes_good = 0;
         foreach(pktgen.nbr_of_pkt[i]) begin
- //           env.predictor.insect.classifier.stats[pktgen.outgoing_port].classified.bytes_good += pktgen.nbr_of_pkt[i] * pktgen.pkt_size_in_byte[i];
+            env.predictor.insect.classifier.stats[pktgen.outgoing_port].classified.bytes_good += pktgen.nbr_of_pkt[i] * pktgen.pkt_size_in_byte[i];
         end
 
         phase.drop_objection(this);
@@ -118,62 +110,103 @@ class sat_test extends clipper_test_base;
     virtual task shutdown_phase(uvm_phase phase);
         uvm_status_e status;
         int flow_nbr;
-        int pktgen_bytes;
-        int last_pkt;
-        
+
         phase.raise_objection(phase);
 
         // Inspector check value
         for(int flow=0;flow<pktgen.nbr_of_flow;flow++) begin
-            // all latencies/jitter/delay checks are disabled since timestamps are compensated
-            // (pktgen ++, inspector --) but frames don't go through MACs, so this will lead to delay underrun
+            //all latencies/jitter/delay checks are disabled since timestamps are compensated (pktgen ++, inspector --) but frames don't go through MACs, so this will lead to delay underrun
 
-            // Disable check on fields
-            env.regmodel.pktgen.shaping_flow[flow].last_pkt_size.dbg_pkt_afull              .set_compare(UVM_NO_CHECK);
-            env.regmodel.pktgen.shaping_flow[flow].last_pkt_size.dbg_pkt_request_valid      .set_compare(UVM_NO_CHECK);
-            env.regmodel.pktgen.shaping_flow[flow].last_pkt_size.dbg_size_rdy               .set_compare(UVM_NO_CHECK);
-            env.regmodel.pktgen.shaping_flow[flow].last_pkt_size.dbg_duration_rdy           .set_compare(UVM_NO_CHECK);
-            env.regmodel.pktgen.shaping_flow[flow].last_pkt_size.dbg_shaping_ready          .set_compare(UVM_NO_CHECK);
-            env.regmodel.pktgen.shaping_flow[flow].last_pkt_size.dbg_pktgen_fsm_state       .set_compare(UVM_NO_CHECK);
-            env.regmodel.pktgen.shaping_flow[flow].last_pkt_size.dbg_pktgen_remain_bytes_cnt.set_compare(UVM_NO_CHECK);
+            //pktgen stats (TX) validationl
+            env.regmodel.pktgen.shapping[flow].mirror(status, .check(UVM_NO_CHECK), .parent(null));
 
-            // pktgen stats (TX) validation
-            last_pkt     = pktgen.pkt_size_in_byte[flow] + pktgen.compensation - 4;
-            pktgen_bytes = pktgen.nbr_of_pkt[flow]*last_pkt;
-            void'(env.regmodel.pktgen.shaping_flow[flow].byte_count.bytes.predict                (pktgen_bytes));
-            void'(env.regmodel.pktgen.shaping_flow[flow].pkt_count.pkts.predict                  (pktgen.nbr_of_pkt[flow]));
-            void'(env.regmodel.pktgen.shaping_flow[flow].last_pkt_size.last_pkt_sent_size.predict(last_pkt));
-            env.regmodel.pktgen.shaping_flow[flow].byte_count   .mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.pktgen.shaping_flow[flow].pkt_count    .mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.pktgen.shaping_flow[flow].last_pkt_size.mirror(status, .check(UVM_CHECK), .parent(null));
-            
-            // inspector stats (RX) validation
+            if (!(env.regmodel.pktgen.shapping[flow].byte_count.bytes.get() == pktgen.nbr_of_pkt[flow]*( (pktgen.pkt_size_in_byte[flow] + pktgen.compensation - 4 )))) begin                                   //tx pkt sizes (in bytes) are compensated
+                `uvm_error(get_name, $sformatf("Flow[%0d] - Pktgen(Tx) number of bytes (%d) (compensated) is outside expected range.", flow, env.regmodel.pktgen.shapping[flow].byte_count.bytes.get()))
+            end
+            if (!(env.regmodel.pktgen.shapping[flow].pkt_count.pkts.get() == pktgen.nbr_of_pkt[flow])) begin
+                `uvm_error(get_name, $sformatf("Flow[%0d] - Pktgen(Tx) number of pkts (%d) (compensated) is outside expected range.", flow, env.regmodel.pktgen.shapping[flow].pkt_count.pkts.get()))
+            end
+            if (!(env.regmodel.pktgen.shapping[flow].last_pkt_size.last_pkt_sent_size.get() == pktgen.pkt_size_in_byte[flow] + pktgen.compensation - 4)) begin
+                `uvm_error(get_name, $sformatf("Flow[%0d] - Pktgen(Tx) last pkt size (%d) (compensated) is outside expected range.", flow, env.regmodel.pktgen.shapping[flow].last_pkt_size.last_pkt_sent_size.get()))
+            end
+
+            //inspector stats (RX) validation
             flow_nbr = pktgen.flow_number[flow];
+            //env.regmodel.inspector[flow_nbr].mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].latency_min.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].latency_max.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].jitter_min.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].jitter_max.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].sum_latency.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].sum_jitter.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].bytes_good.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].pkts_good.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].bytes_bad.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].pkts_bad.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].first_ts.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].last_ts.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].next_seq_no.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].last_latency.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].last_jitter.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].gap_max.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].gap.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].out_of_seq_or_dup.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].first_gap.mirror(status, .check(UVM_NO_CHECK), .parent(null));
+            env.regmodel.inspector[flow_nbr].last_pkt_size.mirror(status, .check(UVM_NO_CHECK), .parent(null));
 
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].bytes_good.bytes_good.predict              (pktgen.nbr_of_pkt[flow]*pktgen.pkt_size_in_byte[flow]));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].pkts_good.pkts_good.predict                (pktgen.nbr_of_pkt[flow]));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].bytes_bad.bytes_bad.predict                (0));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].pkts_bad.pkts_bad.predict                  (0));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].next_seq_no.next_seq_no.predict            (pktgen.nbr_of_pkt[flow]));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].next_seq_no.overflow.predict               (0));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].next_seq_no.first_bad.predict              (0));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].next_seq_no.gap.predict                    (0));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].next_seq_no.first_good.predict             (1));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].gap_max.gap_max.predict                    (0));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].gap.gap.predict                            (0));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].out_of_seq_or_dup.out_of_seq_or_dup.predict(0));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].first_gap.first_gap.predict                (0));
-            void'(env.regmodel.inspector.inspector_flow[flow_nbr].last_pkt_size.last_pkt_size.predict        (pktgen.pkt_size_in_byte[flow]));
-            env.regmodel.inspector.inspector_flow[flow_nbr].bytes_good       .mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.inspector.inspector_flow[flow_nbr].pkts_good        .mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.inspector.inspector_flow[flow_nbr].bytes_bad        .mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.inspector.inspector_flow[flow_nbr].pkts_bad         .mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.inspector.inspector_flow[flow_nbr].next_seq_no      .mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.inspector.inspector_flow[flow_nbr].gap_max          .mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.inspector.inspector_flow[flow_nbr].gap              .mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.inspector.inspector_flow[flow_nbr].out_of_seq_or_dup.mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.inspector.inspector_flow[flow_nbr].first_gap        .mirror(status, .check(UVM_CHECK), .parent(null));
-            env.regmodel.inspector.inspector_flow[flow_nbr].last_pkt_size    .mirror(status, .check(UVM_CHECK), .parent(null));
+
+            if (!(env.regmodel.inspector[flow_nbr].bytes_good.bytes_good.get() == pktgen.nbr_of_pkt[flow]*pktgen.pkt_size_in_byte[flow])) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Bytes Good 0x%0h outside expected range 0x%0h.",
+                    flow_nbr, env.regmodel.inspector[flow_nbr].bytes_good.bytes_good.get(), pktgen.nbr_of_pkt[flow]*pktgen.pkt_size_in_byte[flow]))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].pkts_good.pkts_good.get() == pktgen.nbr_of_pkt[flow])) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Pkts Good 0x%0h outside expected range 0x%0h.",
+                    flow_nbr, env.regmodel.inspector[flow_nbr].pkts_good.pkts_good.get(), pktgen.nbr_of_pkt[flow]))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].bytes_bad.bytes_bad.get() == 0)) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Bytes bad 0x%0h outside expected range (0).", flow_nbr, env.regmodel.inspector[flow_nbr].bytes_bad.bytes_bad.get()))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].pkts_bad.pkts_bad.get() == 0)) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Pkts bad 0x%0h outside expected range (0).", flow_nbr, env.regmodel.inspector[flow_nbr].pkts_bad.pkts_bad.get()))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].next_seq_no.next_seq_no.get() == pktgen.nbr_of_pkt[flow])) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Next seq nbr 0x%0h outside expected range 0x%0h.",
+                    flow_nbr, env.regmodel.inspector[flow_nbr].next_seq_no.next_seq_no.get(), pktgen.nbr_of_pkt[flow]))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].next_seq_no.overflow.get() == 0)) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Next seq nbr overflow 0x%0h outside expected range (0).", flow_nbr, env.regmodel.inspector[flow_nbr].next_seq_no.overflow.get()))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].next_seq_no.first_bad.get() == 0)) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Next seq nbr first bad 0x%0h outside expected range (0).", flow_nbr, env.regmodel.inspector[flow_nbr].next_seq_no.first_bad.get()))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].next_seq_no.gap.get() == 0)) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Next seq nbr gap 0x%0h outside expected range (0).", flow_nbr, env.regmodel.inspector[flow_nbr].next_seq_no.gap.get()))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].next_seq_no.first_good.get() == 1)) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Next seq nbr first good 0x%0h outside expected range (1).", flow_nbr, env.regmodel.inspector[flow_nbr].next_seq_no.first_good.get()))
+            end
+            //if (!(env.regmodel.inspector[flow_nbr].last_latency.last_latency.get() inside {[latency-jitter:latency+jitter]})) begin
+            //    `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Latency Last 0x%0h outside expected range.", flow_nbr, env.regmodel.inspector[flow_nbr].last_latency.last_latency.get()))
+            //end
+            //if (!(env.regmodel.inspector[flow_nbr].last_jitter.last_jitter.get() inside {['h00:jitter]})) begin
+            //    `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Jitter Last 0x%0h outside expected range.", flow_nbr, env.regmodel.inspector[flow_nbr].last_jitter.last_jitter.get()))
+            //end
+            if (!(env.regmodel.inspector[flow_nbr].gap_max.gap_max.get() == 0)) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Gap Max 0x%0h outside expected range (0).", flow_nbr, env.regmodel.inspector[flow_nbr].gap_max.gap_max.get()))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].gap.gap.get() == 0)) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Gap 0x%0h outside expected range (0).", flow_nbr, env.regmodel.inspector[flow_nbr].gap.gap.get()))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].out_of_seq_or_dup.out_of_seq_or_dup.get() == 0)) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Out of seq or dup 0x%0h outside expected range (0).", flow_nbr, env.regmodel.inspector[flow_nbr].out_of_seq_or_dup.out_of_seq_or_dup.get()))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].first_gap.first_gap.get() == 0)) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - First Gap 0x%0h outside expected range (0).", flow_nbr, env.regmodel.inspector[flow_nbr].first_gap.first_gap.get()))
+            end
+            if (!(env.regmodel.inspector[flow_nbr].last_pkt_size.last_pkt_size.get() == pktgen.pkt_size_in_byte[flow])) begin
+                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Last packet size 0x%0h outside expected range 0x%0h.",
+                    flow_nbr, env.regmodel.inspector[flow_nbr].last_pkt_size.last_pkt_size.get(), pktgen.pkt_size_in_byte[flow]))
+            end
         end
 
         phase.drop_objection(phase);
