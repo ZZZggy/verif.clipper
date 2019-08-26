@@ -129,13 +129,13 @@ class clipper_class_rule_action extends class_rule_action#(c1lt_reg_block);
     endfunction
 
     function bit cpu_fwd_ena(ethernet_frame_t t, int rule_idx);
-        return (regmodel.cpu_monitor_action[t.p_id].cpu_action[rule_idx].cpu_forwarding.get() & 1'b1);
+        return (regmodel.cpu_monitor_action[t.p_id-1].cpu_action[rule_idx].cpu_forwarding.get() & 1'b1);
     endfunction
 
     function bit mon_fwd_ena(ethernet_frame_t t, int rule_idx, int mon_idx);
         case(mon_idx)
-            0      : return (regmodel.cpu_monitor_action[t.p_id].mon1_action[rule_idx].monitor1_forwarding.get() & 1'b1);
-            default: return (regmodel.cpu_monitor_action[t.p_id].mon2_action[rule_idx].monitor2_forwarding.get() & 1'b1);
+            0      : return (regmodel.cpu_monitor_action[t.p_id-1].mon1_action[rule_idx].monitor1_forwarding.get() & 1'b1);
+            default: return (regmodel.cpu_monitor_action[t.p_id-1].mon2_action[rule_idx].monitor2_forwarding.get() & 1'b1);
         endcase
     endfunction
 

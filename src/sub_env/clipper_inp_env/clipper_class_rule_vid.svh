@@ -79,6 +79,10 @@ class clipper_class_rule_vid extends class_rule_vid#(c1lt_reg_block);
             6: return $size(regmodel.vid_pairing_table.p6.ndx)-1;
             7: return $size(regmodel.vid_pairing_table.p7.ndx)-1;
             8: return $size(regmodel.vid_pairing_table.p8.ndx)-1;
+            9: return $size(regmodel.vid_pairing_table.p9.ndx)-1;
+            10: return $size(regmodel.vid_pairing_table.p10.ndx)-1;
+            11: return $size(regmodel.vid_pairing_table.p11.ndx)-1;
+            12: return $size(regmodel.vid_pairing_table.p12.ndx)-1;
             default: `uvm_fatal("PORTERR", $sformatf("Port %0d undefined user port index.", t.p_id))
         endcase
     endfunction
@@ -100,14 +104,18 @@ class clipper_class_rule_vid extends class_rule_vid#(c1lt_reg_block);
             `uvm_warning("FIXME", "GET REAL PRIO OFFSETS")
 
             case(t.p_id)
-                1: dom_prio.prio[DOM_IF] += 64;
-                2: dom_prio.prio[DOM_IF] += 64;
-                3: dom_prio.prio[DOM_IF] += 64;
-                4: dom_prio.prio[DOM_IF] += 64;
-                5: dom_prio.prio[DOM_IF] += 256;
-                6: dom_prio.prio[DOM_IF] += 256;
-                7: dom_prio.prio[DOM_IF] += 256;
-                8: dom_prio.prio[DOM_IF] += 256;
+                1:  dom_prio.prio[DOM_IF] += 64;
+                2:  dom_prio.prio[DOM_IF] += 64;
+                3:  dom_prio.prio[DOM_IF] += 64;
+                4:  dom_prio.prio[DOM_IF] += 64;
+                5:  dom_prio.prio[DOM_IF] += 256;
+                6:  dom_prio.prio[DOM_IF] += 256;
+                7:  dom_prio.prio[DOM_IF] += 256;
+                8:  dom_prio.prio[DOM_IF] += 256;
+                9:  dom_prio.prio[DOM_IF] += 64;
+                10: dom_prio.prio[DOM_IF] += 64;
+                11: dom_prio.prio[DOM_IF] += 64;
+                12: dom_prio.prio[DOM_IF] += 64;
                 default: begin
                     `uvm_fatal("PORTERR", $sformatf("Port %0d undefined user port index.", t.p_id))
                 end

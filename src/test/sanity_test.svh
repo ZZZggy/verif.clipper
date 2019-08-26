@@ -41,7 +41,7 @@ class sanity_test extends clipper_test_base;
     // Send a packet per USER interface
     task main_phase(uvm_phase phase);
         uvm_status_e status;
-        mac_frame_good_traffic_sequence_t seq[5:5];
+        mac_frame_good_traffic_sequence_t seq[1:12];
         acd_mm_raw_reg_sequence raw_seq;
         int unsigned wr_data = 'h1234;
         int unsigned scratch_addr = env.regmodel.globals.scratch.get_address();
@@ -114,7 +114,7 @@ class sanity_test extends clipper_test_base;
             seq[i] = mac_frame_good_traffic_sequence_t::type_id::create($sformatf("seq%0d", i));
             if (!seq[i].randomize() with {
                 id               == i;
-                frame_count      == 100000;
+                frame_count      == 1;
                 max_payload_size == 62;
             }) `uvm_fatal("RNDERR", seq[i].get_name)
         end
