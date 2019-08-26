@@ -54,7 +54,7 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
     rand bit [47:0]   src_mac_addr;
     rand bit [47:0]   dst_mac_addr;
     rand int unsigned gen_pkt_type;   // 0:Layer 2 LBM 0VLAN, 1:Layer 3 0VLAN, 2:Layer 3 IPv6/UDP/TWAMP
-    rand int unsigned min_frame_size; // with gen_pkt_type=0: 64 , with gen_pkt_type=1: , with gen_pkt_type=2: 122, 
+    rand int unsigned min_frame_size; // with gen_pkt_type=0: 64 , with gen_pkt_type=1: 82, with gen_pkt_type=2: 122, 
     int unsigned extra_offset_cfg;
     
 
@@ -76,8 +76,12 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
         compensation         inside {0, 4, 24};
         soft compensation    == 24;
 
-        soft gen_pkt_type    == 2;   // Layer 3 IPv6/UDP/TWAMP
-        soft min_frame_size  == 122; // with gen_pkt_type=0: 64 , with gen_pkt_type=1: , with gen_pkt_type=2: 122, 
+        soft gen_pkt_type    == 0;   // Layer 2 LBM, 0 VLAN
+        soft min_frame_size  == 64;  // with gen_pkt_type=0: 64 
+        //soft gen_pkt_type    == 1;   // Layer 3 IPv4/UDP/OAM, 0 VLAN
+        //soft min_frame_size  == 82;  // with gen_pkt_type=1: 82 
+        //soft gen_pkt_type    == 2;   // Layer 3 IPv6/UDP/TWAMP, 0 VLAN
+        //soft min_frame_size  == 122; // with gen_pkt_type=2: 122, 
 
         src_mac_addr         != dst_mac_addr;
 
@@ -88,7 +92,7 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
         bucket_val.size       == nbr_of_flow;
 
 //        foreach(bit_rate_in_mbps[i]) {bit_rate_in_mbps[i] inside {[100: 1000]};}
-        foreach(nbr_of_pkt[i]      ) {nbr_of_pkt[i]       inside {[  1:  100]};}
+        foreach(nbr_of_pkt[i]      ) {nbr_of_pkt[i]       inside {[  1000:  2000]};}
         foreach(pkt_size_in_byte[i]) {pkt_size_in_byte[i] inside {[ min_frame_size:  256]};}
         foreach(flow_number[i])      {flow_number[i]      inside {[  0:   15]};}
 
@@ -113,6 +117,10 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
             credit_value = calculate_credit_value(bit_rate_in_mbps[flow], period_factor);
 
             `uvm_info(get_name, $sformatf("period_factor=%0d, credit_value=%0d", period_factor, credit_value), UVM_LOW);
+            // Forcing shaper values
+            ////period_factor = 'h32;
+            ////credit_value = 'h3de;
+            `uvm_info(get_name, $sformatf("FORCED VALUES: period_factor=%0d, credit_value=%0d", period_factor, credit_value), UVM_LOW);
 
             // Flow Header registers
             regmodel.header_flow[flow].header[0].flag.set(0);
@@ -132,12 +140,16 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
                 extra_offset_cfg = 0;
 
                 regmodel.header_flow[flow].header[ 6].flag.set(0);
-                regmodel.header_flow[flow].header[ 6].data.set('h8902);  // ethertype CFM(IEEE 802.1ag) or OAM(ITU Y.1731)
+                regmodel.header_flow[flow].header[ 6].data.set('h88a8); // VLAN ethertype
                 regmodel.header_flow[flow].header[ 7].flag.set(0);
-                regmodel.header_flow[flow].header[ 7].data.set('h0003);  // OAM LBM
-                regmodel.header_flow[flow].header[ 8].flag.set(3);
-                regmodel.header_flow[flow].header[ 8].data.set('h0004);
-                regmodel.padding_flow[flow].frame_info.mpls_vlan_stack_size.set(0);
+                regmodel.header_flow[flow].header[ 7].data.set('h4eb0); // VLAN tag
+                regmodel.header_flow[flow].header[ 8].flag.set(0);
+                regmodel.header_flow[flow].header[ 8].data.set('h8902);  // ethertype CFM(IEEE 802.1ag) or OAM(ITU Y.1731)
+                regmodel.header_flow[flow].header[ 9].flag.set(0);
+                regmodel.header_flow[flow].header[ 9].data.set('h0003);  // OAM LBM
+                regmodel.header_flow[flow].header[10].flag.set(3);
+                regmodel.header_flow[flow].header[10].data.set('h0004);
+                regmodel.padding_flow[flow].frame_info.mpls_vlan_stack_size.set(1);
                 regmodel.padding_flow[flow].frame_info.protocol.set(0);
                 regmodel.padding_flow[flow].frame_info.ip_options_extensions_stack_size.set(0);
                 regmodel.padding_flow[flow].frame_info.extra_offset_stack_size.set(extra_offset_cfg);
@@ -311,26 +323,27 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
             end
             
             // Padding registers
-            regmodel.padding_flow[flow].pad_info_1.padding.set(0);
-            regmodel.padding_flow[flow].pad_info_2.mode.set(4);
+            regmodel.padding_flow[flow].pad_info_1.padding.set('h12345678);
+            regmodel.padding_flow[flow].pad_info_2.mode.set(2);
             regmodel.padding_flow[flow].gen_info.flow_hdr_only.set(0);
             regmodel.padding_flow[flow].gen_info.force_crc_error.set(0);
             regmodel.padding_flow[flow].gen_info.y1731_info_add_ena.set(1);
             regmodel.padding_flow[flow].seq_nbr.seq_nbr.set(0);
             regmodel.padding_flow[flow].flow_number.flow_number.set(flow_number[flow]);
-            regmodel.padding_flow[flow].timestamp_select.freerun.set(0);
+            regmodel.padding_flow[flow].timestamp_select.freerun.set(1);
             // Shaping registers
-            regmodel.shaping_flow[flow].shaping_bucket.signbit.set(1);
-            regmodel.shaping_flow[flow].shaping_bucket.bucket_val.set(bucket_val[flow]);
-            regmodel.shaping_flow[flow].credit.value.set(credit_value);
-            regmodel.shaping_flow[flow].period.factor.set(period_factor-1);
+            regmodel.shaping_flow[flow].shaping_bucket.signbit.set(0);
+            regmodel.shaping_flow[flow].shaping_bucket.bucket_val.set(bucket_val[flow]); // bucket should initialise to -1 -> 0x7fffffff
+            regmodel.shaping_flow[flow].credit.value.set(credit_value); ////'hc8);
+            regmodel.shaping_flow[flow].period.factor.set(period_factor-1); ////'h0);
             regmodel.shaping_flow[flow].shaping_mode.ena.set(1);
             regmodel.shaping_flow[flow].shaping_mode.sel.set(0); // bytes
             
-            regmodel.shaping_flow[flow].duration_bucket.duration_bucket.set(nbr_of_pkt[flow]);
+            regmodel.shaping_flow[flow].duration_bucket.duration_bucket.set('h9c4); ////nbr_of_pkt[flow]);
             regmodel.shaping_flow[flow].duration_mode.sel.set(1); // packet
-            regmodel.shaping_flow[flow].info0.value.set(32'hC0000000 + pkt_size_in_byte[flow]);
-            regmodel.shaping_flow[flow].info2.value.set(pkt_size_in_byte[flow]);
+            //regmodel.shaping_flow[flow].info0.value.set(32'hC0000000 + pkt_size_in_byte[flow]);
+            regmodel.shaping_flow[flow].info0.value.set('hc0000040); ////32'hC0244040); // replaced by random 64B to 209B for FPGAB-316
+            regmodel.shaping_flow[flow].info2.value.set('h40); ////pkt_size_in_byte[flow]);
 
 //            regmodel.shaping_flow[flow].emix_table.sequence_value_index.set(0);
 //            regmodel.shaping_flow[flow].emix_table.sequence_value.set('h44);
@@ -410,11 +423,20 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
     virtual function int unsigned find_period_factor(int unsigned bit_rate_in_mbps_for_this_flow);
         int unsigned period_factor;
 
-        // Find the period factor
+        // Find the period factor for 1G design
         //while((bit_rate_in_mbps_for_this_flow*40*period_factor/1000) != int(bit_rate_in_mbps_for_this_flow*40*period_factor/1000)) period_factor++;
-        if ((bit_rate_in_mbps_for_this_flow % 25) == 0) period_factor = 1;
-        else if ((bit_rate_in_mbps_for_this_flow % 5) == 0) period_factor = 5;
-        else period_factor = 25;
+        //if ((bit_rate_in_mbps_for_this_flow % 25) == 0) period_factor = 1;
+        //else if ((bit_rate_in_mbps_for_this_flow % 5) == 0) period_factor = 5;
+        //else if ((bit_rate_in_mbps_for_this_flow % 1) == 0) period_factor = 25;
+        //else period_factor = 200; // implies a min rate increments of 125 kbps
+
+        // Find the period factor for 10G design
+        //while((bit_rate_in_mbps_for_this_flow*40*period_factor/1000) != int(bit_rate_in_mbps_for_this_flow*40*period_factor/1000)) period_factor++;
+        if ((bit_rate_in_mbps_for_this_flow % 50) == 0) period_factor = 1;
+        else if ((bit_rate_in_mbps_for_this_flow % 10) == 0) period_factor = 5;
+        else if ((bit_rate_in_mbps_for_this_flow % 5) == 0) period_factor = 10;
+        else if ((bit_rate_in_mbps_for_this_flow % 1) == 0) period_factor = 50;
+        else period_factor = 100; // implies a min rate increment of 500 kbps
 
         return period_factor;
     endfunction
@@ -425,9 +447,13 @@ class pktgen_reg_seq extends uvm_sequence#(uvm_sequence_item);
     virtual function int unsigned calculate_credit_value(int unsigned bit_rate_in_mbps_for_this_flow, int unsigned period_factor);
         int unsigned credit_value;
 
-        // Calculate the credit value
+        // Calculate the credit value for 1G design
         // bit_rate_per_sec*320ns*period_factor/8 bit = bit_rate_in_Mbps*10^6*320s/10^9*period_factor/8 bit = bit_rate_in_Mbps*320s/1000*period_factor/8 bit
-        credit_value = bit_rate_in_mbps_for_this_flow*40*period_factor/1000;
+        //credit_value = bit_rate_in_mbps_for_this_flow*40*period_factor/1000;
+
+        // Calculate the credit value for 10G design
+        // bit_rate_per_sec*160ns*period_factor/8 bit = bit_rate_in_Mbps*10^6*160s/10^9*period_factor/8 bit = bit_rate_in_Mbps*160s/1000*period_factor/8 bit
+        credit_value = bit_rate_in_mbps_for_this_flow*20*period_factor/1000;
 
         return credit_value;
     endfunction

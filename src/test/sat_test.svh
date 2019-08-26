@@ -79,9 +79,9 @@ class sat_test extends clipper_test_base;
             {
              outgoing_port       == 5;
              nbr_of_flow         == 1;
-             bit_rate_in_mbps[0] == 10000;
-             bucket_val[0]       == 1000;
-             gen_pkt_type        == 2;
+             bit_rate_in_mbps[0] == 10000; ////990;
+             bucket_val[0]       == 'h7fffffff; // 0x7fffffff to initialise to -1
+             gen_pkt_type        == 0;
              }
             )) `randerr
         `uvm_info("TEST", pktgen.convert2string(), UVM_LOW)
