@@ -59,6 +59,8 @@ package clipper_test_pkg;
 `include "reg_test.svh"
 `include "sat_test.svh"
 
+`include "cpu2if_test.svh"
+
 /*
 `include "reg_test_lib.svh"
 `include "reg_invalid_addr_test.svh"
@@ -84,7 +86,7 @@ package clipper_test_pkg;
 `include "flush_stats_test.svh"
 `include "cmd_proc_time_test.svh"
 */
-    
+
 endpackage
 
 `endif

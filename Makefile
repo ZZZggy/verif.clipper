@@ -142,7 +142,7 @@ $(LIST_LIB) \
 $(VOPT_SUP)
 
 DO_MEM_LOAD=\
-"mem load -format hex -filltype value -filldata 'h3FC /top/dut/inst_clipper_core/acd_core_inst/u_vid_index_table/gen_table(0)/inst_bram_rw_rw_ndx_table/bram_model_inst/v_memdual;" \
+"mem load -format hex -filltype value -filldata 'h3FC /top/dut/inst_clipper_core/acd_core_inst/u_vid_index_table/gen_table(0)/inst_bram_rw_rw_ndx_table/bram_model_inst/mem_array_ty;" \
 "mem load -format hex -filltype value -filldata 'h3FC /top/dut/inst_clipper_core/acd_core_inst/u_vid_index_table/gen_table(1)/inst_bram_rw_rw_ndx_table/bram_model_inst/v_memdual;" \
 "mem load -format hex -filltype value -filldata 'h3FC /top/dut/inst_clipper_core/acd_core_inst/u_vid_index_table/gen_table(2)/inst_bram_rw_rw_ndx_table/bram_model_inst/v_memdual;" \
 "mem load -format hex -filltype value -filldata 'h3FC /top/dut/inst_clipper_core/acd_core_inst/u_vid_index_table/gen_table(3)/inst_bram_rw_rw_ndx_table/bram_model_inst/v_memdual;" \

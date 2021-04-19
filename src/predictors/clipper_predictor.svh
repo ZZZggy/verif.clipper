@@ -66,7 +66,7 @@ class clipper_predictor extends uvm_subscriber#(ethernet_frame);
     clipper_mon_predictor mon;
 
 
-    
+
     insect_tx_dom_prio_conv#(12) exp_dom_prio_conv;
 
 
@@ -154,7 +154,7 @@ class clipper_predictor extends uvm_subscriber#(ethernet_frame);
 
         exp_dom_prio_conv = insect_tx_dom_prio_conv#(12)::type_id::create("exp_dom_prio_conv", this);
 
-        
+
         `uvm_info("CLIPPER_PREDICTOR", "Exiting build_phase", UVM_LOW)
     endfunction
 
@@ -186,11 +186,13 @@ class clipper_predictor extends uvm_subscriber#(ethernet_frame);
                 p_xgmac_export[i].connect(xgmac_rx[i].analysis_export);
                 xgmac_rx[i].p_notify.connect(insect.analysis_export);
             end
-            
+
             foreach (p_tse_export[i]) begin
                 // TSE
-                p_tse_export[i].connect(tse_rx[i].analysis_export);
-                tse_rx[i].p_notify.connect(insect.analysis_export);
+                if(i != PORT_CPU && i != PORT_MGMT) begin
+                    p_tse_export[i].connect(tse_rx[i].analysis_export);
+                    tse_rx[i].p_notify.connect(insect.analysis_export);
+                end
             end
 
             // INP pre cpu to THI/CPU
@@ -216,7 +218,7 @@ class clipper_predictor extends uvm_subscriber#(ethernet_frame);
 
         // TBD : need to connect that?
         insect.classifier.dom_idx_ap.connect(exp_dom_prio_conv.analysis_export);
-        
+
         `uvm_info("CLIPPER_PREDICTOR", "Exiting connect_phase", UVM_LOW)
     endfunction
 

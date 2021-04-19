@@ -48,7 +48,7 @@
       <!--parameter name="vopt_args">+floatparameters+G_USE_PHY+G_USE_BEH_RAM+G_SYNTHESIS+G_USE_I2C</parameter-->
       <parameter name="vopt_args">(%use_ext_mem%) (%use_phy%) -suppress 1130</parameter>
       <parameter name="vsim_args">+nowarnTSCALE (%vsim_plusargs%)</parameter>
-      <parameter name="vsim_do">do (%RMDBDIR%)/vid_mem_load.do;</parameter>
+      <!--parameter name="vsim_do">do (%RMDBDIR%)/vid_mem_load.do;</parameter-->
 
       <!-- convenient parameters -->
       <parameter name="top_name">top</parameter>
@@ -83,6 +83,8 @@
   <runnable name="sat_hsi_test"              type="task" base="base_task"/>
   <runnable name="sat_test"                  type="task" base="base_task"/>
   <runnable name="xgmac_pause_linerate_test" type="task" base="base_task"/>
+  <runnable name="forwarding_test"           type="task" base="base_task"/>
+
 
   <!-- GROUPS -->
 
@@ -118,6 +120,7 @@
         <member>sat_hsi_test</member>
         <member>sat_test</member>
         <member>xgmac_pause_linerate_test</member>
+        <member>forwarding_test</member>
     </members>
   </runnable>
 

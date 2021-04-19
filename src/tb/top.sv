@@ -668,7 +668,7 @@ module top #(
     `define DUT_TSE_WRP_HIER   `DUT_MULTIMAC_HIER.u_clipper_tse_wrapper
     `define DUT_XGMAC_GEN_HIER `DUT_MULTIMAC_HIER.inst_clipper_xgmac_wrapper.gen_xgmac_inst
     `define DUT_ACD_MM_HIER    `DUT_C2CORE_HIER.acd_core_inst.inst_clipper_reg_master
-    `define DUT_TIMEBASE_HIER  `DUT_C2CORE_HIER.acd_core_inst.u_acd_timebase.u_timebase
+    `define DUT_TIMEBASE_HIER  `DUT_C2CORE_HIER.acd_core_inst.u_clipper_timebase.u_timebase2
     `define DUT_TM_HIER        `DUT_C2CORE_HIER.acd_core_inst.u_traffic_manager
 
     //--------------------------------------------------------------------------
@@ -925,8 +925,10 @@ module top #(
     assign gmii_tx_if[``IF_SIM``].valid = `DUT_TOP_HIER.core_gmii_tx_en[``IF_HW``];\
     assign gmii_tx_if[``IF_SIM``].error = `DUT_TOP_HIER.core_gmii_tx_err[``IF_HW``];\
     // Timestamp\
-    assign gmii_rx_if[``IF_SIM``].freerun_tbase = `DUT_TIMEBASE_HIER.timestamp_int;\
-    assign gmii_tx_if[``IF_SIM``].freerun_tbase = `DUT_TIMEBASE_HIER.timestamp_int;\
+    assign gmii_rx_if[``IF_SIM``].freerun_tbase[63:32] = `DUT_TIMEBASE_HIER.pps_local_timestamp_sec;\
+    assign gmii_rx_if[``IF_SIM``].freerun_tbase[31:0]  = `DUT_TIMEBASE_HIER.pps_local_timestamp_fract;\
+    assign gmii_tx_if[``IF_SIM``].freerun_tbase[63:32] = `DUT_TIMEBASE_HIER.pps_local_timestamp_sec;\
+    assign gmii_tx_if[``IF_SIM``].freerun_tbase[31:0]  = `DUT_TIMEBASE_HIER.pps_local_timestamp_fract;\
     // end TSE_CONNECT
     //-------------------------------------------------------------------------
 
@@ -970,8 +972,10 @@ module top #(
     assign xgmii_tx_if[``IF_SIM``].data = `DUT_XGMAC_GEN_HIER[``IF_HW``].inst_xgmac.xgmii_tx_data;\
     assign xgmii_tx_if[``IF_SIM``].ctrl = `DUT_XGMAC_GEN_HIER[``IF_HW``].inst_xgmac.xgmii_tx_ctrl;\
     // Timestamp\
-    assign xgmii_rx_if[``IF_SIM``].freerun_tbase = `DUT_TIMEBASE_HIER.timestamp_int;\
-    assign xgmii_tx_if[``IF_SIM``].freerun_tbase = `DUT_TIMEBASE_HIER.timestamp_int;\
+    assign xgmii_rx_if[``IF_SIM``].freerun_tbase[63:32] = `DUT_TIMEBASE_HIER.pps_local_timestamp_sec;\
+    assign xgmii_rx_if[``IF_SIM``].freerun_tbase[31:0]  = `DUT_TIMEBASE_HIER.pps_local_timestamp_fract;\
+    assign xgmii_tx_if[``IF_SIM``].freerun_tbase[63:32] = `DUT_TIMEBASE_HIER.pps_local_timestamp_sec;\
+    assign xgmii_tx_if[``IF_SIM``].freerun_tbase[31:0]  = `DUT_TIMEBASE_HIER.pps_local_timestamp_fract;\
     // end XGMAC_CONNECT
     //-------------------------------------------------------------------------
 
@@ -1008,7 +1012,7 @@ module top #(
             // Drive 'port_typespeed_sel' to select DUT's SFP port speed: 1G (1'b1) or 10G (1'b0 - default)
             for (g_ps_idx = 0; g_ps_idx < NB_IF_PORTS; g_ps_idx++) begin : GEN_PORT_TYPESPEED_SEL
                 always_comb begin
-                    force `DUT_TOP_HIER.port_typespeed_sel[g_ps_idx] = (ctrl_if.port_speed[PORT_IF + g_ps_idx] == PS_1G);
+                    force `DUT_TOP_HIER.port_typespeed_sel[g_ps_idx] = 1;//(ctrl_if.port_speed[PORT_IF + g_ps_idx] == PS_1G);
                 end
             end
 
@@ -1069,48 +1073,63 @@ module top #(
     //------------------------------------------------
     logic [63:0]  accell_timebase = '0;
 
-    always @(posedge `DUT_TIMEBASE_HIER.i_clk) begin
-        //(dis)allow forcing of timebase
-        if (ctrl_if.timebase_force) begin
-            //force cpu_rx_mii_if[0].freerun_tbase               = ctrl_if.timebase_time;
-            force `DUT_TIMEBASE_HIER.o_timestamp               = ctrl_if.timebase_time;
-            force `DUT_TIMEBASE_HIER.o_timestamp_ns            = ctrl_if.timebase_time;
-            force `DUT_TIMEBASE_HIER.o_time_base_minus         = '{default: ctrl_if.timebase_time};
-            force `DUT_TIMEBASE_HIER.o_time_base_minus_ns      = '{default: ctrl_if.timebase_time};
-            force `DUT_TIMEBASE_HIER.o_time_base_plus          = '{default: ctrl_if.timebase_time};
-            force `DUT_TIMEBASE_HIER.o_time_base_plus_ns       = '{default: ctrl_if.timebase_time};
-            force `DUT_TIMEBASE_HIER.o_time_base_freerun_minus = '{default: ctrl_if.timebase_time[63:24]};
-            force `DUT_TIMEBASE_HIER.o_time_base_freerun_plus  = '{default: ctrl_if.timebase_time[63:24]};
-            force `DUT_TIMEBASE_HIER.o_timestamp_fr            = ctrl_if.timebase_time[63:24];
-            force `DUT_TIMEBASE_HIER.timestamp_int             = ctrl_if.timebase_time;
-
-       end else if (ctrl_if.timebase_accelerate) begin
-            accell_timebase = accell_timebase + 32'h20C4;
-            //force cpu_rx_mii_if[0].freerun_tbase               = ctrl_if.timebase_time;
-            force `DUT_TIMEBASE_HIER.o_timestamp               = accell_timebase;
-            force `DUT_TIMEBASE_HIER.o_timestamp_ns            = accell_timebase;
-            force `DUT_TIMEBASE_HIER.o_time_base_minus         = '{default: accell_timebase};
-            force `DUT_TIMEBASE_HIER.o_time_base_minus_ns      = '{default: accell_timebase};
-            force `DUT_TIMEBASE_HIER.o_time_base_plus          = '{default: accell_timebase};
-            force `DUT_TIMEBASE_HIER.o_time_base_plus_ns       = '{default: accell_timebase};
-            force `DUT_TIMEBASE_HIER.o_time_base_freerun_minus = '{default: accell_timebase[63:24]};
-            force `DUT_TIMEBASE_HIER.o_time_base_freerun_plus  = '{default: accell_timebase[63:24]};
-            force `DUT_TIMEBASE_HIER.o_timestamp_fr            = accell_timebase[63:24];
-            force `DUT_TIMEBASE_HIER.timestamp_int             = accell_timebase;
-        end else begin
-            //release cpu_rx_mii_if[0].freerun_tbase;
-            release `DUT_TIMEBASE_HIER.o_timestamp;
-            release `DUT_TIMEBASE_HIER.o_timestamp_ns;
-            release `DUT_TIMEBASE_HIER.o_time_base_minus;
-            release `DUT_TIMEBASE_HIER.o_time_base_minus_ns;
-            release `DUT_TIMEBASE_HIER.o_time_base_plus;
-            release `DUT_TIMEBASE_HIER.o_time_base_plus_ns;
-            release `DUT_TIMEBASE_HIER.o_time_base_freerun_minus;
-            release `DUT_TIMEBASE_HIER.o_time_base_freerun_plus;
-            release `DUT_TIMEBASE_HIER.o_timestamp_fr;
-            release `DUT_TIMEBASE_HIER.timestamp_int;
-        end
+        // Load an initial timebase time
+    always @(ctrl_if.timebase_force) begin
+        @(posedge `DUT_C2CORE_HIER.i_clk_sys_1g);
+        `uvm_info("TOP", "Forcing inital timebase2 time", UVM_MEDIUM)
+        force `DUT_TIMEBASE_HIER.initial_acc_data  = ctrl_if.timebase_time;
+        force `DUT_TIMEBASE_HIER.load_initial_acc_data  = '1;
+        #10ns;
+        @(posedge `DUT_C2CORE_HIER.i_clk_sys_1g)
+        force `DUT_TIMEBASE_HIER.load_initial_acc_data  = '0;
+        @(posedge `DUT_C2CORE_HIER.i_clk_sys_1g)
+        release `DUT_TIMEBASE_HIER.initial_acc_data ;
+        release `DUT_TIMEBASE_HIER.load_initial_acc_data ;
     end
+
+
+//    always @(posedge `DUT_TIMEBASE_HIER.i_clk) begin
+//        //(dis)allow forcing of timebase
+//        if (ctrl_if.timebase_force) begin
+//            //force cpu_rx_mii_if[0].freerun_tbase               = ctrl_if.timebase_time;
+//            force `DUT_TIMEBASE_HIER.o_timestamp               = ctrl_if.timebase_time;
+//            force `DUT_TIMEBASE_HIER.o_timestamp_ns            = ctrl_if.timebase_time;
+//            force `DUT_TIMEBASE_HIER.o_time_base_minus         = '{default: ctrl_if.timebase_time};
+//            force `DUT_TIMEBASE_HIER.o_time_base_minus_ns      = '{default: ctrl_if.timebase_time};
+//            force `DUT_TIMEBASE_HIER.o_time_base_plus          = '{default: ctrl_if.timebase_time};
+//            force `DUT_TIMEBASE_HIER.o_time_base_plus_ns       = '{default: ctrl_if.timebase_time};
+//            force `DUT_TIMEBASE_HIER.o_time_base_freerun_minus = '{default: ctrl_if.timebase_time[63:24]};
+//            force `DUT_TIMEBASE_HIER.o_time_base_freerun_plus  = '{default: ctrl_if.timebase_time[63:24]};
+//            force `DUT_TIMEBASE_HIER.o_timestamp_fr            = ctrl_if.timebase_time[63:24];
+//            force `DUT_TIMEBASE_HIER.timestamp_int             = ctrl_if.timebase_time;
+//
+//       end else if (ctrl_if.timebase_accelerate) begin
+//            accell_timebase = accell_timebase + 32'h20C4;
+//            //force cpu_rx_mii_if[0].freerun_tbase               = ctrl_if.timebase_time;
+//            force `DUT_TIMEBASE_HIER.o_timestamp               = accell_timebase;
+//            force `DUT_TIMEBASE_HIER.o_timestamp_ns            = accell_timebase;
+//            force `DUT_TIMEBASE_HIER.o_time_base_minus         = '{default: accell_timebase};
+//            force `DUT_TIMEBASE_HIER.o_time_base_minus_ns      = '{default: accell_timebase};
+//            force `DUT_TIMEBASE_HIER.o_time_base_plus          = '{default: accell_timebase};
+//            force `DUT_TIMEBASE_HIER.o_time_base_plus_ns       = '{default: accell_timebase};
+//            force `DUT_TIMEBASE_HIER.o_time_base_freerun_minus = '{default: accell_timebase[63:24]};
+//            force `DUT_TIMEBASE_HIER.o_time_base_freerun_plus  = '{default: accell_timebase[63:24]};
+//            force `DUT_TIMEBASE_HIER.o_timestamp_fr            = accell_timebase[63:24];
+//            force `DUT_TIMEBASE_HIER.timestamp_int             = accell_timebase;
+//        end else begin
+//            //release cpu_rx_mii_if[0].freerun_tbase;
+//            release `DUT_TIMEBASE_HIER.o_timestamp;
+//            release `DUT_TIMEBASE_HIER.o_timestamp_ns;
+//            release `DUT_TIMEBASE_HIER.o_time_base_minus;
+//            release `DUT_TIMEBASE_HIER.o_time_base_minus_ns;
+//            release `DUT_TIMEBASE_HIER.o_time_base_plus;
+//            release `DUT_TIMEBASE_HIER.o_time_base_plus_ns;
+//            release `DUT_TIMEBASE_HIER.o_time_base_freerun_minus;
+//            release `DUT_TIMEBASE_HIER.o_time_base_freerun_plus;
+//            release `DUT_TIMEBASE_HIER.o_timestamp_fr;
+//            release `DUT_TIMEBASE_HIER.timestamp_int;
+//        end
+//    end
 
     // TBD : ADD
     // Freeze FlowMeter time
