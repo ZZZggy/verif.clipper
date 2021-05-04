@@ -1584,7 +1584,7 @@ endclass
 typedef class mem_ctrl_tab_mem_1_bist_stat_reg_cover;
 
 // Class: mem_ctrl_tab_mem_1_bist_stat_reg
-// Register mem_ctrl.tab_mem_1_bist_stat: Table memory 1 (U49) BIST statistics
+// Register mem_ctrl.tab_mem_1_bist_stat: Table memory 1 (U61) BIST statistics
 class mem_ctrl_tab_mem_1_bist_stat_reg extends uvm_reg;
 
     // Variable: err_count
@@ -1771,7 +1771,7 @@ endclass
 typedef class mem_ctrl_tab_mem_2_bist_stat_reg_cover;
 
 // Class: mem_ctrl_tab_mem_2_bist_stat_reg
-// Register mem_ctrl.tab_mem_2_bist_stat: Table memory 2 (U65) BIST statistics
+// Register mem_ctrl.tab_mem_2_bist_stat: Table memory 2 (U45) BIST statistics
 class mem_ctrl_tab_mem_2_bist_stat_reg extends uvm_reg;
 
     // Variable: err_count
@@ -1958,7 +1958,7 @@ endclass
 typedef class mem_ctrl_dat_mem_l_bist_stat_reg_cover;
 
 // Class: mem_ctrl_dat_mem_l_bist_stat_reg
-// Register mem_ctrl.dat_mem_l_bist_stat: Data memory Low (U61) BIST statistics
+// Register mem_ctrl.dat_mem_l_bist_stat: Data memory Low (U49) BIST statistics
 class mem_ctrl_dat_mem_l_bist_stat_reg extends uvm_reg;
 
     // Variable: err_count
@@ -2145,7 +2145,7 @@ endclass
 typedef class mem_ctrl_dat_mem_h_bist_stat_reg_cover;
 
 // Class: mem_ctrl_dat_mem_h_bist_stat_reg
-// Register mem_ctrl.dat_mem_h_bist_stat: Data memory High (U45) BIST statistics
+// Register mem_ctrl.dat_mem_h_bist_stat: Data memory High (U65) BIST statistics
 class mem_ctrl_dat_mem_h_bist_stat_reg extends uvm_reg;
 
     // Variable: err_count

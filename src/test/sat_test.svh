@@ -49,6 +49,25 @@ class sat_test extends clipper_test_base;
 
         phase.raise_objection(this);
 
+        foreach(env_cfg.eth_sb_cfg[m])
+            env_cfg.eth_sb_cfg[m].ena_sb = 0;
+
+        // By default the port shaper are closed
+         for(int i = 0; i < 2; i++) begin
+            env.regmodel.tm.shaper.shaper_group_0.params_cir[i].cbs.set(10);
+            env.regmodel.tm.shaper.shaper_group_0.params_cir[i].cir.set(80000);
+            env.regmodel.tm.shaper.shaper_group_0.params_cir[i].cir_max.set(80000);
+            env.regmodel.tm.shaper.shaper_group_0.params_cir[i].cir_ena.set(0);
+            env.regmodel.tm.shaper.shaper_group_0.params_cir[i].update(status);
+        end
+        for(int i = 0; i < 16; i++) begin
+            env.regmodel.tm.shaper.shaper_group_1.params_cir[i].cbs.set(10);
+            env.regmodel.tm.shaper.shaper_group_1.params_cir[i].cir.set(80000);
+            env.regmodel.tm.shaper.shaper_group_1.params_cir[i].cir_max.set(80000);
+            env.regmodel.tm.shaper.shaper_group_1.params_cir[i].cir_ena.set(0);
+            env.regmodel.tm.shaper.shaper_group_1.params_cir[i].update(status);
+        end
+
         pktgen = pktgen_reg_seq::type_id::create("pktgen");
         pktgen.regmodel = env.regmodel.pktgen;
 
@@ -71,23 +90,15 @@ class sat_test extends clipper_test_base;
             }) `randerr
             catchall.start(null);
         end
-        env.regmodel.globals.tlcs.update(status);
-
-        // Configure PKTGEN
-        
-//        if (!pktgen.randomize()) `randerr
 
 
         if (!pktgen.randomize() with {
-            gen_pkt_type == 1;
             nbr_of_flow  == 2;
-            pkt_size_in_byte[0] == 60;
-            pkt_size_in_byte[1] == 60;
-            outgoing_port       == 5;
+            outgoing_port       == 9;
         }) `randerr
 
 
-            
+
         `uvm_info("TEST", pktgen.convert2string(), UVM_LOW)
         pktgen.start(null);
         pktgen.enable_flow();
@@ -185,12 +196,18 @@ class sat_test extends clipper_test_base;
             if (!(env.regmodel.inspector[flow_nbr].next_seq_no.first_good.get() == 1)) begin
                 `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Next seq nbr first good 0x%0h outside expected range (1).", flow_nbr, env.regmodel.inspector[flow_nbr].next_seq_no.first_good.get()))
             end
-            //if (!(env.regmodel.inspector[flow_nbr].last_latency.last_latency.get() inside {[latency-jitter:latency+jitter]})) begin
-            //    `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Latency Last 0x%0h outside expected range.", flow_nbr, env.regmodel.inspector[flow_nbr].last_latency.last_latency.get()))
-            //end
-            //if (!(env.regmodel.inspector[flow_nbr].last_jitter.last_jitter.get() inside {['h00:jitter]})) begin
-            //    `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Jitter Last 0x%0h outside expected range.", flow_nbr, env.regmodel.inspector[flow_nbr].last_jitter.last_jitter.get()))
-            //end
+//////
+            $display("latency_min %0d", env.regmodel.inspector[flow_nbr].latency_min.latency_min.get() );
+            $display("latency_max %0d", env.regmodel.inspector[flow_nbr].latency_max.latency_max.get() );
+            $display("Last latency %0d", env.regmodel.inspector[flow_nbr].last_latency.last_latency.get() );
+//            if (!(env.regmodel.inspector[flow_nbr].last_latency.last_latency.get() inside {[latency-jitter:latency+jitter]})) begin
+//                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Latency Last 0x%0h outside expected range.", flow_nbr, env.regmodel.inspector[flow_nbr].last_latency.last_latency.get()))
+//            end
+            $display("Last jitter %0d", env.regmodel.inspector[flow_nbr].last_jitter.last_jitter.get() );
+//            if (!(env.regmodel.inspector[flow_nbr].last_jitter.last_jitter.get() inside {['h00:jitter]})) begin
+//                `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Jitter Last 0x%0h outside expected range.", flow_nbr, env.regmodel.inspector[flow_nbr].last_jitter.last_jitter.get()))
+//            end
+//////
             if (!(env.regmodel.inspector[flow_nbr].gap_max.gap_max.get() == 0)) begin
                 `uvm_error(get_name, $sformatf("Flow_nbr[%0d] - Inspector (Rx) Gap Max 0x%0h outside expected range (0).", flow_nbr, env.regmodel.inspector[flow_nbr].gap_max.gap_max.get()))
             end

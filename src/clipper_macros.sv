@@ -149,4 +149,24 @@
         end\
     endcase
 
+
+`define REG_XNI_BY_PRT(VAR, PRE, PRT, POST)\
+    case (``PRT``)\
+        1  : ``VAR`` ``PRE``p1.``POST``;\
+        2  : ``VAR`` ``PRE``p2.``POST``;\
+        3  : ``VAR`` ``PRE``p3.``POST``;\
+        4  : ``VAR`` ``PRE``p4.``POST``;\
+        5  : ``VAR`` ``PRE``p5.``POST``;\
+        6  : ``VAR`` ``PRE``p6.``POST``;\
+        7  : ``VAR`` ``PRE``p7.``POST``;\
+        8  : ``VAR`` ``PRE``p8.``POST``;\
+        9  : ``VAR`` ``PRE``p9.``POST``;\
+        10 : ``VAR`` ``PRE``p10.``POST``;\
+        11 : ``VAR`` ``PRE``p11.``POST``;\
+        12 : ``VAR`` ``PRE``p12.``POST``;\
+        default: begin\
+            `uvm_error(get_name, $sformatf("Port%0d undefined user port index.", ``PRT``))\
+        end\
+    endcase
+
 `endif

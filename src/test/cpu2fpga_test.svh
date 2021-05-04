@@ -20,7 +20,7 @@
 // WRITTEN PERMISSION OF ACCEDIAN INC.
 //------------------------------------------------------------------------------
 
-class cpu2fpga_test extends thi_cpu2fpga_test#(fsx_test_base);
+class cpu2fpga_test extends thi_cpu2fpga_test#(clipper_test_base);
 
     `uvm_component_utils(cpu2fpga_test)
     // Constructor: new
@@ -83,10 +83,10 @@ class cpu2fpga_test extends thi_cpu2fpga_test#(fsx_test_base);
     virtual task main_phase(uvm_phase phase);
         // Disable PC
         uvm_status_e status;
-        env_cfg.pc_env_cfg.ena_eot_drain = 0;
-        env.regmodel.packet_capture.cfg.ena.set(0);
-        env.regmodel.packet_capture.cfg.keep_alive_ena.set(0);
-        env.regmodel.packet_capture.cfg.update(status);
+//        env_cfg.pc_env_cfg.ena_eot_drain = 0;
+//        env.regmodel.packet_capture.cfg.ena.set(0);
+//        env.regmodel.packet_capture.cfg.keep_alive_ena.set(0);
+//        env.regmodel.packet_capture.cfg.update(status);
 
         // Enable ethernet THI path
         cfg.thi_ena = 1;

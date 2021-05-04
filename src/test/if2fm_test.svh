@@ -26,7 +26,7 @@
 // Class: if2fm
 // DEBUG TESTCASE
 // Classifiers configured to caltchall with all domains enabled and all forwarding enabled.
-class if2fm_test extends fsx_test_base;
+class if2fm_test extends clipper_test_base;
     `uvm_component_utils(if2fm_test)
 
     // Constructor
@@ -93,7 +93,7 @@ class if2fm_test extends fsx_test_base;
             if (!catch_cfg_seq.randomize() with {
                 port == i;
                 foreach(domains[j]) domains[j] == 1;
-                dom_capture == 1;
+//                dom_capture == 1;
             }) `uvm_fatal("RNDERR", "cfg")
             `uvm_info("TEST", catch_cfg_seq.convert2string(), UVM_MEDIUM)
             catch_cfg_seq.start(null);

@@ -19,7 +19,7 @@
 //
 //------------------------------------------------------------------------------
 // !!! AUTO-GENERATED FILE !!!
-// Register definitions for altera_phy_1g register block.
+// Register definitions for timebase2 register block.
 //
 // To enable per-instance coverage: regmodel...set_per_instance_coverage(1, UVM_(NO_)HIER);
 // To enable singleton coverage:    regmodel...set_per_instance_coverage(0, UVM_(NO_)HIER);
@@ -36,27 +36,29 @@
 `include "uvm_macros.svh"
 
 //---------------------------------------------------------
-// Group: altera_phy_1g
+// Group: timebase2
 //---------------------------------------------------------
 
-package altera_phy_1g_reg_pkg;
+package timebase2_reg_pkg;
     import uvm_pkg::*;
     import acd_uvm_pkg::*;
-    import pcs_registers_1g_reg_pkg::*;
+    import timebase2_core_globals_reg_pkg::*;
+    import timebase2_core_compensations_reg_pkg::*;
 
 
 
 
 
 
-// Class: altera_phy_1g_reg_block
-// Register Block .altera_phy_1g: 
-class altera_phy_1g_reg_block extends uvm_reg_block;
+// Class: timebase2_reg_block
+// Register Block .timebase2: 
+class timebase2_reg_block extends uvm_reg_block;
 
     // Validate register width
     local static bit valid_reg_data_width = check_data_width(`UVM_REG_DATA_WIDTH);
 
-    rand pcs_registers_1g_reg_block pcs_registers_1g;
+    rand timebase2_core_globals_reg_block globals;
+    rand timebase2_core_compensations_reg_block compensations[];
 
     // Variable: params
     // Parameter key/value lookup.
@@ -66,10 +68,10 @@ class altera_phy_1g_reg_block extends uvm_reg_block;
     // Assert to construct all sub-block and register covergroups per instance rather than singleton
     protected bit cg_per_instance;
 
-    `uvm_object_utils(altera_phy_1g_reg_pkg::altera_phy_1g_reg_block)
+    `uvm_object_utils(timebase2_reg_pkg::timebase2_reg_block)
 
     // Constructor: new
-    function new(string name = "altera_phy_1g_reg_block");
+    function new(string name = "timebase2_reg_block");
         super.new(name, UVM_NO_COVERAGE);
     endfunction
 
@@ -80,16 +82,29 @@ class altera_phy_1g_reg_block extends uvm_reg_block;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
+        compensations = new[24];
 
-        pcs_registers_1g = pcs_registers_1g_reg_block::type_id::create("pcs_registers_1g", , get_full_name());
+        globals = timebase2_core_globals_reg_block::type_id::create("globals", , get_full_name());
+        foreach(compensations[m]) begin
+            compensations[m] = timebase2_core_compensations_reg_block::type_id::create($sformatf("compensations[%0d]",m), , get_full_name());
+        end
 
-        pcs_registers_1g.configure(this);
+        globals.configure(this);
+        foreach(compensations[m]) begin
+            compensations[m].configure(this);
+        end
 
-        pcs_registers_1g.build();
+        globals.build();
+        foreach(compensations[m]) begin
+            compensations[m].build();
+        end
 
         // define default map
-        default_map = create_map("altera_phy_1g_default_map", 'h0, `UVM_REG_DATA_WIDTH/8, UVM_NO_ENDIAN, 0);
-        this.default_map.add_submap(this.pcs_registers_1g.default_map, 'h0);
+        default_map = create_map("timebase2_default_map", 'h0, `UVM_REG_DATA_WIDTH/8, UVM_NO_ENDIAN, 0);
+        this.default_map.add_submap(this.globals.default_map, 'h0);
+        foreach(compensations[m]) begin
+            this.default_map.add_submap(this.compensations[m].default_map, 'h20 + m*('h1));
+        end
 
         // Recursively lock register model and build the address map to enable
         // uvm_reg_map::get_reg_by_offset() and uvm_reg_map::get_mem_by_offset() methods.
@@ -105,7 +120,10 @@ class altera_phy_1g_reg_block extends uvm_reg_block;
 
         // Use UVM_CVR_ALL for hierarchical enabling.
         if(hier == UVM_HIER) begin
-            pcs_registers_1g.set_per_instance_coverage(per_inst, hier);
+            globals.set_per_instance_coverage(per_inst, hier);
+            foreach(compensations[m]) begin
+                compensations[m].set_per_instance_coverage(per_inst, hier);
+            end
         end
      endfunction
 
@@ -119,8 +137,12 @@ class altera_phy_1g_reg_block extends uvm_reg_block;
         set_coverage = super.set_coverage(is_on);
         // Use UVM_CVR_ALL for hierarchical enabling.
         if(is_on == UVM_CVR_ALL) begin
-            //void'(uvm_config_db#(bit)::set(null, pcs_registers_1g.get_full_name(), "cg_per_instance", cg_per_instance));
-            void'(pcs_registers_1g.set_coverage(is_on));
+            //void'(uvm_config_db#(bit)::set(null, globals.get_full_name(), "cg_per_instance", cg_per_instance));
+            void'(globals.set_coverage(is_on));
+            foreach(compensations[m]) begin
+                //void'(uvm_config_db#(bit)::set(null, compensations[m].get_full_name(), "cg_per_instance", cg_per_instance));
+                void'(compensations[m].set_coverage(is_on));
+            end
         end
         return set_coverage;
     endfunction

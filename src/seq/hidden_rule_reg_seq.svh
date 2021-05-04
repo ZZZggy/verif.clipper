@@ -24,148 +24,21 @@
 // Sequence for randomizing the hidden rule configuration
 //------------------------------------------------------------------------------
 
-//-----------------------------------------------------------------------------
-// Sequence to configure hidden rule enables and settings.
-// This sequence should be randomize and run, and any additional configuration
-// requirements applied afterwards.
-//------------------------------------------------------------------------------
-class clipper_hidden_rule_random_seq extends hidden_rule_random_seq#(c1lt_reg_block);
-    `uvm_object_utils(clipper_hidden_rule_random_seq)
-
-    function new(string name="clipper_hidden_rule_random_seq");
-        super.new(name);
-    endfunction
-
-    //------------------------------------------------------------------
-    // Sequence API functions to implement.
-    //------------------------------------------------------------------
-    function address_t get_sys_mac_addr();
-        address_t addr = 48'h0015ad000000 | (48'h000000ffffff & regmodel.globals.mac_base_addr.nic.get());
-        addr &= 48'hFFFFFFFFFFF0;
-        return addr;
-    endfunction
-
-    function bit[2:0] get_mep_md_level(int unsigned prt);
-        return regmodel.globals.port_input_cfg[id-1].cfg0.port_mep_md_level.get();
-    endfunction
-
-    function bit[2:0] get_acp_md_level(int unsigned prt);
-        return regmodel.globals.global_input_cfg_0.system_acp_md_level.get();
-    endfunction
-
-    // Get the configuration matching the selected VTAG index.
-    function vlan_tag_t get_vtag_cfg(int unsigned prt, int unsigned idx);
-        case(idx)
-            1: begin
-                get_vtag_cfg.tci.vid = regmodel.globals.port_input_cfg[prt-1].cfg3.vlan1_id.get();
-                case(regmodel.globals.port_input_cfg[prt-1].cfg3.vlan1_type.get())
-                    0: get_vtag_cfg.tpid = 'h8100;
-                    1: get_vtag_cfg.tpid = 'h88A8;
-                    2: get_vtag_cfg.tpid = 'h9100;
-                    3: get_vtag_cfg.tpid = regmodel.globals.global_input_cfg_0.user_vlan_ethertype.get();
-                    default: `uvm_error(get_name, "Unknown VLAN/TPID type.")
-                endcase
-            end
-            2: begin
-                get_vtag_cfg.tci.vid = regmodel.globals.port_input_cfg[prt-1].cfg3.vlan2_id.get();
-                case(regmodel.globals.port_input_cfg[prt-1].cfg3.vlan2_type.get())
-                    0: get_vtag_cfg.tpid = 'h8100;
-                    1: get_vtag_cfg.tpid = 'h88A8;
-                    2: get_vtag_cfg.tpid = 'h9100;
-                    3: get_vtag_cfg.tpid = regmodel.globals.global_input_cfg_0.user_vlan_ethertype.get();
-                    default: `uvm_error(get_name, "Unknown VLAN/TPID type.")
-                endcase
-            end
-            default: `uvm_fatal("CFGERR", $sformatf("Unsupported VTAG stack index: %0d", idx))
-        endcase
-    endfunction
-
-    function bit get_vtag2_ena(int unsigned prt);
-        return regmodel.globals.port_input_cfg[prt-1].cfg3.vlan2_ena.get();
-    endfunction
-
-    function bit[15:0] get_twamp_dport(int unsigned prt);
-        return regmodel.globals.global_input_cfg_1.twamp_reflector_dport.get();
-    endfunction
-
-    function bit get_l2pt_rule_ena(int unsigned prt);
-        return regmodel.globals.port_input_cfg[id-1].cfg1.l2pt_rule_ena.get();
-    endfunction
-
-    function bit[15:0] get_sys_ld_domain(int unsigned prt);
-        return 0;
-        regmodel.vid_table.p1.idx[0].get();
-    endfunction
-
-    function bit[11:0] find_bcast_vid(int unsigned prt);
-    endfunction
-
-    function bit[11:0] find_cfm_vid(int unsigned prt);
-    endfunction
-
-    function bit[11:0] find_l2pt_vid(int unsigned prt);
-    endfunction
-
-    function bit[11:0] find_blocking_vid(int unsigned prt);
-    endfunction
-
-    // TBD : ?
-
-    /**
-     * Try to find a VID for the given port with CPU flag set.
-     * A random VID of those found is returned.
-     * If no match is found, all ones is returned.
-     */
-    /*
-`define FIND_VID_WITH_FLAG_SET(FNAME, FLAG)\
-    virtual function bit[11:0] ``FNAME``(int unsigned prt);\
-        bit[11:0] vids[$];\
-        if (prt inside {PORT_TRAFFIC}) begin\
-            vid_table_traffic_reg_pkg::p5_idx_reg _reg;\
-            foreach (regmodel.vid_table.p5.idx[m]) begin\
-                `REG_TRF_PRT(_reg =, regmodel.vid_table.p,prt,.idx[m])\
-                if (_reg.``FLAG``.get()) vids.push_back(m);\
-            end\
-        end else begin\
-            vid_table_aux_reg_pkg::p1_idx_reg _reg;\
-            foreach (regmodel.vid_table.p1.idx[m]) begin\
-                `REG_AUX_PRT(_reg =, regmodel.vid_table.p,prt,.idx[m])\
-                if (_reg.``FLAG``.get()) vids.push_back(m);\
-            end\
-        end\
-        if (vids.size()) begin\
-            vids.shuffle();\
-            return vids[0];\
-        end\
-        return $urandom_range(4095, 0);\
-    endfunction
-
-    `FIND_VID_WITH_FLAG_SET(find_bcast_vid, cpu_membership)
-    `FIND_VID_WITH_FLAG_SET(find_cfm_vid, cpu_cfm_membership)
-    `FIND_VID_WITH_FLAG_SET(find_l2pt_vid, cpu_l2pt_tunneling_flag)
-    `FIND_VID_WITH_FLAG_SET(find_blocking_vid, cpu_l2pt_tunneling_flag)
-*/
-
-    /**
-     * Try to find a VTAG for the given port with isFTDropMatch i.e. FWD_DB domain in RING_2_LOCAL_DROP
-     * A random VTAG of those found is returned.
-     * If no match is found, a C-VTAG with VID=0 is returned
-     */
-    virtual function vlan_tag_t find_ft_drop_vtag();
-        vlan_tag_t res_tag;
-        res_tag.tpid = 'h8100;
-        return res_tag;
-    endfunction
-endclass
+//`include "e5gx_reg_macros.sv"
+import c1lt_reg_pkg::*;
+import lag_type_pkg::*;
+import vid_table_uni1g_reg_pkg::*;
+import vid_table_nni10g_reg_pkg::*;
 
 //-----------------------------------------------------------------------------
-// Sequence to configure hidden rule enables and settings.
+// Class: inp_globals_reg_seq_t
+// Sequence to write INP Globals registers.
 //
 // This sequence should be randomize and run, and any additional configuration
 // requirements applied afterwards.
 //------------------------------------------------------------------------------
-class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
-    `uvm_object_utils(clipper_hidden_rule_cfg_reg_seq)
+class hidden_rule_reg_seq_t extends uvm_sequence#(uvm_sequence_item);
+    `uvm_object_utils(hidden_rule_reg_seq_t)
 
     //---------------------------------------------------------------------------------
     // Variable: regmodel
@@ -206,6 +79,12 @@ class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
     rand bit[15:0] twamp_dport;
 
     //---------------------------------------------------------------------------------
+    // Variable: lpbk_domain
+    // Loopback domain
+    //---------------------------------------------------------------------------------
+    rand bit[15:0] ld_domain;
+
+    //---------------------------------------------------------------------------------
     // Variable: is_lp_ring
     // Setup ring
     //---------------------------------------------------------------------------------
@@ -218,11 +97,34 @@ class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
     rand bit[15:0] user_vlan;
 
     //---------------------------------------------------------------------------------
+    // Variable: sw_up_soam_ena
+    // Enable NP mac address pattern matching in certain CFM rules
+    //---------------------------------------------------------------------------------
+    rand bit sw_up_soam_ena;
+
+    //---------------------------------------------------------------------------------
+    // Variable: internal_lpbk_active_dist
+    // Distribution to activate internal loopback, used by isSwUpSoam
+    //---------------------------------------------------------------------------------
+    rand int unsigned internal_lpbk_active_dist;
+
+    //---------------------------------------------------------------------------------
     // Constraints
     //---------------------------------------------------------------------------------
 
+//     globals_mac_base_addr_reg mac_base_addr_reg = regmodel.globals.mac_base_addr;
+//     globals_global_input_cfg_0_reg global_input_cfg_0_reg = regmodel.globals.global_input_cfg_0;
+//     globals_global_input_cfg_1_reg global_input_cfg_1_reg = regmodel.globals.global_input_cfg_1;
+
     constraint c_ena_dist {
         soft ena_dist == 100;
+    }
+
+    constraint c_internal_lpbk_active_dist {
+        if (port_id < 6)
+            soft internal_lpbk_active_dist == 0;
+        else
+            soft internal_lpbk_active_dist inside {[0:100]};
     }
 
     constraint c_mgmt_vlans {
@@ -242,9 +144,6 @@ class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
         is_lp_ring dist {1 := ena_dist, 0 := 100-ena_dist};
     }
 
-    function new(string name="clipper_hidden_rule_cfg_reg_seq");
-        super.new(name);
-    endfunction
 
     //---------------------------------------------------------------------------------
     // Sequence body
@@ -263,6 +162,7 @@ class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
         regmodel.globals.mac_base_addr.update(status, .parent(null));
 
         if (!regmodel.globals.global_input_cfg_0.randomize() with {
+            system_acp_md_level.value                         inside {[0:7]};
             soam_lbm_rule_vlan_aware_ena.value                dist {1 := ena_dist, 0 := 100-ena_dist};
             acd_lbm_rule_vlan_aware_ena.value                 dist {1 := ena_dist, 0 := 100-ena_dist};
             acd_lbr_tst_leak_rule_vlan_aware_ena.value        dist {1 := ena_dist, 0 := 100-ena_dist};
@@ -272,19 +172,16 @@ class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
             paa_layer2_rule_vlan_aware_ena.value              dist {1 := ena_dist, 0 := 100-ena_dist};
             twamp_reflector_rule_vlan_aware_ena.value         dist {1 := ena_dist, 0 := 100-ena_dist};
             general_purpose_unicast_rule_vlan_aware_ena.value dist {1 := ena_dist, 0 := 100-ena_dist};
-            system_acp_md_level.value inside {[0:7]};
+            user_vlan_ethertype.value                         ==  user_vlan;
+            sw_up_soam_ena.value                              == local::sw_up_soam_ena;
         }) `uvm_fatal(get_name, "Randomization failed.")
         regmodel.globals.global_input_cfg_0.update(status, .parent(null));
 
         if (!regmodel.globals.global_input_cfg_1.randomize() with {
-            twamp_reflector_dport.value                       == twamp_dport;
+            twamp_reflector_dport.value == twamp_dport;
+            system_ld_domain.value      == ld_domain;
         }) `uvm_fatal(get_name, "Randomization failed.")
         regmodel.globals.global_input_cfg_1.update(status, .parent(null));
-
-        if (!regmodel.globals.global_input_cfg_0.randomize() with {
-            user_vlan_ethertype.value                         ==  user_vlan;
-        }) `uvm_fatal(get_name, "Randomization failed.")
-        regmodel.globals.global_input_cfg_0.update(status, .parent(null));
 
 
         if (!regmodel.globals.port_input_cfg[port_id-1].cfg0.randomize() with {
@@ -294,6 +191,7 @@ class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
             l2pt_ena.value          dist {1 := ena_dist, 0 := 100-ena_dist};
             acd_src_only.value      dist {1 := ena_dist, 0 := 100-ena_dist};
             other_mac_address.value dist {port_id := ena_dist, port_id-1 := (100-ena_dist)/2, port_id+1 := (100-ena_dist)/2};
+            port_blocking_ena.value dist {0 := ena_dist, 1 := 100-ena_dist};
         }) `uvm_fatal(get_name, "Randomization failed.")
         regmodel.globals.port_input_cfg[port_id-1].cfg0.update(status, .parent(null));
 
@@ -333,6 +231,11 @@ class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
         }) `uvm_fatal(get_name, "Randomization failed.")
         regmodel.globals.port_input_cfg[port_id-1].cfg1.update(status, .parent(null));
 
+        if (!regmodel.globals.port_input_cfg[port_id-1].cfg2.randomize() with {
+            ld_rule_ena.value dist {1 := ena_dist, 0 := 100-ena_dist};
+        }) `uvm_fatal(get_name, "Randomization failed.")
+        regmodel.globals.port_input_cfg[port_id-1].cfg2.update(status, .parent(null));
+
         if (!regmodel.globals.port_input_cfg[port_id-1].cfg3.randomize() with {
             vlan1_id.value   == mgmt_vids[0];
             vlan1_type.value == mgmt_vlan_types[0];
@@ -348,23 +251,89 @@ class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
         //---------------------------------------------------------------------------------
 
         foreach(flag_vids[v]) begin
-            `RANDOMIZE_REG_PRT(regmodel.vid_table.p,.idx[flag_vids[v]],port_id, {
-                cpu_l2pt_tunneling_flag.value dist {1 := ena_dist, 0 := 100-ena_dist};
-                cpu_membership.value          dist {1 := ena_dist, 0 := 100-ena_dist};
-                cpu_cfm_membership.value      dist {1 := ena_dist, 0 := 100-ena_dist};
-            })
-//            `REG_PRT(,regmodel.vid_table.p,port_id,.idx[flag_vids[v]].randomize() with {
-//                cpu_l2pt_tunneling_flag.value dist {1 := ena_dist, 0 := 100-ena_dist};
-//                cpu_membership.value          dist {1 := ena_dist, 0 := 100-ena_dist};
-//                cpu_cfm_membership.value      dist {1 := ena_dist, 0 := 100-ena_dist};
-//            })
-            `REG_PRT(,regmodel.vid_table.p,port_id,.idx[flag_vids[v]].update(status, .parent(null)))
+                case(port_id)
+                   0:
+                   begin
+                     if (uvm_report_enabled(UVM_NONE,UVM_ERROR,get_name))
+                       uvm_report_error (get_name, "Port0 undefined user port index.", UVM_NONE, "NA.v", 0);
+                   end
+                   5,6:
+                   begin
+                       vid_table_nni10g_reg_block vid_t;
+                       $display("port_id %0d", port_id);
+                       if (!$cast(vid_t, regmodel.vid_table.get_block_by_name($sformatf("p%0d",port_id)))) `uvm_fatal("CASTERR", "vid_table")
+                       if (!vid_t.idx[flag_vids[v]].randomize() with {
+                       cpu_l2pt_tunneling_flag.value dist {1 := ena_dist, 0 := 100-ena_dist};
+                       cpu_membership.value          dist {1 := ena_dist, 0 := 100-ena_dist};
+                       cpu_cfm_membership.value      dist {1 := ena_dist, 0 := 100-ena_dist};})
+                       if (uvm_report_enabled(UVM_NONE,UVM_FATAL,get_name))
+                           uvm_report_fatal (get_name, "Randomization failed!", UVM_NONE, "NA.v", 0);
+                    end
+                    7:
+                    begin
+                        if (!regmodel.vid_table.p7.idx[flag_vids[v]].randomize() with {
+                        cpu_l2pt_tunneling_flag.value dist {1 := ena_dist, 0 := 100-ena_dist};
+                        cpu_membership.value          dist {1 := ena_dist, 0 := 100-ena_dist};
+                        cpu_cfm_membership.value      dist {1 := ena_dist, 0 := 100-ena_dist};})
+                        if (uvm_report_enabled(UVM_NONE,UVM_FATAL,get_name))
+                            uvm_report_fatal (get_name, "Randomization failed!", UVM_NONE, "NA.v", 0);
+                    end
+                    8:
+                    begin
+                        if (!regmodel.vid_table.p8.idx[flag_vids[v]].randomize() with {
+                        cpu_l2pt_tunneling_flag.value dist {1 := ena_dist, 0 := 100-ena_dist};
+                        cpu_membership.value          dist {1 := ena_dist, 0 := 100-ena_dist};
+                        cpu_cfm_membership.value      dist {1 := ena_dist, 0 := 100-ena_dist};})
+                        if (uvm_report_enabled(UVM_NONE,UVM_FATAL,get_name))
+                            uvm_report_fatal (get_name, "Randomization failed!", UVM_NONE, "NA.v", 0);
+                    end
+                    default:
+                    begin
+                        vid_table_uni1g_reg_block  vid_t;
+                        $display("port_id %0d = %s", port_id, $sformatf("p%0d",port_id));
+                        if (!$cast(vid_t, regmodel.vid_table.get_block_by_name($sformatf("p%0d",port_id)))) `uvm_fatal("CASTERR", "vid_table")
+                        if (!vid_t.idx[flag_vids[v]].randomize() with {
+                        cpu_l2pt_tunneling_flag.value dist {1 := ena_dist, 0 := 100-ena_dist};
+                        cpu_membership.value          dist {1 := ena_dist, 0 := 100-ena_dist};
+                        cpu_cfm_membership.value      dist {1 := ena_dist, 0 := 100-ena_dist};})
+    //               begin
+                     if (uvm_report_enabled(UVM_NONE,UVM_FATAL,get_name))
+                       uvm_report_fatal (get_name, "Randomization failed!", UVM_NONE, "NA.v", 0);
+                   end
+                endcase
+            case(port_id)
+                0:       `uvm_error(get_name, "Port0 undefined user port index.")
+                1,2: begin
+                    regmodel.vid_table.get_block_by_name($sformatf("p%0d",port_id)).get_reg_by_name($sformatf("idx[%0d]",flag_vids[v])).update(status, .parent(null));
+                end
+                default: begin
+                    regmodel.vid_table.get_block_by_name($sformatf("p%0d",port_id)).get_reg_by_name($sformatf("idx[%0d]",flag_vids[v])).update(status, .parent(null));
+                end
+            endcase
         end
 
         //---------------------------------------------------------------------------------
         // FWD_DB flags
         //---------------------------------------------------------------------------------
         foreach(flag_vids[v]) begin
+            int unsigned dom;
+
+            if (!regmodel.fwd_db.fwd_vid.info[flag_vids[v]].randomize() with {
+                ring0_fwd_domain.value inside {[0:2**regmodel.fwd_db.fwd_vid.info[0].ring0_fwd_domain.get_n_bits()-1]};
+                ring0_vlan_type.value inside {[0:2]};
+                ring0_wr_ena.value == 1;
+            }) `uvm_fatal("RNDERR", "fwd_db")
+            regmodel.fwd_db.fwd_vid.info[flag_vids[v]].update(status);
+            dom = regmodel.fwd_db.fwd_vid.info[flag_vids[v]].ring0_fwd_domain.get();
+            if (!regmodel.fwd_db.fwd_domain.domain[dom].randomize() with {
+                fwd_domain_mode.value dist {G8032_DOM_RING2LDROP := ena_dist, [0:G8032_DOM_RING2LDROP-1] := (100-ena_dist)/2, [G8032_DOM_RING2LDROP+1:15] := (100-ena_dist)/2};
+                // Keep other values at default
+                erp_instance_number.value == 0;
+                data_15_to_0.value  == 1;
+                data_31_to_16.value == 0;
+                data_60_to_32.value == 0;
+            }) `uvm_fatal("RNDERR", "fwd_db")
+            regmodel.fwd_db.fwd_domain.domain[dom].update(status);
         end
 
 
@@ -373,13 +342,25 @@ class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
         //---------------------------------------------------------------------------------
 
         if (is_lp_ring) begin
-//            // enable LP ring on port
-//            regmodel.protection_tbl.logical_port[0].physical_port[port_id-1].mode_bridge.mode.set(1);
-//            regmodel.protection_tbl.logical_port[0].physical_port[port_id-1].mode_bridge.update(status, .parent(null));
+            // enable LP ring on port
+            regmodel.protection_tbl.logical_port[0].physical_port[port_id-1].mode_bridge.mode.set(1);
+            regmodel.protection_tbl.logical_port[0].physical_port[port_id-1].mode_bridge.update(status, .parent(null));
         end else begin
-//            regmodel.protection_tbl.logical_port[0].physical_port[port_id-1].mode_bridge.mode.set(0);
-//            regmodel.protection_tbl.logical_port[0].physical_port[port_id-1].mode_bridge.update(status, .parent(null));
+            regmodel.protection_tbl.logical_port[0].physical_port[port_id-1].mode_bridge.mode.set(0);
+            regmodel.protection_tbl.logical_port[0].physical_port[port_id-1].mode_bridge.update(status, .parent(null));
         end
+
+        // randomize internal loopback to change UP SOAM
+        randcase
+            internal_lpbk_active_dist: begin
+                // enable internal loopback (!isSwUpSoam)
+                configure_internal_loopback(port_id-1, 1);
+            end
+            100-internal_lpbk_active_dist: begin
+                // do not enable internal loopback (isSwUpSoam)
+                configure_internal_loopback(port_id-1, 0);
+            end
+        endcase
 
     endtask
 
@@ -395,47 +376,13 @@ class clipper_hidden_rule_cfg_reg_seq extends uvm_sequence#(uvm_sequence_item);
         end else begin
             `uvm_info(get_name, $sformatf("Port%0d: Disabling internal loopback", prt+1), UVM_MEDIUM)
         end
+    // TODO
 //        regmodel.core.np_if.np_if_ctrl[prt].port_local_in_ena.port_int_lpbk_in_ena.set(ena);
 //        regmodel.core.np_if.np_if_ctrl[prt].port_local_out_ena.port_int_lpbk_out_ena.set(ena);
-//        regmodel.core.np_if.np_if_ctrl[prt].port_local_out_map.port_tx_mac_out_map.set(ena);
+//        regmodel.core.np_if.np_if_ctrl[prt].port_local_out_map.port_tx_mac_out_map.set(ena ? 2 : 1);
 //        regmodel.core.np_if.np_if_ctrl[prt].port_local_in_ena.update(status, .parent(null));
 //        regmodel.core.np_if.np_if_ctrl[prt].port_local_out_ena.update(status, .parent(null));
 //        regmodel.core.np_if.np_if_ctrl[prt].port_local_out_map.update(status, .parent(null));
     endtask
 
 endclass
-
-
-
-//-----------------------------------------------------------------------------
-// Sequence to configure hidden rule enables and settings.
-//
-// This sequence should be randomize and run, and any additional configuration
-// requirements applied afterwards.
-//------------------------------------------------------------------------------
-
-// ?
-
-
-//class clipper_hard_rule_2p2_prio_cfg_reg_seq extends hard_rule_2p2_prio_cfg_reg_seq#(c1lt_reg_block);
-//    `uvm_object_utils(clipper_hard_rule_2p2_prio_cfg_reg_seq)
-//
-//    function new(string name="clipper_hard_rule_2p2_prio_cfg_reg_seq");
-//        super.new(name);
-//    endfunction
-//
-//    task map_hr_cfg();
-//        uvm_status_e status;
-//        foreach(prios[i]) begin
-//            regmodel.action_map_tables.p1.priority_index[prios[i]].if_action_index.set(if_act[i]);
-//            `REG_PRT(,regmodel.action_map_tables.p,input_port_id,.priority_index[prios[i]].if_action_index.set(if_act[i]))
-//            `REG_PRT(,regmodel.action_map_tables.p,input_port_id,.priority_index[prios[i]].cpu_action_index.set(cpu_act[i]))
-//            `REG_PRT(,regmodel.action_map_tables.p,input_port_id,.priority_index[prios[i]].update(status))
-//            `REG_PRT(,regmodel.cpu_monitor_action.p,input_port_id,.cpu_action[prios[i]].cpu_forwarding.set(cpu_ena[i]))
-//            `REG_PRT(,regmodel.cpu_monitor_action.p,input_port_id,.cpu_action[prios[i]].cpu_bucket.set(cpu_bucket[i]))
-//            `REG_PRT(,regmodel.cpu_monitor_action.p,input_port_id,.cpu_action[prios[i]].update(status))
-//        end
-//    endtask
-//
-//endclass
-

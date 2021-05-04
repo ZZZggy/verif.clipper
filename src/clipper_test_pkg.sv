@@ -61,6 +61,18 @@ package clipper_test_pkg;
 
 `include "cpu2if_test.svh"
 
+`include "management_test.svh"
+
+`include "if2fm_test.svh"
+`include "if2all_test.svh"
+
+`include "pc_test_cfg_vseq.svh"
+`include "all2cpu_test.svh"
+
+`include "hidden_rule_test.svh"
+
+`include "cpu2fpga_test.svh"
+
 /*
 `include "reg_test_lib.svh"
 `include "reg_invalid_addr_test.svh"

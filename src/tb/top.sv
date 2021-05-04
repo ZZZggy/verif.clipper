@@ -668,7 +668,7 @@ module top #(
     `define DUT_TSE_WRP_HIER   `DUT_MULTIMAC_HIER.u_clipper_tse_wrapper
     `define DUT_XGMAC_GEN_HIER `DUT_MULTIMAC_HIER.inst_clipper_xgmac_wrapper.gen_xgmac_inst
     `define DUT_ACD_MM_HIER    `DUT_C2CORE_HIER.acd_core_inst.inst_clipper_reg_master
-    `define DUT_TIMEBASE_HIER  `DUT_C2CORE_HIER.acd_core_inst.u_clipper_timebase.u_timebase2
+    `define DUT_TIMEBASE_HIER  `DUT_C2CORE_HIER.acd_core_inst.u_clipper_timebase
     `define DUT_TM_HIER        `DUT_C2CORE_HIER.acd_core_inst.u_traffic_manager
 
     //--------------------------------------------------------------------------
@@ -925,10 +925,8 @@ module top #(
     assign gmii_tx_if[``IF_SIM``].valid = `DUT_TOP_HIER.core_gmii_tx_en[``IF_HW``];\
     assign gmii_tx_if[``IF_SIM``].error = `DUT_TOP_HIER.core_gmii_tx_err[``IF_HW``];\
     // Timestamp\
-    assign gmii_rx_if[``IF_SIM``].freerun_tbase[63:32] = `DUT_TIMEBASE_HIER.pps_local_timestamp_sec;\
-    assign gmii_rx_if[``IF_SIM``].freerun_tbase[31:0]  = `DUT_TIMEBASE_HIER.pps_local_timestamp_fract;\
-    assign gmii_tx_if[``IF_SIM``].freerun_tbase[63:32] = `DUT_TIMEBASE_HIER.pps_local_timestamp_sec;\
-    assign gmii_tx_if[``IF_SIM``].freerun_tbase[31:0]  = `DUT_TIMEBASE_HIER.pps_local_timestamp_fract;\
+    assign gmii_rx_if[``IF_SIM``].freerun_tbase = `DUT_TIMEBASE_HIER.gen_sim_probe.sim_probe_local_timestamp_reference;\
+    assign gmii_tx_if[``IF_SIM``].freerun_tbase = `DUT_TIMEBASE_HIER.gen_sim_probe.sim_probe_local_timestamp_reference;\
     // end TSE_CONNECT
     //-------------------------------------------------------------------------
 
@@ -972,10 +970,8 @@ module top #(
     assign xgmii_tx_if[``IF_SIM``].data = `DUT_XGMAC_GEN_HIER[``IF_HW``].inst_xgmac.xgmii_tx_data;\
     assign xgmii_tx_if[``IF_SIM``].ctrl = `DUT_XGMAC_GEN_HIER[``IF_HW``].inst_xgmac.xgmii_tx_ctrl;\
     // Timestamp\
-    assign xgmii_rx_if[``IF_SIM``].freerun_tbase[63:32] = `DUT_TIMEBASE_HIER.pps_local_timestamp_sec;\
-    assign xgmii_rx_if[``IF_SIM``].freerun_tbase[31:0]  = `DUT_TIMEBASE_HIER.pps_local_timestamp_fract;\
-    assign xgmii_tx_if[``IF_SIM``].freerun_tbase[63:32] = `DUT_TIMEBASE_HIER.pps_local_timestamp_sec;\
-    assign xgmii_tx_if[``IF_SIM``].freerun_tbase[31:0]  = `DUT_TIMEBASE_HIER.pps_local_timestamp_fract;\
+    assign xgmii_rx_if[``IF_SIM``].freerun_tbase =  `DUT_TIMEBASE_HIER.gen_sim_probe.sim_probe_local_timestamp_reference;\
+    assign xgmii_tx_if[``IF_SIM``].freerun_tbase =  `DUT_TIMEBASE_HIER.gen_sim_probe.sim_probe_local_timestamp_reference;\
     // end XGMAC_CONNECT
     //-------------------------------------------------------------------------
 
@@ -1077,14 +1073,14 @@ module top #(
     always @(ctrl_if.timebase_force) begin
         @(posedge `DUT_C2CORE_HIER.i_clk_sys_1g);
         `uvm_info("TOP", "Forcing inital timebase2 time", UVM_MEDIUM)
-        force `DUT_TIMEBASE_HIER.initial_acc_data  = ctrl_if.timebase_time;
-        force `DUT_TIMEBASE_HIER.load_initial_acc_data  = '1;
+        force `DUT_TIMEBASE_HIER.u_timebase2.initial_acc_data  = ctrl_if.timebase_time;
+        force `DUT_TIMEBASE_HIER.u_timebase2.load_initial_acc_data  = '1;
         #10ns;
         @(posedge `DUT_C2CORE_HIER.i_clk_sys_1g)
-        force `DUT_TIMEBASE_HIER.load_initial_acc_data  = '0;
+        force `DUT_TIMEBASE_HIER.u_timebase2.load_initial_acc_data  = '0;
         @(posedge `DUT_C2CORE_HIER.i_clk_sys_1g)
-        release `DUT_TIMEBASE_HIER.initial_acc_data ;
-        release `DUT_TIMEBASE_HIER.load_initial_acc_data ;
+        release `DUT_TIMEBASE_HIER.u_timebase2.initial_acc_data ;
+        release `DUT_TIMEBASE_HIER.u_timebase2.load_initial_acc_data ;
     end
 
 

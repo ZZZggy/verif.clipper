@@ -2546,6 +2546,225 @@ class phy_if_global_registers_reconfig_status_reg_cover extends uvm_object;
     endfunction
 
 endclass
+typedef class phy_if_global_registers_diag_1g_reg_cover;
+
+// Class: phy_if_global_registers_diag_1g_reg
+// Register phy_if_global_registers.diag_1g: Diagnostic status in 1G mode for ports 1 to 8
+class phy_if_global_registers_diag_1g_reg extends uvm_reg;
+
+    // Variable: rudi_c
+    // The core is receiving /C/ ordered sets (Auto-Negotiation Configuration sequences) as defined in IEEE 802.3-2008 clause 36.2.4.10.
+    rand uvm_reg_field rudi_c;
+    // Variable: rudi_i
+    // The core is receiving /I/ ordered sets (Idles) as defined in IEEE 802.3-2008 clause 36.2.4.12.
+    rand uvm_reg_field rudi_i;
+    // Variable: rudi_inv
+    // The core has received invalid data while receiving/C/ or /I/ ordered set set as defined in IEEE 802.3-2008 clause 36.2.5.1.6. This can be caused, for example, by bit errors occurring in any clock cycle of the /C/ or /I/ ordered set.
+    rand uvm_reg_field rudi_inv;
+    // Variable: rxdisperr
+    // The core has received a running disparity error during the 8B/10B decoding Function.
+    rand uvm_reg_field rxdisperr;
+    // Variable: rxnotintable
+    // The core has received a code group which is not recognized from the 8B/10B coding tables.
+    rand uvm_reg_field rxnotintable;
+
+    // Variable: m_params
+    // Parameter key/value lookup.
+    static protected acd_reg_param_cfg m_params;
+
+    // Variable: cg
+    // Coverage object. Static to reduce memory usage.
+    static phy_if_global_registers_diag_1g_reg_cover cg_all;
+
+    // Variable: cg
+    // Coverage object.
+    phy_if_global_registers_diag_1g_reg_cover cg;
+
+    // Variable: is_read
+    // Last access type.
+    protected bit is_read;
+
+    `uvm_object_utils(phy_if_globals_reg_pkg::phy_if_global_registers_diag_1g_reg)
+
+    // Constructor: new
+    function new(string name = "phy_if_global_registers_diag_1g");
+        super.new(name, `UVM_REG_DATA_WIDTH, UVM_NO_COVERAGE);
+    endfunction
+
+
+    // Function: build
+    virtual function void build();
+        if ((m_params == null) && has_params())
+            if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
+                `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
+
+        rudi_c = uvm_reg_field::type_id::create("rudi_c", , get_full_name());
+        rudi_i = uvm_reg_field::type_id::create("rudi_i", , get_full_name());
+        rudi_inv = uvm_reg_field::type_id::create("rudi_inv", , get_full_name());
+        rxdisperr = uvm_reg_field::type_id::create("rxdisperr", , get_full_name());
+        rxnotintable = uvm_reg_field::type_id::create("rxnotintable", , get_full_name());
+
+        // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
+        rudi_c.configure(this, 1, 0, "RO", 0, 'h0, 1, 1, 0);
+        rudi_i.configure(this, 1, 1, "RO", 0, 'h0, 1, 1, 0);
+        rudi_inv.configure(this, 1, 2, "RO", 0, 'h0, 1, 1, 0);
+        rxdisperr.configure(this, 1, 3, "RO", 0, 'h0, 1, 1, 0);
+        rxnotintable.configure(this, 1, 4, "RO", 0, 'h0, 1, 1, 0);
+    endfunction
+
+
+    // Function: RMW
+    // Helper task for read-modify-write based on mask.
+    // Ones in the mask position indicate bits to modify.
+    task RMW(output uvm_status_e status, input uvm_reg_data_t data, input uvm_reg_data_t mask);
+        uvm_reg_data_t tmp;
+
+        // read
+        read(status, tmp);
+        // modify
+        tmp &= ~mask;
+        tmp |= data & mask;
+        //write
+        write(status, tmp);
+    endtask
+
+
+    // Function: post_write
+    // Add message after access.
+    virtual task post_write(uvm_reg_item rw);
+        super.post_write(rw);
+        is_read = 0;
+        `uvm_info("REG", $sformatf("%0s WRITE=0x%0h ADDR=0x%0h%0s", this.get_full_name(), this.get(), this.get_address(), this.fields2string()), UVM_MEDIUM)
+        sample_values();
+    endtask
+
+
+    // Function: post_read
+    // Add message after access.
+    virtual task post_read(uvm_reg_item rw);
+        super.post_read(rw);
+        is_read = 1;
+        `uvm_info("REG", $sformatf("%0s READ=0x%0h ADDR=0x%0h%0s", this.get_full_name(), this.get(), this.get_address(), this.fields2string()), UVM_MEDIUM)
+        sample_values();
+    endtask
+
+
+    // Function: enable_coverage
+    // Build coverage object if it doesn't already exist.
+    function void enable_coverage(uvm_reg_cvr_t models, bit cg_per_instance=0);
+        if (cg_per_instance) begin
+            if (cg == null) begin
+                //$info("Creating instance coverage object: %0s", {this.get_full_name(), ".cg"});
+                cg = phy_if_global_registers_diag_1g_reg_cover::type_id::create({this.get_full_name(), ".cg"});
+            end
+        end else begin
+            //$info("Creating singleton coverage object: %0s", {this.get_full_name(), ".cg"});
+            cg_all = phy_if_global_registers_diag_1g_reg_cover::get();
+        end
+        this.add_coverage(models);
+    endfunction
+
+
+    // Function: sample_values
+    // Called in post-actions
+    virtual function void sample_values();
+        // Sample only if coverage object has been created
+        if(cg != null) begin
+            cg.sample(this, is_read);
+        end
+        if (cg_all != null) begin
+            cg_all.sample(this, is_read);
+        end
+    endfunction
+
+
+    // Function: sample
+    // Sample the raw transaction
+    //function void sample(uvm_reg_data_t data, uvm_reg_data_t byte_en, bit is_read, uvm_reg_map map);
+
+
+    // Function: has_params
+    function int unsigned has_params();
+        has_params = 0;
+        has_params += 0;
+    endfunction
+
+    // Function: fields2string
+    // Stringify fields.
+    virtual function string fields2string();
+        string s="";
+        $swrite(s, "%0s\n%24s=0x%0h", s, rudi_c.get_name, rudi_c.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, rudi_i.get_name, rudi_i.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, rudi_inv.get_name, rudi_inv.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, rxdisperr.get_name, rxdisperr.value);
+        $swrite(s, "%0s\n%24s=0x%0h", s, rxnotintable.get_name, rxnotintable.value);
+        return s;
+    endfunction
+
+endclass
+
+
+// Class: phy_if_global_registers_diag_1g_reg_cover
+// Register coverage object.
+class phy_if_global_registers_diag_1g_reg_cover extends uvm_object;
+
+    static local phy_if_global_registers_diag_1g_reg_cover m_inst;
+
+    // Variable: r
+    // Handle to register to sample
+    phy_if_global_registers_diag_1g_reg r;
+
+    covergroup cg with function sample(bit is_read);
+        option.per_instance = 1;
+        type_option.merge_instances = 1;
+        rudi_c_wr: coverpoint r.rudi_c.value iff (!is_read);
+        rudi_c_rd: coverpoint r.rudi_c.value iff  (is_read);
+        rudi_i_wr: coverpoint r.rudi_i.value iff (!is_read);
+        rudi_i_rd: coverpoint r.rudi_i.value iff  (is_read);
+        rudi_inv_wr: coverpoint r.rudi_inv.value iff (!is_read);
+        rudi_inv_rd: coverpoint r.rudi_inv.value iff  (is_read);
+        rxdisperr_wr: coverpoint r.rxdisperr.value iff (!is_read);
+        rxdisperr_rd: coverpoint r.rxdisperr.value iff  (is_read);
+        rxnotintable_wr: coverpoint r.rxnotintable.value iff (!is_read);
+        rxnotintable_rd: coverpoint r.rxnotintable.value iff  (is_read);
+    endgroup
+
+    `uvm_object_utils(phy_if_globals_reg_pkg::phy_if_global_registers_diag_1g_reg_cover)
+
+    // Constructor: new
+    // Note that to be truly singleton, the constructor should be protected.
+    /*protected*/ function new(string name="phy_if_global_registers_diag_1g_reg_cover");
+        super.new(name);
+        cg = new(/*name*/);
+    endfunction
+
+
+    // Function: set_name
+    // Override function to set name of covergroup.
+    virtual function void set_name(string name);
+        super.set_name(name);
+        cg.option.name = name;
+    endfunction
+
+
+    // Function: get
+    // Get the coverage object singleton.
+    static function phy_if_global_registers_diag_1g_reg_cover get();
+        if (m_inst == null) begin
+            m_inst = phy_if_global_registers_diag_1g_reg_cover::type_id::create("cg");
+        end
+        return m_inst;
+    endfunction
+
+
+    // Function: sample
+    // Sample the register for coverage.
+    virtual function void sample(phy_if_global_registers_diag_1g_reg _r, bit is_read);
+        r = _r;
+        cg.sample(is_read);
+    endfunction
+
+endclass
 
 
 
@@ -2571,6 +2790,7 @@ class phy_if_globals_reg_block extends uvm_reg_block;
     rand phy_if_global_registers_force_local_link_fault_reg force_local_link_fault;
     rand phy_if_global_registers_reconfig_ctrl_reg reconfig_ctrl;
     rand phy_if_global_registers_reconfig_status_reg reconfig_status;
+    rand phy_if_global_registers_diag_1g_reg diag_1g[];
 
     // Variable: params
     // Parameter key/value lookup.
@@ -2594,6 +2814,7 @@ class phy_if_globals_reg_block extends uvm_reg_block;
             if (!uvm_config_db#(acd_reg_param_cfg)::get(null, get_full_name(), "cfg", m_params))
                 `uvm_fatal("CFGERR", {get_full_name(), " failed to get configuration for parameters."})
 
+        diag_1g = new[8];
 
         rgmii = phy_if_global_registers_rgmii_reg::type_id::create("rgmii", , get_full_name());
         led_link = phy_if_global_registers_led_link_reg::type_id::create("led_link", , get_full_name());
@@ -2608,6 +2829,9 @@ class phy_if_globals_reg_block extends uvm_reg_block;
         force_local_link_fault = phy_if_global_registers_force_local_link_fault_reg::type_id::create("force_local_link_fault", , get_full_name());
         reconfig_ctrl = phy_if_global_registers_reconfig_ctrl_reg::type_id::create("reconfig_ctrl", , get_full_name());
         reconfig_status = phy_if_global_registers_reconfig_status_reg::type_id::create("reconfig_status", , get_full_name());
+        foreach(diag_1g[m]) begin
+            diag_1g[m] = phy_if_global_registers_diag_1g_reg::type_id::create($sformatf("diag_1g[%0d]",m), , get_full_name());
+        end
 
         rgmii.configure(this);
         led_link.configure(this);
@@ -2622,6 +2846,9 @@ class phy_if_globals_reg_block extends uvm_reg_block;
         force_local_link_fault.configure(this);
         reconfig_ctrl.configure(this);
         reconfig_status.configure(this);
+        foreach(diag_1g[m]) begin
+            diag_1g[m].configure(this);
+        end
 
         rgmii.build();
         led_link.build();
@@ -2636,6 +2863,9 @@ class phy_if_globals_reg_block extends uvm_reg_block;
         force_local_link_fault.build();
         reconfig_ctrl.build();
         reconfig_status.build();
+        foreach(diag_1g[m]) begin
+            diag_1g[m].build();
+        end
 
         // define default map
         default_map = create_map("phy_if_globals_default_map", 'h0, `UVM_REG_DATA_WIDTH/8, UVM_NO_ENDIAN, 0);
@@ -2652,6 +2882,9 @@ class phy_if_globals_reg_block extends uvm_reg_block;
         this.default_map.add_reg(force_local_link_fault, 'hC, "RW");
         this.default_map.add_reg(reconfig_ctrl, 'hD, "RW");
         this.default_map.add_reg(reconfig_status, 'hE, "RO");
+        foreach(diag_1g[m]) begin
+            this.default_map.add_reg(this.diag_1g[m], 'h10 + m, "RO");
+        end
 
         // Recursively lock register model and build the address map to enable
         // uvm_reg_map::get_reg_by_offset() and uvm_reg_map::get_mem_by_offset() methods.
@@ -2691,6 +2924,9 @@ class phy_if_globals_reg_block extends uvm_reg_block;
         force_local_link_fault.enable_coverage(is_on, this.cg_per_instance);
         reconfig_ctrl.enable_coverage(is_on, this.cg_per_instance);
         reconfig_status.enable_coverage(is_on, this.cg_per_instance);
+        foreach(diag_1g[m]) begin
+            diag_1g[m].enable_coverage(is_on, this.cg_per_instance);
+        end
         // Use UVM_CVR_ALL for hierarchical enabling.
         if(is_on == UVM_CVR_ALL) begin
         end
