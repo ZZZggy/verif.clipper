@@ -20,6 +20,61 @@
 // WRITTEN PERMISSION OF ACCEDIAN INC.
 //------------------------------------------------------------------------------
 
+class thi_cpu2if_ts_copy_seq_t extends thi_cpu2if_csum_punch_seq_t;
+
+
+
+    `uvm_object_utils(thi_cpu2if_ts_copy_seq_t)
+
+    //---------------------------------------------------------------------------------
+    // Constructor
+    //---------------------------------------------------------------------------------
+    function new(string name="thi_cpu2if_ts_copy_seq_t");
+        super.new(name);
+    endfunction
+
+    //---------------------------------------------------------------------------------
+    // body
+    //---------------------------------------------------------------------------------
+    virtual task body();
+        int frame_id = 0;
+
+        `uvm_info("SEQ", "Entering body", UVM_HIGH)
+        cpu2if = thi_if_frame_t::type_id::create("cpu2if");
+
+            `uvm_info("SEQ", $sformatf("Starting frame_id: %0d", frame_id), UVM_DEBUG)
+            start_item(cpu2if);
+
+            if (!(cpu2if.randomize() with {
+                solve vtags_size before payload_size;
+                thi_vtag.tpid      == thi_uvm_pkg::THI_TPID_CPU2X;
+                info.if_src_dst    == local::if_dst[local::frame_id];
+
+                info.punch_tstamp  == 1;
+                info.tstamp_format == 0;
+
+                info.copy_tstamp   == 1;
+
+                info.punch_csum    == 1;
+                xtra_info.inv_csum == inv_csum;
+
+                vtags_size inside {[local::vtags_size_min : local::vtags_size_max]};
+
+                // CPU MRU: 1518
+                // 1518-16(THI info)-4(FCS)-12(MAC addresses)-2(Ethertype)=1484 untagged
+                payload_size inside {[(local::frame_size_min - 34 - vtags_size*VTAG_BSIZE) :
+                                      (local::frame_size_max - 34 - vtags_size*VTAG_BSIZE)]};
+            })) `randerr
+            cpu2if.frame_id = frame_id+1;
+            cpu2if.p_id = id;
+            finish_item(cpu2if);
+            frame_id++;
+    endtask // body
+
+
+endclass
+
+
 class cpu2if_test extends clipper_test_base;
 
     int unsigned test_cfg_nb_iter = 3;
@@ -46,9 +101,10 @@ class cpu2if_test extends clipper_test_base;
 
     virtual task main_phase(uvm_phase phase);
         thi_cpu2if_seq_t seq;
-        thi_cpu2if_csum_punch_seq_t csum_seq;
+        thi_cpu2if_ts_copy_seq_t csum_seq;
         uvm_status_e status;
         bit [31:0] data;
+        bit [31:0] time_cpy[$];
 
         phase.raise_objection(this);
 
@@ -71,7 +127,7 @@ class cpu2if_test extends clipper_test_base;
         seq = thi_cpu2if_seq_t::type_id::create("seq", this);
         seq.NUM_USR_PRTS = NB_IF_PORTS;
 
-        csum_seq = thi_cpu2if_csum_punch_seq_t::type_id::create("csum_seq", this);
+        csum_seq = thi_cpu2if_ts_copy_seq_t::type_id::create("csum_seq", this);
         csum_seq.NUM_USR_PRTS = NB_IF_PORTS;
 
         // Multiple iterations of forcing a static time, then sending traffic
@@ -93,7 +149,13 @@ class cpu2if_test extends clipper_test_base;
 
             ctrl_vif.thi_ena = '0;
             env.regmodel.timebase.globals.tod_ptp_timestamp.read(status, data);
+            time_cpy.push_back(data);
 
+        end
+
+        while(time_cpy.size() > 1) begin
+            data = time_cpy.pop_front();
+            `ASSERT_MSG(TimeCpy, data < time_cpy[0], "Time copy should be change to match last TOD", UVM_HIGH)
         end
 
         phase.drop_objection(this);

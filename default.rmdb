@@ -90,6 +90,7 @@
   <runnable name="sat_test"                  type="task" base="base_task"/>
   <runnable name="xgmac_pause_linerate_test" type="task" base="base_task"/>
   <runnable name="forwarding_test"           type="task" base="base_task"/>
+  <runnable name="pps_test"                  type="task" base="base_task"/>
 
 
   <!-- GROUPS -->
@@ -136,6 +137,7 @@
         <member>cpu2if_test</member>
         <member>sat_test</member>
         <member>hidden_rule_test</member>
+        <member>pps_test</member>
     </members>
   </runnable>
 

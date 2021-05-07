@@ -94,7 +94,7 @@ package clipper_pkg;
     // Group: Clock and reset parameters
     //-----------------------------------
     // Clock periods
-    parameter CLK_10K_PER_NS       = 100_000;
+    parameter CLK_10K_PER_NS       = 10_000;
     parameter CLK_2p5M_PER_PS      = 400_000;
     parameter CLK_25M_PER_PS       = 40_000;
     parameter CLK_50M_PER_PS       = 20_000;

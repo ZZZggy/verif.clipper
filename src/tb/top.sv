@@ -270,8 +270,6 @@ module top #(
     // Internal refclk (for External RAM)
     wire                    ref_clk_t;
     wire                    ref_clk_b;
-    // GPS reference clock
-    wire                    gps_fpga_clk;
     // External clocks
     wire                    mezz_fpga_external_clk;
     wire                    fpga_mezz_external_clk;
@@ -309,7 +307,7 @@ module top #(
     assign cpu_fpga_reset_n       = ~ctrl_if.rst;
 
     // Non-system clocks
-    assign gps_fpga_clk           = clk_10K.clk; // Speedup for sim - real period: 1 sec
+    assign ctrl_if.gps_fpga_clk   = clk_10K.clk; // Speedup for sim - real period: 1 sec
     assign mezz_fpga_external_clk = '0;          // not used
 
     // SFP loopback: FPGA_out -> FPGA_in, with enable signal
@@ -358,7 +356,7 @@ module top #(
      .i_ref_clk_t                     (ref_clk_t                  ),
      .i_ref_clk_b                     (ref_clk_b                  ),
      // GPS reference clock
-     .i_gps_fpga_clk                  (gps_fpga_clk               ),
+     .i_gps_fpga_clk                  (ctrl_if.gps_fpga_clk       ),
      // External clocks
      .i_mezz_fpga_external_clk        (mezz_fpga_external_clk     ),
      .o_fpga_mezz_external_clk        (fpga_mezz_external_clk     ),

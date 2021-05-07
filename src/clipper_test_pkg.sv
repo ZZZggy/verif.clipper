@@ -73,6 +73,8 @@ package clipper_test_pkg;
 
 `include "cpu2fpga_test.svh"
 
+`include "pps_test.svh"
+
 /*
 `include "reg_test_lib.svh"
 `include "reg_invalid_addr_test.svh"
