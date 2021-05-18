@@ -434,9 +434,9 @@ virtual class clipper_test_base extends uvm_test;
         env_cfg.predictor_cfg.cpu2x_cfg.punch_delta = 0;
         // Configure compesations and tolerances
         env_cfg.predictor_cfg.cpu2x_cfg.compensation_ena              = '1;
-        env_cfg.predictor_cfg.cpu2x_cfg.compensation_cmd_proc_time_rx = 'hecc;  // Latency measured for FSX 1.1
-        env_cfg.predictor_cfg.cpu2x_cfg.compensation_cmd_proc_time_tx = 'h386;  // Latency measured for FSX 1.1
-        env_cfg.predictor_cfg.cpu2x_cfg.compensation_timestamp_fpga   = 'h2eb;  // Latency measured for FSX 1.1
+        env_cfg.predictor_cfg.cpu2x_cfg.compensation_cmd_proc_time_rx = 'h0;  // Latency measured for FSX 1.1
+        env_cfg.predictor_cfg.cpu2x_cfg.compensation_cmd_proc_time_tx = 'h0;  // Latency measured for FSX 1.1
+        env_cfg.predictor_cfg.cpu2x_cfg.compensation_timestamp_fpga   = 'h0;  // Latency measured for FSX 1.1
         env_cfg.predictor_cfg.cpu2x_cfg.tolerance_cmd_proc_time       = 'h10;   // without congestion and with default ~cmd_proc_time_range~
                                                                                 // no extra tolerance needed other then its 60ns granularity
         env_cfg.predictor_cfg.cpu2x_cfg.tolerance_timestamp_fpga      = 'h700;  // without congestion: 'h20 ~7.45ns
