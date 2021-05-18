@@ -20,7 +20,62 @@
 // WRITTEN PERMISSION OF ACCEDIAN INC.
 //------------------------------------------------------------------------------
 
-class cpu2if_test extends fsx_test_base;
+class thi_cpu2if_ts_copy_seq_t extends thi_cpu2if_csum_punch_seq_t;
+
+
+
+    `uvm_object_utils(thi_cpu2if_ts_copy_seq_t)
+
+    //---------------------------------------------------------------------------------
+    // Constructor
+    //---------------------------------------------------------------------------------
+    function new(string name="thi_cpu2if_ts_copy_seq_t");
+        super.new(name);
+    endfunction
+
+    //---------------------------------------------------------------------------------
+    // body
+    //---------------------------------------------------------------------------------
+    virtual task body();
+        int frame_id = 0;
+
+        `uvm_info("SEQ", "Entering body", UVM_HIGH)
+        cpu2if = thi_if_frame_t::type_id::create("cpu2if");
+
+            `uvm_info("SEQ", $sformatf("Starting frame_id: %0d", frame_id), UVM_DEBUG)
+            start_item(cpu2if);
+
+            if (!(cpu2if.randomize() with {
+                solve vtags_size before payload_size;
+                thi_vtag.tpid      == thi_uvm_pkg::THI_TPID_CPU2X;
+                info.if_src_dst    == local::if_dst[local::frame_id];
+
+                info.punch_tstamp  == 1;
+                info.tstamp_format == 0;
+
+                info.copy_tstamp   == 1;
+
+                info.punch_csum    == 1;
+                xtra_info.inv_csum == inv_csum;
+
+                vtags_size inside {[local::vtags_size_min : local::vtags_size_max]};
+
+                // CPU MRU: 1518
+                // 1518-16(THI info)-4(FCS)-12(MAC addresses)-2(Ethertype)=1484 untagged
+                payload_size inside {[(local::frame_size_min - 34 - vtags_size*VTAG_BSIZE) :
+                                      (local::frame_size_max - 34 - vtags_size*VTAG_BSIZE)]};
+            })) `randerr
+            cpu2if.frame_id = frame_id+1;
+            cpu2if.p_id = id;
+            finish_item(cpu2if);
+            frame_id++;
+    endtask // body
+
+
+endclass
+
+
+class cpu2if_test extends clipper_test_base;
 
     int unsigned test_cfg_nb_iter = 3;
 
@@ -30,7 +85,8 @@ class cpu2if_test extends fsx_test_base;
         super.new(name, parent);
 
         if (!cfg.randomize()) `randerr
-        cfg.stim_cnt_time_us =100;
+        cfg.port_speed = '{default:PS_1G};
+        cfg.stim_cnt_time_us =20;
         cli.get_cli_uint("+STIM_CNT_TIME_US=", cfg.stim_cnt_time_us);
 
         cli.get_cli_uint("+NB_ITER=", test_cfg_nb_iter);
@@ -45,52 +101,61 @@ class cpu2if_test extends fsx_test_base;
 
     virtual task main_phase(uvm_phase phase);
         thi_cpu2if_seq_t seq;
-        thi_cpu2if_csum_punch_seq_t csum_seq;
+        thi_cpu2if_ts_copy_seq_t csum_seq;
         uvm_status_e status;
+        bit [31:0] data;
+        bit [31:0] time_cpy[$];
 
         phase.raise_objection(this);
 
-        // Disable PC
-        env_cfg.pc_env_cfg.ena_eot_drain = 0;
-        env.regmodel.packet_capture.cfg.ena.set(0);
-        env.regmodel.packet_capture.cfg.keep_alive_ena.set(0);
-        env.regmodel.packet_capture.cfg.update(status);
+        env_cfg.eth_sb_cfg[1].ena_sb = 0;
+
+
+        //if (!std::randomize(ctrl_vif.timebase_time)) `randerr
+        `uvm_info("TEST", $sformatf("Timebase forced to 0x%16h", ctrl_vif.timebase_time), UVM_LOW)
+
+
+        env.regmodel.timebase.globals.local_time.read(status, data);
+        env.regmodel.timebase.globals.pps_local_timestamp.read(status, data);
+        env.regmodel.timebase.globals.ntp_time_offset.read(status, data);
 
         // Force static time
-        env.regmodel.timebase.ts_incr.write(status, 0);
+
+        env_cfg.predictor_cfg.cpu2x_cfg.compensation_ena = 1;
 
         // Setup sequence
         seq = thi_cpu2if_seq_t::type_id::create("seq", this);
-        seq.NUM_USR_PRTS = NB_IF_PORTS + 1 /*Management*/;
+        seq.NUM_USR_PRTS = NB_IF_PORTS;
 
-        csum_seq = thi_cpu2if_csum_punch_seq_t::type_id::create("csum_seq", this);
-        csum_seq.NUM_USR_PRTS = NB_IF_PORTS + 1 /*Management*/;
+        csum_seq = thi_cpu2if_ts_copy_seq_t::type_id::create("csum_seq", this);
+        csum_seq.NUM_USR_PRTS = NB_IF_PORTS;
 
         // Multiple iterations of forcing a static time, then sending traffic
         for(int i=0; i<test_cfg_nb_iter; i++) begin
-            // Randomize time, forcing both fractional and nanosecond
-            ctrl_vif.timebase_force = '1;
-            begin
-                bit[63:0] randtime;
-                if (!std::randomize(randtime)) `randerr
-                ctrl_vif.timebase_time = randtime;
-            end
-            //if (!std::randomize(ctrl_vif.timebase_time)) `randerr
-            `uvm_info("TEST", $sformatf("Timebase forced to 0x%16h", ctrl_vif.timebase_time), UVM_LOW)
 
             // Launch sequence
             ctrl_vif.thi_ena = '1;
-            if (!seq.randomize() with {frame_count == cfg.stim_cnt_time_us;}) `randerr
+            if (!seq.randomize() with {id > 1; frame_count == cfg.stim_cnt_time_us; vtags_size_max==0;}) `randerr
             seq.start(env.rx_eth.agent[PORT_CPU].sequencer);
 
             if (!csum_seq.randomize() with {
+                id > 1;
                 inv_csum == csum_seq.zero_csum(ctrl_vif.timebase_time);
+                vtags_size_max==0;
             }) `randerr
             csum_seq.start(env.rx_eth.agent[PORT_CPU].sequencer);
 
             eot_drain();
 
             ctrl_vif.thi_ena = '0;
+            env.regmodel.timebase.globals.tod_ptp_timestamp.read(status, data);
+            time_cpy.push_back(data);
+
+        end
+
+        while(time_cpy.size() > 1) begin
+            data = time_cpy.pop_front();
+            `ASSERT_MSG(TimeCpy, data < time_cpy[0], "Time copy should be change to match last TOD", UVM_HIGH)
         end
 
         phase.drop_objection(this);

@@ -27,15 +27,15 @@
 
 import hidden_rule_frame_pkg::*;
 
-class hidden_rule_test extends fsx_test_base;
+class hidden_rule_test extends clipper_test_base;
     `uvm_component_utils(hidden_rule_test)
 
     //---------------------------------------------------------------------------------
     // Variables
     //---------------------------------------------------------------------------------
-    fsx_hard_rule_2p2_prio_cfg_reg_seq hard_rule_cfg_seq;
-    fsx_hidden_rule_cfg_reg_seq        hidden_rule_reg_seq;
-    domain_catchall_cfg_seq            complex_reg_seq;
+    clipper_hard_rule_cfg_reg_seq hard_rule_cfg_seq;
+    hidden_rule_reg_seq_t         hidden_rule_reg_seq;
+    domain_catchall_cfg_seq       complex_reg_seq;
 
     int unsigned test_cfg_nb_ports;
 
@@ -46,7 +46,7 @@ class hidden_rule_test extends fsx_test_base;
         cfg.size_min = 80;
         cfg.size_max = 80;
         cfg.nb_flow  = 80; // use as enable distribution
-        test_cfg_nb_ports = 1;
+        test_cfg_nb_ports = 12;
         parse_cli_test_cfg();
         cli.get_cli_uint("+NB_PORT=", test_cfg_nb_ports);
     endfunction
@@ -61,16 +61,16 @@ class hidden_rule_test extends fsx_test_base;
         super.configure_phase(phase);
         phase.raise_objection(this);
 
-        hard_rule_cfg_seq = fsx_hard_rule_2p2_prio_cfg_reg_seq::type_id::create("hard_rule_cfg_seq", this);
+        hard_rule_cfg_seq = clipper_hard_rule_cfg_reg_seq::type_id::create("hard_rule_cfg_seq", this);
         hard_rule_cfg_seq.regmodel = env.regmodel;
 
-        hidden_rule_reg_seq = fsx_hidden_rule_cfg_reg_seq::type_id::create("hidden_rule_reg_seq", this);
+        hidden_rule_reg_seq = hidden_rule_reg_seq_t::type_id::create("hidden_rule_reg_seq", this);
         hidden_rule_reg_seq.regmodel = env.regmodel;
 
         complex_reg_seq = domain_catchall_cfg_seq::type_id::create("complex_reg_seq", this);
         complex_reg_seq.regmodel = env.regmodel;
 
-        for (int i=1; i<= test_cfg_nb_ports; i++) begin
+        for (int i=6; i<= 6/*test_cfg_nb_ports*/; i++) begin
             //---------------------------------------------------------------------------------
             // Hidden rule config
             //---------------------------------------------------------------------------------
@@ -125,10 +125,12 @@ class hidden_rule_test extends fsx_test_base;
      * @Override
      */
     virtual task main_phase(uvm_phase phase);
-        fsx_hidden_rule_random_seq seq[];
+        clipper_hidden_rule_random_seq seq[];
         seq = new[test_cfg_nb_ports];
 
         phase.raise_objection(this);
+
+        $display("Start Sequence");
 
         fork begin : thread_frk
             // Create isolated thread for wait fork to apply only to this thread
@@ -136,7 +138,8 @@ class hidden_rule_test extends fsx_test_base;
                 // Required re-assignment since cannot pass by reference i inside for-join block(LRM 9.3.2)
                 automatic int s = i;
                 fork begin : thread_seq
-                    seq[s] = fsx_hidden_rule_random_seq::type_id::create($sformatf("seq%0d",s));
+                    seq[s] = clipper_hidden_rule_random_seq::type_id::create($sformatf("seq%0d",s));
+                    $display("Start Random on sequence %0d", s);
                     if (!seq[s].randomize() with {
                         id          == s+1;
                         frame_count == cfg.stim_cnt_time_us;
@@ -144,6 +147,7 @@ class hidden_rule_test extends fsx_test_base;
                         size_max    == cfg.size_max;
                     }) `uvm_fatal(get_name, "Randomization failed!")
                     seq[s].regmodel = env.regmodel;
+                    $display("Start Sequence on agent %0d", s+1);
                     seq[s].start(env.rx_eth.agent[s+1].sequencer);
                 end
                 join_none // To spawn concurrent thread

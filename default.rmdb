@@ -48,7 +48,7 @@
       <!--parameter name="vopt_args">+floatparameters+G_USE_PHY+G_USE_BEH_RAM+G_SYNTHESIS+G_USE_I2C</parameter-->
       <parameter name="vopt_args">(%use_ext_mem%) (%use_phy%) -suppress 1130</parameter>
       <parameter name="vsim_args">+nowarnTSCALE (%vsim_plusargs%)</parameter>
-      <parameter name="vsim_do">do (%RMDBDIR%)/vid_mem_load.do;</parameter>
+      <!--parameter name="vsim_do">do (%RMDBDIR%)/vid_mem_load.do;</parameter-->
 
       <!-- convenient parameters -->
       <parameter name="top_name">top</parameter>
@@ -58,6 +58,12 @@
       <!--parameter name="vopt_libs">-L work -L uvm_vip -L phy_1g10g_reset_controller -L phy_1g_10g -L reconfig_8x1g10g -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L stratixv_ver -L stratixv_hssi_ver</parameter-->
       <parameter name="vopt_libs">-L work -L uvm_vip -L altera_mf_ver -L altera_lnsim_ver -L lpm_ver -L sgate_ver -L altera_ver -L arriaii_ver -L arriaii_hssi_ver -L stratixv_ver -L stratixv_hssi_ver -L sgate -L altera_lnsim -L stratixv -L stratixv_hssi -L altera_mf -L ethernet_xgmac -L pll_class2 -L pll_10g_synce -L pll_sys -L phy_1g10g_reset_controller -L phy_1g_reset_controller -L phy_1g_10g -L low_latency_phy_1pll -L low_latency_phy_combo -L tse_tbi -L reconfig_8x1g10g -L reconfig_c1lt -L reconfig_TestSet -L pll_xgmii</parameter>
     </parameters>
+    <members>
+      <member>timebase</member>
+      <member>register</member>
+      <member>regression</member>
+      <member>sanity</member>
+    </members>
     <!--postScript >
         <command>vrun -vrmdata (%DATADIR%) -status -full -html -covreport -htmldir (%DATADIR%)/report</command>
     </postScript-->
@@ -83,6 +89,9 @@
   <runnable name="sat_hsi_test"              type="task" base="base_task"/>
   <runnable name="sat_test"                  type="task" base="base_task"/>
   <runnable name="xgmac_pause_linerate_test" type="task" base="base_task"/>
+  <runnable name="forwarding_test"           type="task" base="base_task"/>
+  <runnable name="pps_test"                  type="task" base="base_task"/>
+
 
   <!-- GROUPS -->
 
@@ -118,6 +127,17 @@
         <member>sat_hsi_test</member>
         <member>sat_test</member>
         <member>xgmac_pause_linerate_test</member>
+        <member>forwarding_test</member>
+    </members>
+  </runnable>
+
+
+  <runnable name="timebase" type="group">
+    <members>
+        <member>cpu2if_test</member>
+        <member>sat_test</member>
+        <member>hidden_rule_test</member>
+        <member>pps_test</member>
     </members>
   </runnable>
 

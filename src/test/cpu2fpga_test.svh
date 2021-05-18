@@ -20,7 +20,7 @@
 // WRITTEN PERMISSION OF ACCEDIAN INC.
 //------------------------------------------------------------------------------
 
-class cpu2fpga_test extends thi_cpu2fpga_test#(fsx_test_base);
+class cpu2fpga_test extends thi_cpu2fpga_test#(clipper_test_base);
 
     `uvm_component_utils(cpu2fpga_test)
     // Constructor: new
@@ -73,6 +73,8 @@ class cpu2fpga_test extends thi_cpu2fpga_test#(fsx_test_base);
         env_cfg.predictor_cfg.cpu2x_cfg.tolerance_cmd_proc_time  = 'h1;    // with no congestion and default ~cmd_proc_time_range~ 60ns granularity
         env_cfg.predictor_cfg.cpu2x_cfg.tolerance_timestamp_fpga = 'h20;   // ~7.45ns - empiric value for FSX 1.1
 
+//        env_cfg.predictor_cfg.cpu2x_cfg.compensation_ena = 0;
+
     endfunction // build_predictor_cfg
 
     //---------------------------------------
@@ -83,14 +85,18 @@ class cpu2fpga_test extends thi_cpu2fpga_test#(fsx_test_base);
     virtual task main_phase(uvm_phase phase);
         // Disable PC
         uvm_status_e status;
-        env_cfg.pc_env_cfg.ena_eot_drain = 0;
-        env.regmodel.packet_capture.cfg.ena.set(0);
-        env.regmodel.packet_capture.cfg.keep_alive_ena.set(0);
-        env.regmodel.packet_capture.cfg.update(status);
+//        env_cfg.pc_env_cfg.ena_eot_drain = 0;
+//        env.regmodel.packet_capture.cfg.ena.set(0);
+//        env.regmodel.packet_capture.cfg.keep_alive_ena.set(0);
+//        env.regmodel.packet_capture.cfg.update(status);
+
+
+        env_cfg.predictor_cfg.cpu2x_cfg.compensation_timestamp_fpga = -(((env.regmodel.timebase.globals.ntp_time_offset_adjust.sec.get() + env.regmodel.timebase.globals.ntp_time_offset.sec.get()) << 32) - 'h2b8);
 
         // Enable ethernet THI path
         cfg.thi_ena = 1;
         ctrl_vif.thi_ena = '1;
+
         super.main_phase(phase);
     endtask
 

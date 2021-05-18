@@ -94,7 +94,7 @@ package clipper_pkg;
     // Group: Clock and reset parameters
     //-----------------------------------
     // Clock periods
-    parameter CLK_10K_PER_NS       = 100_000;
+    parameter CLK_10K_PER_NS       = 10_000;
     parameter CLK_2p5M_PER_PS      = 400_000;
     parameter CLK_25M_PER_PS       = 40_000;
     parameter CLK_50M_PER_PS       = 20_000;
@@ -167,6 +167,11 @@ package clipper_pkg;
     const shortint PORT_MON[]     = '{8,12};
     const shortint PORT_10G[]     = '{5,6,7,8};
     const shortint PORT_1G[]      = '{1,2,3,4,9,10,11,12};
+
+
+    const int      PORT_TRF1[] = '{5,6};
+    const int      PORT_TRF2[] = '{7,8};
+    const shortint PORT_AUX[]  = '{1,2,3,4};
 
     // Rate controller group IDs
     typedef enum {
@@ -285,7 +290,7 @@ package clipper_pkg;
 `include "clipper_tse_cfg.svh"
 `include "clipper_xgmac_cfg.svh"
 
-    // predictors : 
+    // predictors :
 `include "clipper_predictor_cfg.svh"
 `include "clipper_predictor_converters.svh"
 `include "clipper_mgmt_predictor.svh"
@@ -307,8 +312,11 @@ package clipper_pkg;
 `include "domain_catchall_cfg_seq.svh"
 
     // sub_env_seq :
+`include "hidden_rule_reg_seq.svh"
+`include "clipper_hard_rule_cfg_reg_seq.svh"
+
 `include "hidden_rule_seq_lib.svh"
-    
+
 endpackage
 
 `endif

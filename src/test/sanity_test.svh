@@ -32,7 +32,7 @@ class sanity_test extends clipper_test_base;
     function new(string name="sanity_test", uvm_component parent=null);
         super.new(name, parent);
         // Configure TRF ports 10Gbps
-        cfg.port_speed[5:8] = '{PS_10G, PS_10G, PS_10G, PS_10G};
+        cfg.port_speed[5:8] = '{PS_1G, PS_1G, PS_1G, PS_1G};
         cfg.eot_win_cnt = 100; // 10us drain
         // Enable CLI overrides for test parameters
         parse_cli_test_cfg();
@@ -81,7 +81,7 @@ class sanity_test extends clipper_test_base;
         env.regmodel.cos_action.p5.action_index[0].cfg1.outgoing_interface.set(6);
         env.regmodel.cos_action.p5.action_index[0].cfg1.interface_rule.set(2);
         env.regmodel.cos_action.p5.action_index[0].cfg1.update(status);
-        
+
         env.regmodel.action_map_tables.p6.priority_index[2048].if_action_index.set(0);
         env.regmodel.action_map_tables.p6.priority_index[2048].update(status);
         env.regmodel.cos_action.p6.action_index[0].cfg1.outgoing_interface.set(6);
@@ -106,6 +106,182 @@ class sanity_test extends clipper_test_base;
         env.regmodel.tm.shaper.shaper_group_0.params_cir[0].cir_max.set(80000);
         env.regmodel.tm.shaper.shaper_group_0.params_cir[0].cir_ena.set(0);
         env.regmodel.tm.shaper.shaper_group_0.params_cir[0].update(status);
+
+
+        $display("********************* Speed = %0p", ctrl_vif.port_speed);
+
+        //-------------------------------------------------------------------
+        // Validate that traffic passes
+        //-------------------------------------------------------------------
+        foreach(seq[i]) begin
+            seq[i] = mac_frame_good_traffic_sequence_t::type_id::create($sformatf("seq%0d", i));
+            if (!seq[i].randomize() with {
+                id               == i;
+                frame_count      == 1;
+                max_payload_size == 62;
+            }) `uvm_fatal("RNDERR", seq[i].get_name)
+        end
+
+        fork begin
+            foreach(seq[i]) begin
+                automatic int s=i;
+                fork
+                    // Start sequence on Interface port agents
+                    begin
+                        seq[s].start(env.rx_eth.agent[s].sequencer);
+                    end
+                join_none
+            end
+            wait fork;
+        end
+        join
+
+        phase.drop_objection(this);
+    endtask
+
+endclass
+
+
+class forwarding_test extends clipper_test_base;
+    `uvm_component_utils(forwarding_test)
+
+    // Constructor
+    function new(string name="forwarding_test", uvm_component parent=null);
+        super.new(name, parent);
+        // Configure TRF ports 10Gbps
+        cfg.port_speed[5:8] = '{PS_1G, PS_1G, PS_1G, PS_1G};
+        cfg.eot_win_cnt = 100; // 10us drain
+        // Enable CLI overrides for test parameters
+        parse_cli_test_cfg();
+    endfunction
+
+    // Send a packet per USER interface
+    task main_phase(uvm_phase phase);
+        uvm_status_e status;
+        mac_frame_good_traffic_sequence_t seq[1:12];
+        acd_mm_raw_reg_sequence raw_seq;
+        int unsigned wr_data = 'h1234;
+        int unsigned scratch_addr = env.regmodel.globals.scratch.get_address();
+
+        phase.raise_objection(this);
+
+        //-------------------------------------------------------------------
+        // Validate scratchpad register(s)
+        //-------------------------------------------------------------------
+        raw_seq = acd_mm_raw_reg_sequence::type_id::create("raw_seq", this);
+
+        // Read current scratch value
+        raw_seq.kind = acd_mm_rw::READ;
+        raw_seq.addr = scratch_addr;
+        raw_seq.start(env.acd_mm.agent.sequencer);
+
+        // Write scratch
+        raw_seq.kind = acd_mm_rw::WRITE;
+        raw_seq.addr = scratch_addr;
+        raw_seq.data = wr_data;
+        raw_seq.start(env.acd_mm.agent.sequencer);
+
+        // Read new scratch value
+        raw_seq.kind = acd_mm_rw::READ;
+        raw_seq.addr = scratch_addr;
+        raw_seq.start(env.acd_mm.agent.sequencer);
+
+        if (raw_seq.data == wr_data) begin
+            `uvm_info("TEST", "Wrote/Read Scratch pad register successfully", UVM_NONE)
+        end else begin
+            `uvm_error("TEST", $sformatf("Scratch pad register access failed. Wrote 0x%0h, but read 0x%0h", wr_data, raw_seq.data))
+        end
+
+        // Setup action map table to avoid index 0
+        env.regmodel.action_map_tables.p1.priority_index[256].if_action_index.set(0);
+        env.regmodel.action_map_tables.p1.priority_index[256].update(status);
+        env.regmodel.cos_action.p1.action_index[0].cfg1.outgoing_interface.set(1);
+        env.regmodel.cos_action.p1.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p1.action_index[0].cfg1.update(status);
+
+        env.regmodel.action_map_tables.p2.priority_index[256].if_action_index.set(0);
+        env.regmodel.action_map_tables.p2.priority_index[256].update(status);
+        env.regmodel.cos_action.p2.action_index[0].cfg1.outgoing_interface.set(2);
+        env.regmodel.cos_action.p2.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p2.action_index[0].cfg1.update(status);
+
+        env.regmodel.action_map_tables.p3.priority_index[256].if_action_index.set(0);
+        env.regmodel.action_map_tables.p3.priority_index[256].update(status);
+        env.regmodel.cos_action.p3.action_index[0].cfg1.outgoing_interface.set(3);
+        env.regmodel.cos_action.p3.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p3.action_index[0].cfg1.update(status);
+
+        env.regmodel.action_map_tables.p4.priority_index[256].if_action_index.set(0);
+        env.regmodel.action_map_tables.p4.priority_index[256].update(status);
+        env.regmodel.cos_action.p4.action_index[0].cfg1.outgoing_interface.set(4);
+        env.regmodel.cos_action.p4.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p4.action_index[0].cfg1.update(status);
+
+
+        env.regmodel.action_map_tables.p5.priority_index[2048].if_action_index.set(0);
+        env.regmodel.action_map_tables.p5.priority_index[2048].update(status);
+        env.regmodel.cos_action.p5.action_index[0].cfg1.outgoing_interface.set(5);
+        env.regmodel.cos_action.p5.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p5.action_index[0].cfg1.update(status);
+
+        env.regmodel.action_map_tables.p6.priority_index[2048].if_action_index.set(0);
+        env.regmodel.action_map_tables.p6.priority_index[2048].update(status);
+        env.regmodel.cos_action.p6.action_index[0].cfg1.outgoing_interface.set(6);
+        env.regmodel.cos_action.p6.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p6.action_index[0].cfg1.update(status);
+
+        env.regmodel.action_map_tables.p7.priority_index[1024].if_action_index.set(0);
+        env.regmodel.action_map_tables.p7.priority_index[1024].update(status);
+        env.regmodel.cos_action.p7.action_index[0].cfg1.outgoing_interface.set(7);
+        env.regmodel.cos_action.p7.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p7.action_index[0].cfg1.update(status);
+
+        env.regmodel.action_map_tables.p8.priority_index[1024].if_action_index.set(0);
+        env.regmodel.action_map_tables.p8.priority_index[1024].update(status);
+        env.regmodel.cos_action.p8.action_index[0].cfg1.outgoing_interface.set(8);
+        env.regmodel.cos_action.p8.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p8.action_index[0].cfg1.update(status);
+
+        env.regmodel.action_map_tables.p9.priority_index[256].if_action_index.set(0);
+        env.regmodel.action_map_tables.p9.priority_index[256].update(status);
+        env.regmodel.cos_action.p9.action_index[0].cfg1.outgoing_interface.set(4);
+        env.regmodel.cos_action.p9.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p9.action_index[0].cfg1.update(status);
+
+        env.regmodel.action_map_tables.p10.priority_index[256].if_action_index.set(0);
+        env.regmodel.action_map_tables.p10.priority_index[256].update(status);
+        env.regmodel.cos_action.p10.action_index[0].cfg1.outgoing_interface.set(4);
+        env.regmodel.cos_action.p10.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p10.action_index[0].cfg1.update(status);
+
+        env.regmodel.action_map_tables.p11.priority_index[256].if_action_index.set(0);
+        env.regmodel.action_map_tables.p11.priority_index[256].update(status);
+        env.regmodel.cos_action.p11.action_index[0].cfg1.outgoing_interface.set(4);
+        env.regmodel.cos_action.p11.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p11.action_index[0].cfg1.update(status);
+
+        env.regmodel.action_map_tables.p12.priority_index[256].if_action_index.set(0);
+        env.regmodel.action_map_tables.p12.priority_index[256].update(status);
+        env.regmodel.cos_action.p12.action_index[0].cfg1.outgoing_interface.set(4);
+        env.regmodel.cos_action.p12.action_index[0].cfg1.interface_rule.set(2);
+        env.regmodel.cos_action.p12.action_index[0].cfg1.update(status);
+
+        // By default the port shaper are closed
+        env.regmodel.tm.shaper.shaper_group_0.params_cir[0].cbs.set(4);
+        env.regmodel.tm.shaper.shaper_group_0.params_cir[0].cir.set(80000);
+        env.regmodel.tm.shaper.shaper_group_0.params_cir[0].cir_max.set(80000);
+        env.regmodel.tm.shaper.shaper_group_0.params_cir[0].cir_ena.set(0);
+        env.regmodel.tm.shaper.shaper_group_0.params_cir[0].update(status);
+
+
+        env.regmodel.tm.shaper.shaper_group_1.params_cir[0].cbs.set(4);
+        env.regmodel.tm.shaper.shaper_group_1.params_cir[0].cir.set(80000);
+        env.regmodel.tm.shaper.shaper_group_1.params_cir[0].cir_max.set(80000);
+        env.regmodel.tm.shaper.shaper_group_1.params_cir[0].cir_ena.set(0);
+        env.regmodel.tm.shaper.shaper_group_1.params_cir[0].update(status);
+
+
+        $display("********************* Speed = %0p", ctrl_vif.port_speed);
 
         //-------------------------------------------------------------------
         // Validate that traffic passes

@@ -44,7 +44,7 @@ package c1lt_reg_pkg;
     import acd_uvm_pkg::*;
     import chip_global_reg_pkg::*;
     import protection_tbl_reg_pkg::*;
-    import timebase_reg_pkg::*;
+    import timebase2_reg_pkg::*;
     import cpu_bucket_reg_pkg::*;
     import flush_stat_reg_pkg::*;
     import i2c_reg_pkg::*;
@@ -86,7 +86,7 @@ class c1lt_reg_block extends uvm_reg_block;
 
     rand chip_global_reg_block globals;
     rand protection_tbl_reg_block protection_tbl;
-    rand timebase_reg_block timebase;
+    rand timebase2_reg_block timebase;
     rand cpu_bucket_reg_block cpu_bucket;
     rand flush_stat_reg_block flush_stat;
     rand i2c_reg_block i2c;
@@ -142,7 +142,7 @@ class c1lt_reg_block extends uvm_reg_block;
 
         globals = chip_global_reg_block::type_id::create("globals", , get_full_name());
         protection_tbl = protection_tbl_reg_block::type_id::create("protection_tbl", , get_full_name());
-        timebase = timebase_reg_block::type_id::create("timebase", , get_full_name());
+        timebase = timebase2_reg_block::type_id::create("timebase", , get_full_name());
         cpu_bucket = cpu_bucket_reg_block::type_id::create("cpu_bucket", , get_full_name());
         flush_stat = flush_stat_reg_block::type_id::create("flush_stat", , get_full_name());
         i2c = i2c_reg_block::type_id::create("i2c", , get_full_name());

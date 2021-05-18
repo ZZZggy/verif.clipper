@@ -120,44 +120,44 @@ class insect_fwd_cfg_vseq extends clipper_base_vseq;
 
     function void pre_randomize();
 
-        max_cpu_action[0]  = $size(regmodel.cpu_monitor_action[1].cpu_action);
-        max_cpu_action[1]  = $size(regmodel.cpu_monitor_action[2].cpu_action);
-        max_cpu_action[2]  = $size(regmodel.cpu_monitor_action[3].cpu_action);
-        max_cpu_action[3]  = $size(regmodel.cpu_monitor_action[4].cpu_action);
-        max_cpu_action[4]  = $size(regmodel.cpu_monitor_action[5].cpu_action);
-        max_cpu_action[5]  = $size(regmodel.cpu_monitor_action[6].cpu_action);
-        max_cpu_action[6]  = $size(regmodel.cpu_monitor_action[7].cpu_action);
-        max_cpu_action[7]  = $size(regmodel.cpu_monitor_action[8].cpu_action);
-        max_cpu_action[8]  = $size(regmodel.cpu_monitor_action[9].cpu_action);
-        max_cpu_action[9]  = $size(regmodel.cpu_monitor_action[10].cpu_action);
-        max_cpu_action[10] = $size(regmodel.cpu_monitor_action[11].cpu_action);
-        max_cpu_action[11] = $size(regmodel.cpu_monitor_action[12].cpu_action);
+        max_cpu_action[0]  = $size(regmodel.cpu_monitor_action[0].cpu_action);
+        max_cpu_action[1]  = $size(regmodel.cpu_monitor_action[1].cpu_action);
+        max_cpu_action[2]  = $size(regmodel.cpu_monitor_action[2].cpu_action);
+        max_cpu_action[3]  = $size(regmodel.cpu_monitor_action[3].cpu_action);
+        max_cpu_action[4]  = $size(regmodel.cpu_monitor_action[4].cpu_action);
+        max_cpu_action[5]  = $size(regmodel.cpu_monitor_action[5].cpu_action);
+        max_cpu_action[6]  = $size(regmodel.cpu_monitor_action[6].cpu_action);
+        max_cpu_action[7]  = $size(regmodel.cpu_monitor_action[7].cpu_action);
+        max_cpu_action[8]  = $size(regmodel.cpu_monitor_action[8].cpu_action);
+        max_cpu_action[9]  = $size(regmodel.cpu_monitor_action[9].cpu_action);
+        max_cpu_action[10] = $size(regmodel.cpu_monitor_action[10].cpu_action);
+        max_cpu_action[11] = $size(regmodel.cpu_monitor_action[11].cpu_action);
 
-        max_mon1_action[0]  = $size(regmodel.cpu_monitor_action[1].mon1_action);
-        max_mon1_action[1]  = $size(regmodel.cpu_monitor_action[2].mon1_action);
-        max_mon1_action[2]  = $size(regmodel.cpu_monitor_action[3].mon1_action);
-        max_mon1_action[3]  = $size(regmodel.cpu_monitor_action[4].mon1_action);
-        max_mon1_action[4]  = $size(regmodel.cpu_monitor_action[5].mon1_action);
-        max_mon1_action[5]  = $size(regmodel.cpu_monitor_action[6].mon1_action);
-        max_mon1_action[6]  = $size(regmodel.cpu_monitor_action[7].mon1_action);
-        max_mon1_action[7]  = $size(regmodel.cpu_monitor_action[8].mon1_action);
-        max_mon1_action[8]  = $size(regmodel.cpu_monitor_action[9].mon1_action);
-        max_mon1_action[9]  = $size(regmodel.cpu_monitor_action[10].mon1_action);
-        max_mon1_action[10] = $size(regmodel.cpu_monitor_action[11].mon1_action);
-        max_mon1_action[11] = $size(regmodel.cpu_monitor_action[12].mon1_action);
+        max_mon1_action[0]  = $size(regmodel.cpu_monitor_action[0].mon1_action);
+        max_mon1_action[1]  = $size(regmodel.cpu_monitor_action[1].mon1_action);
+        max_mon1_action[2]  = $size(regmodel.cpu_monitor_action[2].mon1_action);
+        max_mon1_action[3]  = $size(regmodel.cpu_monitor_action[3].mon1_action);
+        max_mon1_action[4]  = $size(regmodel.cpu_monitor_action[4].mon1_action);
+        max_mon1_action[5]  = $size(regmodel.cpu_monitor_action[5].mon1_action);
+        max_mon1_action[6]  = $size(regmodel.cpu_monitor_action[6].mon1_action);
+        max_mon1_action[7]  = $size(regmodel.cpu_monitor_action[7].mon1_action);
+        max_mon1_action[8]  = $size(regmodel.cpu_monitor_action[8].mon1_action);
+        max_mon1_action[9]  = $size(regmodel.cpu_monitor_action[9].mon1_action);
+        max_mon1_action[10] = $size(regmodel.cpu_monitor_action[10].mon1_action);
+        max_mon1_action[11] = $size(regmodel.cpu_monitor_action[11].mon1_action);
 
-        max_mon2_action[0]  = $size(regmodel.cpu_monitor_action[1].mon2_action);
-        max_mon2_action[1]  = $size(regmodel.cpu_monitor_action[2].mon2_action);
-        max_mon2_action[2]  = $size(regmodel.cpu_monitor_action[3].mon2_action);
-        max_mon2_action[3]  = $size(regmodel.cpu_monitor_action[4].mon2_action);
-        max_mon2_action[4]  = $size(regmodel.cpu_monitor_action[5].mon2_action);
-        max_mon2_action[5]  = $size(regmodel.cpu_monitor_action[6].mon2_action);
-        max_mon2_action[6]  = $size(regmodel.cpu_monitor_action[7].mon2_action);
-        max_mon2_action[7]  = $size(regmodel.cpu_monitor_action[8].mon2_action);
-        max_mon2_action[8]  = $size(regmodel.cpu_monitor_action[9].mon2_action);
-        max_mon2_action[9]  = $size(regmodel.cpu_monitor_action[10].mon2_action);
-        max_mon2_action[10] = $size(regmodel.cpu_monitor_action[11].mon2_action);
-        max_mon2_action[11] = $size(regmodel.cpu_monitor_action[12].mon2_action);
+        max_mon2_action[0]  = $size(regmodel.cpu_monitor_action[0].mon2_action);
+        max_mon2_action[1]  = $size(regmodel.cpu_monitor_action[1].mon2_action);
+        max_mon2_action[2]  = $size(regmodel.cpu_monitor_action[2].mon2_action);
+        max_mon2_action[3]  = $size(regmodel.cpu_monitor_action[3].mon2_action);
+        max_mon2_action[4]  = $size(regmodel.cpu_monitor_action[4].mon2_action);
+        max_mon2_action[5]  = $size(regmodel.cpu_monitor_action[5].mon2_action);
+        max_mon2_action[6]  = $size(regmodel.cpu_monitor_action[6].mon2_action);
+        max_mon2_action[7]  = $size(regmodel.cpu_monitor_action[7].mon2_action);
+        max_mon2_action[8]  = $size(regmodel.cpu_monitor_action[8].mon2_action);
+        max_mon2_action[9]  = $size(regmodel.cpu_monitor_action[9].mon2_action);
+        max_mon2_action[10] = $size(regmodel.cpu_monitor_action[10].mon2_action);
+        max_mon2_action[11] = $size(regmodel.cpu_monitor_action[11].mon2_action);
     endfunction
 
     // Helper functions for constraints
@@ -168,31 +168,33 @@ class insect_fwd_cfg_vseq extends clipper_base_vseq;
     virtual task body();
         uvm_status_e status;
 
+        $display("Port %0d, pe %0d, rule %0d", port, pe, rule);
+
         // Classifier
-        regmodel.classifiers.p[port].pe[pe].rule[rule].priority_index.set(prio   );
-        regmodel.classifiers.p[port].pe[pe].rule[rule].domain.set        (domains);
-        regmodel.classifiers.p[port].pe[pe].rule[rule].ft_start_addr.set (field  );
-        regmodel.classifiers.p[port].pe[pe].rule[rule].nb_comp.set       (0      );
-        regmodel.classifiers.p[port].pe[pe].rule[rule].last_key_addr.set (1      ); // anything with MAC addresses
-        regmodel.classifiers.p[port].pe[pe].rule[rule].prefilter.set     (0      );
-        regmodel.classifiers.p[port].pe[pe].rule[rule].update(status);
-        
-        regmodel.classifiers.p[port].pe[pe].field[field].opcode_a.set(0);
-        regmodel.classifiers.p[port].pe[pe].field[field].opcode_b.set(0);
-        regmodel.classifiers.p[port].pe[pe].field[field].data_a.set  (0);
-        regmodel.classifiers.p[port].pe[pe].field[field].data_b.set  (0);
-        regmodel.classifiers.p[port].pe[pe].field[field].update(status);
-        
-        regmodel.classifiers.p[port].rule_info.cfg[pe].rt_start_addr.set   (rule   );
-        regmodel.classifiers.p[port].rule_info.cfg[pe].nb_rules_to_scan.set(0      );
-        regmodel.classifiers.p[port].rule_info.cfg[pe].early_exit_ena.set  (0      );
-        regmodel.classifiers.p[port].rule_info.cfg[pe].domains.set         (domains);
-        regmodel.classifiers.p[port].rule_info.cfg[pe].update(status);
-        
-        regmodel.classifiers.p[port].rule_info.cfg_status[pe].mirror(status, .check(UVM_NO_CHECK));
-        
-        regmodel.classifiers.p[port].rule_info.cfg_update.request.set(1);
-        regmodel.classifiers.p[port].rule_info.cfg_update.update(status);
+        regmodel.classifiers.p[port-1].pe[pe].rule[rule].priority_index.set(prio   );
+        regmodel.classifiers.p[port-1].pe[pe].rule[rule].domain.set        (domains);
+        regmodel.classifiers.p[port-1].pe[pe].rule[rule].ft_start_addr.set (field  );
+        regmodel.classifiers.p[port-1].pe[pe].rule[rule].nb_comp.set       (0      );
+        regmodel.classifiers.p[port-1].pe[pe].rule[rule].last_key_addr.set (1      ); // anything with MAC addresses
+        regmodel.classifiers.p[port-1].pe[pe].rule[rule].prefilter.set     (0      );
+        regmodel.classifiers.p[port-1].pe[pe].rule[rule].update(status);
+
+        regmodel.classifiers.p[port-1].pe[pe].field[field].opcode_a.set(0);
+        regmodel.classifiers.p[port-1].pe[pe].field[field].opcode_b.set(0);
+        regmodel.classifiers.p[port-1].pe[pe].field[field].data_a.set  (0);
+        regmodel.classifiers.p[port-1].pe[pe].field[field].data_b.set  (0);
+        regmodel.classifiers.p[port-1].pe[pe].field[field].update(status);
+
+        regmodel.classifiers.p[port-1].rule_info.cfg[pe].rt_start_addr.set   (rule   );
+        regmodel.classifiers.p[port-1].rule_info.cfg[pe].nb_rules_to_scan.set(0      );
+        regmodel.classifiers.p[port-1].rule_info.cfg[pe].early_exit_ena.set  (0      );
+        regmodel.classifiers.p[port-1].rule_info.cfg[pe].domains.set         (domains);
+        regmodel.classifiers.p[port-1].rule_info.cfg[pe].update(status);
+
+        regmodel.classifiers.p[port-1].rule_info.cfg_status[pe].mirror(status, .check(UVM_NO_CHECK));
+
+        regmodel.classifiers.p[port-1].rule_info.cfg_update.request.set(1);
+        regmodel.classifiers.p[port-1].rule_info.cfg_update.update(status);
 
         // Priority to action mapping
         `REG_PRT(, regmodel.action_map_tables.p, port, .priority_index[prio].if_action_index.set  (actions[DOM_IF]  ))
@@ -202,14 +204,14 @@ class insect_fwd_cfg_vseq extends clipper_base_vseq;
         `REG_PRT(, regmodel.action_map_tables.p, port, .priority_index[prio].update(status))
 
         // CoS'n Action CPU, MON
-        regmodel.cpu_monitor_action[port].cpu_action[actions[DOM_CPU]].cpu_forwarding.set       (cpu_mon_action.cpu   );
-        regmodel.cpu_monitor_action[port].cpu_action[actions[DOM_CPU]].update(status);
+        regmodel.cpu_monitor_action[port-1].cpu_action[actions[DOM_CPU]].cpu_forwarding.set       (cpu_mon_action.cpu   );
+        regmodel.cpu_monitor_action[port-1].cpu_action[actions[DOM_CPU]].update(status);
 
-        regmodel.cpu_monitor_action[port].mon1_action[actions[DOM_MON1]].monitor1_forwarding.set(cpu_mon_action.mon[0]);
-        regmodel.cpu_monitor_action[port].mon1_action[actions[DOM_MON1]].update(status);
+        regmodel.cpu_monitor_action[port-1].mon1_action[actions[DOM_MON1]].monitor1_forwarding.set(cpu_mon_action.mon[0]);
+        regmodel.cpu_monitor_action[port-1].mon1_action[actions[DOM_MON1]].update(status);
 
-        regmodel.cpu_monitor_action[port].mon2_action[actions[DOM_MON2]].monitor2_forwarding.set(cpu_mon_action.mon[1]);
-        regmodel.cpu_monitor_action[port].mon2_action[actions[DOM_MON2]].update(status);
+        regmodel.cpu_monitor_action[port-1].mon2_action[actions[DOM_MON2]].monitor2_forwarding.set(cpu_mon_action.mon[1]);
+        regmodel.cpu_monitor_action[port-1].mon2_action[actions[DOM_MON2]].update(status);
 
         regmodel.globals.mon_cfg.mon1_ena.set(1);
         regmodel.globals.mon_cfg.mon2_ena.set(1);
@@ -219,14 +221,14 @@ class insect_fwd_cfg_vseq extends clipper_base_vseq;
         `REG_PRT(,regmodel.cos_action.p, port, .action_index[actions[DOM_IF]].cfg1.interface_rule.set    (if_action  ))
         `REG_PRT(,regmodel.cos_action.p, port, .action_index[actions[DOM_IF]].cfg1.outgoing_interface.set(outgoing_if))
         `REG_PRT(,regmodel.cos_action.p, port, .action_index[actions[DOM_IF]].cfg1.update(status))
-        
+
         `REG_PRT(,regmodel.cos_action.p, port, .action_index[actions[DOM_IF]].cfg0.default_cos_pattern_address.set(cos_pat))
         `REG_PRT(,regmodel.cos_action.p, port, .action_index[actions[DOM_IF]].cfg0.bwp_profile_base_index.set     (bwp_idx))
         `REG_PRT(,regmodel.cos_action.p, port, .action_index[actions[DOM_IF]].cfg0.update(status))
-        
+
         `REG_PRT(,regmodel.cos_action.p, port, .action_index[actions[DOM_IF]].cfg2.outgoing_qset.set(qset))
         `REG_PRT(,regmodel.cos_action.p, port, .action_index[actions[DOM_IF]].cfg2.update(status))
-  
+
         // Cost pattern
         `REG_PRT(,regmodel.cos_pattern_tables.p, port, .pattern[cos_pat].bwp_pre_color1.set    (0      ));
         `REG_PRT(,regmodel.cos_pattern_tables.p, port, .pattern[cos_pat].bwp_profile_ena.set   (0      ));
@@ -240,21 +242,21 @@ class insect_fwd_cfg_vseq extends clipper_base_vseq;
         // BWP
         regmodel.bwp.profile_remap.class2bwp_profile_ndx[bwp_idx].profile_remap.profile_ndx.set(bwp_idx);
         regmodel.bwp.profile_remap.class2bwp_profile_ndx[bwp_idx].profile_remap.update(status);
-        
+
         regmodel.bwp.bwp_shaper[bwp_idx].rank_page_0[bwp_idx].shaper_ndx.set(bwp_idx);
         regmodel.bwp.bwp_shaper[bwp_idx].rank_page_0[bwp_idx].rank.set      (1      );
         regmodel.bwp.bwp_shaper[bwp_idx].rank_page_0[bwp_idx].update(status);
-        
+
         regmodel.bwp.bwp_shaper[bwp_idx].cfg.global_rank_page_ndx.set(0  );
         regmodel.bwp.bwp_shaper[bwp_idx].cfg.last_rank.set           (255);
         regmodel.bwp.bwp_shaper[bwp_idx].cfg.update(status);
-        
+
         regmodel.bwp.bwp_shaper[bwp_idx].params_cir[bwp_idx].cbs.set    (10  );
         regmodel.bwp.bwp_shaper[bwp_idx].params_cir[bwp_idx].cir.set    (8000);
         regmodel.bwp.bwp_shaper[bwp_idx].params_cir[bwp_idx].cir_max.set(8000);
         regmodel.bwp.bwp_shaper[bwp_idx].params_cir[bwp_idx].cir_ena.set(0   );
         regmodel.bwp.bwp_shaper[bwp_idx].params_cir[bwp_idx].update(status);
-        
+
         regmodel.bwp.bwp_shaper[bwp_idx].params_eir[bwp_idx].ebs.set    (10  );
         regmodel.bwp.bwp_shaper[bwp_idx].params_eir[bwp_idx].eir.set    (8000);
         regmodel.bwp.bwp_shaper[bwp_idx].params_eir[bwp_idx].eir_max.set(8000);

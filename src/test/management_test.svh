@@ -20,7 +20,7 @@
 // WRITTEN PERMISSION OF ACCEDIAN INC.
 //------------------------------------------------------------------------------
 
-class management_test extends fsx_test_base;
+class management_test extends clipper_test_base;
     `uvm_component_utils(management_test)
 
     function new(string name="management_test", uvm_component parent=null);

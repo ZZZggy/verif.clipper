@@ -219,6 +219,38 @@ virtual class clipper_test_base extends uvm_test;
         if (!cal_done)
             `uvm_fatal("TIMEOUT", "Calibration of external memories unsuccessful!")
         `uvm_info("TEST", "External memory calibrated", UVM_LOW)
+
+        /*******************************************************************************************************************/
+        `uvm_info(get_name, $sformatf("Init Timebase compensation"),UVM_LOW)
+        for(int i=0; i < NB_IF_PORTS; i++) begin
+
+            if(i<5) begin
+                env.regmodel.timebase.compensations[2*i+0].time_offset.fract.set('hFF283); // toa
+                env.regmodel.timebase.compensations[2*i+1].time_offset.fract.set('h406); // tod mac comp
+            end else if (i<9) begin
+                if (ctrl_vif.port_speed[i]==mac_pkg::PS_1G) begin
+                    //TODO SM: Should it be FE7 to take into factor when clock are not aligned and toggle bit crosses clock domains in 1 clock cycle plus some very small delay?
+                    env.regmodel.timebase.compensations[2*i+0].time_offset.fract.set('hFF283); // toa
+                    env.regmodel.timebase.compensations[2*i+1].time_offset.fract.set('h41A); // tod mac comp
+                    `ASSERT_MSG(CSATION_THUNDERFLY_1000, 1, "Assertion for Timebase compensation", UVM_NONE);
+                end else begin
+                    env.regmodel.timebase.compensations[2*i+0].time_offset.fract.set('hFF283); // toa
+                    env.regmodel.timebase.compensations[2*i+1].time_offset.fract.set('h421); // tod mac comp
+                    `ASSERT_MSG(COMPENSATION_ARCHIMEDES_10_000, 1, "Assertion for Timebase compensation", UVM_NONE);
+                end
+            end else begin
+                env.regmodel.timebase.compensations[2*i+0].time_offset.fract.set('hFF283); // toa
+                env.regmodel.timebase.compensations[2*i+1].time_offset.fract.set('h406); // tod mac comp
+            end
+        end
+
+        foreach(env.regmodel.timebase.compensations[i]) begin
+            env.regmodel.timebase.compensations[i].update(status);
+        end
+
+        /*******************************************************************************************************************/
+
+
         phase.drop_objection(this);
     endtask
 
@@ -402,16 +434,16 @@ virtual class clipper_test_base extends uvm_test;
         env_cfg.predictor_cfg.cpu2x_cfg.punch_delta = 0;
         // Configure compesations and tolerances
         env_cfg.predictor_cfg.cpu2x_cfg.compensation_ena              = '1;
-        env_cfg.predictor_cfg.cpu2x_cfg.compensation_cmd_proc_time_rx = 'hecc;  // Latency measured for FSX 1.1
-        env_cfg.predictor_cfg.cpu2x_cfg.compensation_cmd_proc_time_tx = 'h386;  // Latency measured for FSX 1.1
-        env_cfg.predictor_cfg.cpu2x_cfg.compensation_timestamp_fpga   = 'h2eb;  // Latency measured for FSX 1.1
+        env_cfg.predictor_cfg.cpu2x_cfg.compensation_cmd_proc_time_rx = 'h0;  // Latency measured for FSX 1.1
+        env_cfg.predictor_cfg.cpu2x_cfg.compensation_cmd_proc_time_tx = 'h0;  // Latency measured for FSX 1.1
+        env_cfg.predictor_cfg.cpu2x_cfg.compensation_timestamp_fpga   = 'h0;  // Latency measured for FSX 1.1
         env_cfg.predictor_cfg.cpu2x_cfg.tolerance_cmd_proc_time       = 'h10;   // without congestion and with default ~cmd_proc_time_range~
                                                                                 // no extra tolerance needed other then its 60ns granularity
         env_cfg.predictor_cfg.cpu2x_cfg.tolerance_timestamp_fpga      = 'h700;  // without congestion: 'h20 ~7.45ns
         // THI x2CPU predictor
         env_cfg.predictor_cfg.x2cpu_cfg = thi_x2cpu_predictor_cfg::type_id::create("x2cpu_cfg", this);
         env_cfg.predictor_cfg.x2cpu_cfg.compensation_ena              = '1;
-        env_cfg.predictor_cfg.x2cpu_cfg.tolerance_timestamp_if        = 'h200;  // ~119.2ns - empiric value for FSX 1.1
+        env_cfg.predictor_cfg.x2cpu_cfg.tolerance_timestamp_if        = 'hD7; // 50ns //'h200;  // ~119.2ns - empiric value for FSX 1.1
 
         // TSE predictor config
         foreach (env_cfg.predictor_cfg.tse_cfg[i]) begin

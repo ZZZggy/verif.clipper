@@ -45,7 +45,7 @@
 // Check:
 // - Correct behavoir of the system is checked by the PCE verification sub-environement (prediction + scoreboarding) and FSX top env (prediction + scoreboard)
 //
-class all2cpu_test extends thi_cpu2fpga_test#(fsx_test_base);
+class all2cpu_test extends thi_cpu2fpga_test#(clipper_test_base);
     `uvm_component_utils(all2cpu_test)
 
     // Constructor
@@ -103,6 +103,17 @@ class all2cpu_test extends thi_cpu2fpga_test#(fsx_test_base);
     //--------------------------------------------------------------------------------
     // Group: UVM overrides
     //--------------------------------------------------------------------------------
+
+    // Method to initialise the virtual sequence handles
+    function void init_vseq(pc_test_cfg_vseq vseq);
+        vseq.cpu_sequencer = env.rx_eth.agent[0].sequencer;
+        foreach(vseq.if_sequencer[i]) begin
+            vseq.if_sequencer[i] = env.rx_eth.agent[i+1].sequencer;
+        end
+        vseq.mgmt_sequencer = env.rx_eth.agent[NB_ALL_PORTS-1].sequencer;
+
+        vseq.regmodel = env.regmodel;
+    endfunction
 
     // Task: configure_phase
     // Configure stimuli rate control MACs, input section and packet capture engine
@@ -189,6 +200,7 @@ class all2cpu_test extends thi_cpu2fpga_test#(fsx_test_base);
 
         }) `sranderr("PC_TEST_CFG")
         `uvm_info("TEST", pc_test_cfg_seq.convert2string(), UVM_LOW)
+
         pc_test_cfg_seq.start(null);
 
         phase.drop_objection(this);
@@ -205,7 +217,7 @@ class all2cpu_test extends thi_cpu2fpga_test#(fsx_test_base);
         //-------------------------------------------------------------------
         // Setup CPU to FPGA accesses
         //-------------------------------------------------------------------
-        `uvm_info("TEST", "Enabling THI path", UVM_LOW)
+        `uvm_info("TEST_ALL2CPU", "Enabling THI path", UVM_LOW)
         ctrl_vif.thi_ena = '1;
 
         // Configure testcase to wait for FPGA2CPU acknowledge event in THI accesses
@@ -216,9 +228,11 @@ class all2cpu_test extends thi_cpu2fpga_test#(fsx_test_base);
         sequencer = get_sequencer();
         regmodel = get_regmodel();
 
+        `uvm_info("TEST_ALL2CPU", " simple scratch test", UVM_LOW)
         // simple scratch test
-        test_scratch_reg();
+//        test_scratch_reg();
 
+        `uvm_info("TEST_ALL2CPU", "Generate sequences for AUX and TRAFFIC ports", UVM_LOW)
         //-------------------------------------------------------------------
         // Generate sequences for AUX and TRAFFIC ports
         //-------------------------------------------------------------------
@@ -238,10 +252,10 @@ class all2cpu_test extends thi_cpu2fpga_test#(fsx_test_base);
                     // Start sequence on Interface port agents
                     begin
                         automatic int gid = (s inside {PORT_AUX} ? GROUP_AUX : GROUP_TRAFFIC);
-                        automatic real if_rate = real'(env.cfg.rate_aggr_cfg.group_cfg[gid].slave_cfg[s].target_rate);
-                        automatic int unsigned frame_cnt = unsigned'(int'(cfg.stim_cnt_time_us * (if_rate / if_rate_total)));
+                        automatic real if_rate = 1000;//real'(env.cfg.rate_aggr_cfg.group_cfg[gid].slave_cfg[s].target_rate);
+                        automatic int unsigned frame_cnt = 100;//unsigned'(int'(cfg.stim_cnt_time_us * (if_rate / if_rate_total)));
                         automatic string port_type = (gid == GROUP_AUX ? "IF2CPU" : "IF2PC ");
-                        `uvm_info("TEST", $sformatf("%0s port <%0d>: %0d frames at %0d Mbps", port_type, s, frame_cnt, if_rate), UVM_LOW)
+                        `uvm_info("TEST_ALL2CPU", $sformatf("%0s port <%0d>: %0d frames at %0d Mbps", port_type, s, frame_cnt, if_rate), UVM_LOW)
                         if (!eth_seq[s].randomize() with {
                             p_id           == local::s;
                             nb_item        == local::frame_cnt;
@@ -249,27 +263,27 @@ class all2cpu_test extends thi_cpu2fpga_test#(fsx_test_base);
                             frame_size_max == local::cfg.size_max;
                         }) `sranderr(eth_seq[s].get_name())
                         eth_seq[s].start(env.rx_eth.agent[s].sequencer);
-                        `uvm_info("TEST", $sformatf("%0s port <%0d>: done", port_type, s), UVM_DEBUG)
+                        `uvm_info("TEST_ALL2CPU", $sformatf("%0s port <%0d>: done", port_type, s), UVM_DEBUG)
                     end
                 join_none
             end // foreach (eth_seq[i])
 
             // CPU to FPGA register access, resulting in FPGA to CPU traffic
-            begin
-                // Write random data in registers and read back
-                string msg = $sformatf("CPU2FPGA RW iteration");
-                `uvm_info("TEST", msg, UVM_LOW)
-                test_reg_block(get_burst_reg_block(), .shuffle(0));
-                `uvm_info("TEST", {msg," - done"}, UVM_DEBUG)
-                // Re-read continuously the same registers
-                nb_read_loop = cfg.stim_cnt_time_us/60;
-                for (int i=1; i <= nb_read_loop; i++) begin
-                    msg = $sformatf("CPU2FPGA READ iteration: %0d/%0d", i, nb_read_loop);
-                    `uvm_info("TEST", msg, UVM_LOW)
-                    read_reg_block(get_burst_reg_block(), .shuffle(0));
-                    `uvm_info("TEST", {msg," - done"}, UVM_DEBUG)
-                end
-            end
+//            begin
+//                // Write random data in registers and read back
+//                string msg = $sformatf("CPU2FPGA RW iteration");
+//                `uvm_info("TEST_ALL2CPU", msg, UVM_LOW)
+//                test_reg_block(get_burst_reg_block(), .shuffle(0));
+//                `uvm_info("TEST_ALL2CPU", {msg," - done"}, UVM_DEBUG)
+//                // Re-read continuously the same registers
+//                nb_read_loop = cfg.stim_cnt_time_us/60;
+//                for (int i=1; i <= nb_read_loop; i++) begin
+//                    msg = $sformatf("CPU2FPGA READ iteration: %0d/%0d", i, nb_read_loop);
+//                    `uvm_info("TEST_ALL2CPU", msg, UVM_LOW)
+//                    read_reg_block(get_burst_reg_block(), .shuffle(0));
+//                    `uvm_info("TEST_ALL2CPU", {msg," - done"}, UVM_DEBUG)
+//                end
+//            end
 
             wait fork;
         end

@@ -60,6 +60,7 @@ interface clipper_ctrl_if();
 
     // enable forcing of input section READY signal for backpressure emulation
     bit       inp_bp_ena; // TODO: nedded?
+    bit       gps_fpga_clk;
 
     //-----------------------------------------
     // Group: Testbench parameters propagation
