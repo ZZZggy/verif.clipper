@@ -185,9 +185,10 @@ virtual class clipper_test_base extends uvm_test;
         phase.raise_objection(this);
 
         // Misc.
-//        env.regmodel.timebase.pps_ctrl.pps_input_sel.set(1);
-//        env.regmodel.timebase.pps_ctrl.pps_input_delay_compensation.set(207);
-//        env.regmodel.timebase.pps_ctrl.update(status);
+        env.regmodel.timebase.globals.pps_ctrl.input_sel.set(0);
+        env.regmodel.timebase.globals.pps_ctrl.input_internal.set(0);
+        env.regmodel.timebase.globals.pps_ctrl.input_delay_compensation.set('hFFECB);
+        env.regmodel.timebase.globals.pps_ctrl.update(status);
 
         // Initialize MACs
         mac_init = mac_init_seq::type_id::create("mac_init", this);

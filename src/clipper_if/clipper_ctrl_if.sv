@@ -50,6 +50,8 @@ interface clipper_ctrl_if();
     bit       timebase_accelerate;
     bit[63:0] timebase_time;
 
+    bit[63:0] free_run_timebase;
+
     // Freeze timers
     bit freeze_flowmeter_time = '0;
 

@@ -51,20 +51,18 @@ class pps_test extends clipper_test_base;
         bit [31:0] data;
         bit [31:0] g_data[4];
         bit [31:0] pps_data[4];
-        time g_time[4];
+        bit [63:0] g_time[4];
 
         phase.raise_objection(this);
 
         env_cfg.eth_sb_cfg[1].ena_sb = 0;
 
-
-        //if (!std::randomize(ctrl_vif.timebase_time)) `randerr
-
         @(negedge ctrl_vif.gps_fpga_clk);
 
-        g_time[0] = $time();
+        g_time[0] = ctrl_vif.free_run_timebase;
         env.regmodel.timebase.globals.local_time.read(status, g_data[0]);
         env.regmodel.timebase.globals.pps_local_timestamp.read(status, pps_data[0]);
+        `ASSERT_MSG(PPSGpsTimeComp, g_time[0] == pps_data[0], $sformatf("PPS time should be match input time obs %0d, EXP %0d", pps_data[0], g_time[0]), UVM_HIGH)
 
         #9us;
         g_time[1] = $time();
@@ -73,11 +71,13 @@ class pps_test extends clipper_test_base;
         `ASSERT_MSG(PPSGpsTime, pps_data[1] == pps_data[0], $sformatf("PPS time should be not updated between to gps clock edge obs T0 %0d, T1 %0d", pps_data[0], pps_data[1]), UVM_HIGH)
 
         @(negedge ctrl_vif.gps_fpga_clk);
-        g_time[2] = $time();
+        g_time[2] = ctrl_vif.free_run_timebase;
         env.regmodel.timebase.globals.local_time.read(status, g_data[2]);
         #1us;
         env.regmodel.timebase.globals.pps_local_timestamp.read(status, pps_data[2]);
         `ASSERT_MSG(PPSGpsTimeChg, pps_data[2] != pps_data[1] && pps_data[2] > g_data[2]-200 &&  pps_data[2] < g_data[2]+200, $sformatf("PPS time should be updated on gps clock edge Last Time %0d, new time %0d and exp time %0d", pps_data[1], pps_data[2], g_data[2]), UVM_HIGH)
+        `ASSERT_MSG(PPSGpsTimeComp_a, g_time[2] == pps_data[2], $sformatf("PPS time should be match input time obs %0d, EXP %0d", pps_data[2], g_time[2]), UVM_HIGH)
+        `ASSERT_MSG(PPSGpsTimeComp_n, g_time[0] != g_time[2], $sformatf("Time between 2 GPS clk should't not equal T0 %0d, T1 %0d", g_time[0], g_time[2]), UVM_HIGH)
 
 
         env.regmodel.timebase.globals.pps_ctrl.input_internal.set(1);
