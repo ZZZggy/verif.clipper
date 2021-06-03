@@ -231,7 +231,7 @@ sim_novopt: .dummy_ver .dummy_ramfiles simlogs dofile $(SIM_COMP_TSTAMP)
 # Register generation paths
 REG_XML_SRC    = ${ACD_DESIGN_DIR}/clipper/doc/regdefs/clipper_top.xml
 REG_UVM_DEST   = src/reg/
-REG_XML_INCDIR = "${ACD_CORE_DIR}/clipper_phy_if/doc/regdefs/,${ACD_CORE_DIR}/pktgen_ats/doc/regdefs/"
+REG_XML_INCDIR = "${ACD_CORE_DIR}/clipper_phy_if/doc/regdefs/,${ACD_CORE_DIR}/pktgen_ats/doc/regdefs/,${ACD_CORE_DIR}/timebase2/doc/regdefs/"
 
 include ${MAKE_RUN}_sim_uvm
 
