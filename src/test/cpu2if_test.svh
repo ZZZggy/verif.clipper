@@ -82,7 +82,7 @@ endclass
 
 class cpu2if_test extends clipper_test_base;
 
-    int unsigned test_cfg_nb_iter = 20;
+    int unsigned test_cfg_nb_iter = 3;
 
     `uvm_component_utils(cpu2if_test)
 
@@ -140,8 +140,6 @@ class cpu2if_test extends clipper_test_base;
                 vtags_size_max==0;
             }) `randerr
             csum_seq.start(env.rx_eth.agent[PORT_CPU].sequencer);
-
-            eot_drain();
 
             ctrl_vif.thi_ena = '0;
         end

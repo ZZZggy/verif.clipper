@@ -1081,6 +1081,7 @@ module top #(
         release `DUT_TIMEBASE_HIER.u_timebase2.load_initial_acc_data ;
     end
 
+    assign ctrl_if.free_run_timebase = `DUT_TIMEBASE_HIER.gen_sim_probe.sim_probe_local_timestamp_reference;
 
 //    always @(posedge `DUT_TIMEBASE_HIER.i_clk) begin
 //        //(dis)allow forcing of timebase
