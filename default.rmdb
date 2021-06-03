@@ -74,6 +74,7 @@
   <runnable name="cmd_proc_time_test"        type="task" base="base_task"/>
   <runnable name="cpu2fpga_test"             type="task" base="base_task"/>
   <runnable name="cpu2if_test"               type="task" base="base_task"/>
+  <runnable name="cpu2if_tod_rec_test"       type="task" base="base_task"/>
   <runnable name="flush_stats_test"          type="task" base="base_task"/>
   <runnable name="hidden_rule_test"          type="task" base="base_task"/>
   <runnable name="if2all_test"               type="task" base="base_task"/>
@@ -135,6 +136,7 @@
   <runnable name="timebase" type="group">
     <members>
         <member>cpu2if_test</member>
+        <member>cpu2if_tod_rec_test</member>
         <member>sat_test</member>
         <member>hidden_rule_test</member>
         <member>pps_test</member>

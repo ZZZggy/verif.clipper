@@ -50,7 +50,7 @@ typedef class compensations_time_offset_reg_cover;
 class compensations_time_offset_reg extends uvm_reg;
 
     // Variable: fract
-    // This design has 32 bits of fractions and 32-17+1 bits of compensations. The offset compensation represents 1/2^32 fractions of second and is expressed in twos complement.
+    // This design has 32 bits of fractions and 20 bits of compensations. The offset compensation represents 1/2^32 fractions of second and is expressed in twos complement.
     rand uvm_reg_field fract;
 
     // Variable: m_params
@@ -236,7 +236,7 @@ endclass
 
 
 // Class: timebase2_core_compensations_reg_block
-// Register Block .timebase2_core_compensations:
+// Register Block .timebase2_core_compensations: 
 class timebase2_core_compensations_reg_block extends uvm_reg_block;
 
     // Validate register width

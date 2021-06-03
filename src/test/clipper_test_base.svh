@@ -104,6 +104,8 @@ virtual class clipper_test_base extends uvm_test;
         build_eth_sb_cfg();
         set_regmodel_overrides();
 
+        env_cfg.ts_cpy_cfg = clipper_ts_cpy_cfg::type_id::create("ts_cpy_cfg", this);
+
         //-----------------------------------------------------------------------
         // Apply CLI overrides to environment
         //-----------------------------------------------------------------------

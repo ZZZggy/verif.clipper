@@ -33,6 +33,7 @@ class clipper_env extends platform_env#(c1lt_reg_block);
     clipper_predictor predictor;
     thi_filter        cpu_filter;
     acd_scoreboard#(ethernet_frame) eth_sb[PORT_CPU:PORT_MGMT];
+    clipper_ts_cpy_monitor ts_cpy_monitor;
 
     //--------------------------------------------------------------------------------
     // Group: sub-environment
@@ -66,6 +67,10 @@ class clipper_env extends platform_env#(c1lt_reg_block);
 //        cfg.predictor_cfg.cpu2x_cfg.cmd_proc_time_range_reg = regmodel.globals.cmd_proc_time_range;
         uvm_config_db#(clipper_predictor_cfg)::set(this, "predictor", "cfg", cfg.predictor_cfg);
         predictor = clipper_predictor::type_id::create("predictor", this);
+
+        cfg.ts_cpy_cfg.regmodel = regmodel;
+        uvm_config_db#(clipper_ts_cpy_cfg)::set(this, "ts_cpy_monitor", "cfg", cfg.ts_cpy_cfg);
+        ts_cpy_monitor = clipper_ts_cpy_monitor::type_id::create("ts_cpy_monitor", this);
 
         // Input section converter
         // ?
@@ -102,6 +107,7 @@ class clipper_env extends platform_env#(c1lt_reg_block);
                 // CPU and MGMT have regular TSE agent
                 rx_eth.agent[i].p_notify.connect(predictor.p_tse_export[i]);
             end
+            predictor.p_notify[i].connect(ts_cpy_monitor.analysis_export);
         end
 
         // CPU filter connection
@@ -119,6 +125,7 @@ class clipper_env extends platform_env#(c1lt_reg_block);
                         cpu_filter.thi_port.connect(eth_sb[i].obs_ap);
                     end else begin
                         tx_eth.agent[i].p_notify.connect(eth_sb[i].obs_ap);
+                        tx_eth.agent[i].p_notify.connect(ts_cpy_monitor.obs_ap);
                     end
                 end
                 // RX_ETH_AGENT debug

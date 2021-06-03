@@ -452,7 +452,7 @@ endclass
 typedef class globals_ntp_time_offset_adjust_reg_cover;
 
 // Class: globals_ntp_time_offset_adjust_reg
-// Register globals.ntp_time_offset_adjust: Adjustment to be applied to ntp_time_offset.
+// Register globals.ntp_time_offset_adjust: Adjustment to be applied to ntp_time_offset. The value of fields utc_sec, utc_min, utc_hour and sec must be compatible otherwise the UTC time and the NTP time will not be at the same time. If you have screwed it and the register ntp_offset shows an unalignment then you can fix it with this register by setting some fields to 0 and adjust the others to get the UTC time offset and NTP time offset of the register ntp_offset aligned. Depending of the value of utc_sec, utc_min utc_hour fields of ntp_offset register, an offset to the field utc_sec of this register ntp_offset_adjust may increase the utc_min and the utc_hour of the register ntp_offset. Same thing with the utc_min field of this register ntp_offset_adjust may increase the utc_hour of the register ntp_offset.
 class globals_ntp_time_offset_adjust_reg extends uvm_reg;
 
     // Variable: sec
@@ -639,7 +639,7 @@ endclass
 typedef class globals_ntp_time_offset_reg_cover;
 
 // Class: globals_ntp_time_offset_reg
-// Register globals.ntp_time_offset: Offset to be applied to local time to get into the NTP time domain.
+// Register globals.ntp_time_offset: Offset to be applied to local time to get into the NTP time domain. The value of fields utc_sec, utc_min, utc_hour and sec must be compatible otherwise the UTC time and the NTP time will not be at the same time.
 class globals_ntp_time_offset_reg extends uvm_reg;
 
     // Variable: sec
@@ -1023,7 +1023,7 @@ class globals_pps_ctrl_reg extends uvm_reg;
     // Select between the external PPS input or the internal PPS.
     rand uvm_reg_field input_internal;
     // Variable: input_delay_compensation
-    // PPS input delay compensation in 1/2^32 fractions of second to be applied to localtime before loading the pps_local_timestamp register. Twos complement value. Range of value goes from -32768 to 32767
+    // PPS input delay compensation in 1/2^32 fractions of second to be applied to localtime before loading the pps_local_timestamp register. This design has 32 bits of fractions and 20 bits of compensations. The compensation is expressed in twos complement.
     rand uvm_reg_field input_delay_compensation;
 
     // Variable: m_params
@@ -1063,7 +1063,7 @@ class globals_pps_ctrl_reg extends uvm_reg;
         // uvm_reg_field::configure(uvm_reg parent, int unsigned size, int unsigned lsb_pos, string access, bit volatile, uvm_reg_data_t reset, bit has_reset, bit is_rand, bit individually_accessible)
         input_sel.configure(this, 1, 0, "RW", 0, 'h0, 1, 1, 0);
         input_internal.configure(this, 1, 1, "RW", 0, 'h0, 1, 1, 0);
-        input_delay_compensation.configure(this, 16, 2, "RW", 0, 'h0, 1, 1, 0);
+        input_delay_compensation.configure(this, 20, 2, "RW", 0, 'h0, 1, 1, 0);
     endfunction
 
 

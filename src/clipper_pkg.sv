@@ -297,6 +297,7 @@ package clipper_pkg;
 `include "clipper_tm_predictor.svh"
 `include "clipper_mon_predictor.svh"
 `include "clipper_predictor.svh"
+`include "clipper_ts_cpy_monitor.svh"
 
     // env :
 `include "clipper_env_cfg.svh"

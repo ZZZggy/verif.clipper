@@ -31,6 +31,7 @@ class clipper_env_cfg extends platform_env_cfg;
     eth_sb_connect_e       eth_sb_connect = DEFAULT_ETH_SB;
     thi_filter_cfg         cpu_filter_cfg;
     acd_scoreboard_config  eth_sb_cfg[PORT_CPU:PORT_MGMT];
+    clipper_ts_cpy_cfg     ts_cpy_cfg;
 
     //--------------------------------------------------------------------------------
     // Group: sub-environment
@@ -41,6 +42,7 @@ class clipper_env_cfg extends platform_env_cfg;
         `uvm_field_enum(eth_sb_connect_e, eth_sb_connect, UVM_ALL_ON)
         `uvm_field_object(cpu_filter_cfg, UVM_ALL_ON)
         `uvm_field_sarray_object(eth_sb_cfg, UVM_ALL_ON)
+        `uvm_field_object(ts_cpy_cfg, UVM_ALL_ON)
     `uvm_object_utils_end
 
     // Constructor: new
