@@ -70,12 +70,12 @@ class hidden_rule_test extends clipper_test_base;
         complex_reg_seq = domain_catchall_cfg_seq::type_id::create("complex_reg_seq", this);
         complex_reg_seq.regmodel = env.regmodel;
 
-        for (int i=6; i<= 6/*test_cfg_nb_ports*/; i++) begin
+//        for (int i=1; i< test_cfg_nb_ports; i++) begin
             //---------------------------------------------------------------------------------
             // Hidden rule config
             //---------------------------------------------------------------------------------
             if (!hidden_rule_reg_seq.randomize with {
-                port_id  == i;
+                port_id  inside {[1:test_cfg_nb_ports]};
                 ena_dist == cfg.nb_flow; // used as enable distribution
                 user_vlan inside {[0:37]}; // do not set user VLAN to a known one
             }) `uvm_fatal(get_name, "Randomization failed!")
@@ -84,7 +84,7 @@ class hidden_rule_test extends clipper_test_base;
             //---------------------------------------------------------------------------------
             // Hardcoded rule index/bucket config (static)
             //---------------------------------------------------------------------------------
-            hard_rule_cfg_seq.input_port_id = i;
+            hard_rule_cfg_seq.input_port_id = hidden_rule_reg_seq.port_id;
             hard_rule_cfg_seq.start(env.reg_sequencer);
 
 //            //---------------------------------------------------------------------------------
@@ -97,7 +97,7 @@ class hidden_rule_test extends clipper_test_base;
 //                if_is_logical   == 0;
 //            }) `uvm_fatal(get_name, "Randomization failed!")
 //            complex_reg_seq.start(env.reg_sequencer);
-        end
+//        end
 
 //        //---------------------------------------------------------------------------------
 //        // Timebase
@@ -125,36 +125,35 @@ class hidden_rule_test extends clipper_test_base;
      * @Override
      */
     virtual task main_phase(uvm_phase phase);
-        clipper_hidden_rule_random_seq seq[];
-        seq = new[test_cfg_nb_ports];
+        clipper_hidden_rule_random_seq seq;
+        uvm_status_e status;
+        bit [31:0] data;
+//        seq = new[test_cfg_nb_ports];
 
         phase.raise_objection(this);
 
-        $display("Start Sequence");
-
-        fork begin : thread_frk
-            // Create isolated thread for wait fork to apply only to this thread
-            foreach(seq[i]) begin
-                // Required re-assignment since cannot pass by reference i inside for-join block(LRM 9.3.2)
-                automatic int s = i;
-                fork begin : thread_seq
-                    seq[s] = clipper_hidden_rule_random_seq::type_id::create($sformatf("seq%0d",s));
-                    $display("Start Random on sequence %0d", s);
-                    if (!seq[s].randomize() with {
-                        id          == s+1;
+//
+//        fork begin : thread_frk
+//            // Create isolated thread for wait fork to apply only to this thread
+//            foreach(seq[i]) begin
+//                // Required re-assignment since cannot pass by reference i inside for-join block(LRM 9.3.2)
+//                automatic int s = i;
+//                fork begin : thread_seq
+                    seq = clipper_hidden_rule_random_seq::type_id::create($sformatf("seq%0d",hidden_rule_reg_seq.port_id));
+                    if (!seq.randomize() with {
+                        id          == hidden_rule_reg_seq.port_id;
                         frame_count == cfg.stim_cnt_time_us;
                         size_min    == cfg.size_min;
                         size_max    == cfg.size_max;
                     }) `uvm_fatal(get_name, "Randomization failed!")
-                    seq[s].regmodel = env.regmodel;
-                    $display("Start Sequence on agent %0d", s+1);
-                    seq[s].start(env.rx_eth.agent[s+1].sequencer);
-                end
-                join_none // To spawn concurrent thread
-            end
-            wait fork; // Wait for all to complete
-        end
-        join
+                    seq.regmodel = env.regmodel;
+                    seq.start(env.rx_eth.agent[hidden_rule_reg_seq.port_id].sequencer);
+//                end
+//                join_none // To spawn concurrent thread
+//            end
+//            wait fork; // Wait for all to complete
+//        end
+//        join
 
         phase.drop_objection(this);
     endtask
